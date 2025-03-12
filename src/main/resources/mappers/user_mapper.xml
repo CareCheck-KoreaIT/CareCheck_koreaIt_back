@@ -21,7 +21,7 @@
         )
     </insert>
     <update id="updateUsername">
-
+        select
     </update>
 
     <select id="selectById" resultType="com.korit.carecheckkoreait.entity.User">
