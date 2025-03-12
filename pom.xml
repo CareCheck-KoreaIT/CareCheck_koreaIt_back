@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.korit</groupId>
-    <artifactId>board-back</artifactId>
+    <artifactId>CareCheck-KoreaIT</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>board-back</name>
-    <description>board-back</description>
+    <name>CareCheck_koreaIt_back</name>
+    <description>CareCheck_koreaIt_back</description>
     <url/>
     <licenses>
         <license/>
