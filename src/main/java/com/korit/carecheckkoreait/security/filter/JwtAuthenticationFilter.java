@@ -27,30 +27,30 @@ public class JwtAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
     }
-
-    private void jwtAuthentication(String accessToken) {
-        if(accessToken == null) {return;}
-        Claims claims = jwtUtil.parseToken(accessToken);
-
-        int userId = Integer.parseInt(claims.getId());
-        User user = null;
-        // User user = userRepository.findById(userId).get();
-        // 추후 수정
-
-        PrincipalUser principalUser = PrincipalUser.builder().user(user).build();
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    private String getAccessToken(HttpServletRequest request) {
-        String accessToken = null;
-        String authorization = request.getHeader("Authorization");
-
-        if (authorization != null && authorization.startsWith("Bearer ")) {
-            accessToken = authorization.substring(7);
-        }
-
-        return accessToken;
-    }
+//
+//    private void jwtAuthentication(String accessToken) {
+//        if(accessToken == null) {return;}
+//        Claims claims = jwtUtil.parseToken(accessToken);
+//
+//        int userId = Integer.parseInt(claims.getId());
+//        User user = null;
+//        // User user = userRepository.findById(userId).get();
+//        // 추후 수정
+//
+//        PrincipalUser principalUser = PrincipalUser.builder().user(user).build();
+//        Authentication authentication =
+//                new UsernamePasswordAuthenticationToken(principalUser, null, principalUser.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//    }
+//
+//    private String getAccessToken(HttpServletRequest request) {
+//        String accessToken = null;
+//        String authorization = request.getHeader("Authorization");
+//
+//        if (authorization != null && authorization.startsWith("Bearer ")) {
+//            accessToken = authorization.substring(7);
+//        }
+//
+//        return accessToken;
+//    }
 }
