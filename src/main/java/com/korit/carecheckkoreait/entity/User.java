@@ -13,9 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class User {
     private int userId;
-    private String nickname;
-    private String password;
     private String username;
+    private String password;
     private String email;
     private String phoneNumber;
     private int accountExpired;
