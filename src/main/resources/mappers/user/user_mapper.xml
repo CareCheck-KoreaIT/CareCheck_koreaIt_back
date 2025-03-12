@@ -15,6 +15,7 @@
             #{accountLocked},
             #{credentialsExpired},
             #{accountEnabled},
+            now(),
             now()
     </insert>
 
