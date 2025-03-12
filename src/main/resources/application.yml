@@ -1,0 +1,38 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local: local_server, common, secret
+      blue: blue_server, common, secret
+
+---
+
+
+server:
+  port: 8080
+react:
+  server:
+    protocol: http
+    host: localhost
+    port: 5173
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: blue_server
+server:
+  port: 8080
+react:
+  server:
+    protocol: https
+    host: 리액트 서버 배포 주소(ip 또는 도메인)
+    port: 5173
+
+
+---
+
+mybatis:
+  mapper-locations:
+    - /mappers/*.xml
