@@ -16,4 +16,9 @@ public class UserRepository {
     public Optional<User> selectById(int userId) {
         return Optional.ofNullable(userMapper.selectById(userId));
     }
+
+    public User insert(User user) {
+        userMapper.insert(user);
+        return user;
+    }
 }

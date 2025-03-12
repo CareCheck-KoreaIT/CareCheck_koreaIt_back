@@ -1,5 +1,6 @@
 package com.korit.carecheckkoreait.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class User {
     private int userId;
     private String username;
+    @JsonIgnore
     private String password;
     private String email;
     private String phoneNumber;
