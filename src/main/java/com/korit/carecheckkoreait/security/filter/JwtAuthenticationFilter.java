@@ -1,6 +1,7 @@
 package com.korit.carecheckkoreait.security.filter;
 
 import com.korit.carecheckkoreait.entity.User;
+import com.korit.carecheckkoreait.repository.UserRepository;
 import com.korit.carecheckkoreait.security.jwt.JwtUtil;
 import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 import io.jsonwebtoken.Claims;
@@ -20,12 +21,16 @@ public class JwtAuthenticationFilter implements Filter {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // @Autowired
-    // private UserRepository userRepository;
+     @Autowired
+     private UserRepository userRepository;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
 
+        jwtAuthentication(getAccessToken(request));
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     private void jwtAuthentication(String accessToken) {
@@ -33,9 +38,7 @@ public class JwtAuthenticationFilter implements Filter {
         Claims claims = jwtUtil.parseToken(accessToken);
 
         int userId = Integer.parseInt(claims.getId());
-        User user = null;
-        // User user = userRepository.findById(userId).get();
-        // 추후 수정
+        User user = userRepository.selectById(userId).get();
 
         PrincipalUser principalUser = PrincipalUser.builder().user(user).build();
         Authentication authentication =
