@@ -13,4 +13,5 @@ public class Disease {
     private int diseaseId;
     private String diseaseEName;
     private String diseaseKName;
+
 }
