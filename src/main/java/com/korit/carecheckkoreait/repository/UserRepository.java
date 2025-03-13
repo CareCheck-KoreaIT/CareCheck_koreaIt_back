@@ -17,6 +17,14 @@ public class UserRepository {
         return Optional.ofNullable(userMapper.selectById(userId));
     }
 
+    public Optional<User> selectByUsercode(String usercode) {
+        return Optional.ofNullable(userMapper.selectByUsercode(usercode));
+    }
+
+    public String selectUsercode(int roleId) {
+        return userMapper.selectUsercode(roleId);
+    }
+
     public User insert(User user) {
         userMapper.insert(user);
         return user;

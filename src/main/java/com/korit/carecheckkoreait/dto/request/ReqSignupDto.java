@@ -1,5 +1,6 @@
 package com.korit.carecheckkoreait.dto.request;
 
+import com.korit.carecheckkoreait.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

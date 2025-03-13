@@ -9,8 +9,8 @@ public interface UserMapper {
     User selectById(int userId);
     User selectByUsername(String username);
 
+    User selectByUsercode(String usercode);
+
+    String selectUsercode(int roleId);
     int insert(User user);
-    int updateUsername(
-            @Param("username") String username
-    );
 }
