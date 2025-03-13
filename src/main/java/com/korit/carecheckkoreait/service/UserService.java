@@ -72,4 +72,17 @@ public class UserService {
 
         return user;
     }
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePassword(User user, String password) {
+        String encodedPassword = passwordEncoder.encode(password);
+        userRepository.updatePassword(user.getUsercode(), encodedPassword);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void updateEmail(User user, String email) {
+        userRepository.updateEmail(user.getUsercode(), email);
+    }
+    public void updatePhoneNumber(User user, String phoneNumber) {
+        userRepository.updatePhoneNumber(user.getUsercode(), phoneNumber);
+    }
+
 }

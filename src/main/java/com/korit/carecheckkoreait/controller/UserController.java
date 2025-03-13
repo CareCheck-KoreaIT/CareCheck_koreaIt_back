@@ -3,14 +3,15 @@ package com.korit.carecheckkoreait.controller;
 import com.korit.carecheckkoreait.dto.request.ReqSigninDto;
 import com.korit.carecheckkoreait.dto.request.ReqSignupDto;
 import com.korit.carecheckkoreait.dto.response.RespTokenDto;
+import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 import com.korit.carecheckkoreait.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -35,5 +36,36 @@ public class UserController {
 
         return ResponseEntity.ok().body(respTokenDto);
     }
+
+    @PutMapping("/user/changeInfo/password")
+    public ResponseEntity<?> changePassword(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        String password = requestBody.get("password");
+        userService.updatePassword(principalUser.getUser(), password);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/user/changeInfo/email")
+    public ResponseEntity<?> changeEmail(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        String email = requestBody.get("email");
+        userService.updateEmail(principalUser.getUser(), email);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/user/changeInfo/phoneNumber")
+    public ResponseEntity<?> changePhoneNumber(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        String phoneNumber = requestBody.get("phoneNumber");
+        userService.updatePhoneNumber(principalUser.getUser(), phoneNumber);
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }
