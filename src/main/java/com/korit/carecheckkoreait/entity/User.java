@@ -13,8 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    private int userId;
+    private int index;
     private String username;
+    private String usercode;
     @JsonIgnore
     private String password;
     private String email;
