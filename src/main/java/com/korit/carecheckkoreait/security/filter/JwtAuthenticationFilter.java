@@ -21,8 +21,8 @@ public class JwtAuthenticationFilter implements Filter {
     @Autowired
     private JwtUtil jwtUtil;
 
-     @Autowired
-     private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

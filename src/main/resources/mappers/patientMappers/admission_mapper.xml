@@ -11,6 +11,9 @@
             <result property="usercode" column="usercode"/>
             <result property="createdAt" column="created_at"/>
             <result property="updatedAt" column="updated_at"/>
+            <collection property="chart" javaType="java.util.Set" resultMap="chartResultMap"></collection>
+            <collection property="diagnosis" javaType="java.util.Set" resultMap="diagnosisResultMap"></collection>
+            <collection property="diagnosisOrder" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
 
         <resultMap id="chartResultMap" type="com.korit.carecheckkoreait.entity.Chart">
@@ -28,6 +31,7 @@
                 <result property="createdAt" column="created_at"/>
                 <result property="updatedAt" column="updated_at"/>
         </resultMap>
+
         <resultMap id="diagnosisOrderResultMap" type="com.korit.carecheckkoreait.entity.DiagnosisOrder">
                 <id property="diagnosisOrderId" column="diagnosis_order_id"/>
                 <result property="admId" column="adm_id"/>
@@ -35,8 +39,8 @@
                 <result property="orderDose" column="order_dose"/>
                 <result property="orderCount" column="order_count"/>
                 <result property="orderDays" column="order_days"/>
-                <result property="calculateOrderPay" column="order_adcode"/>
-                <result property="orderMethod" column="order_code"/>
+                <result property="calculateOrderPay" column="cal_order_pay"/>
+                <result property="orderMethod" column="order_method"/>
                 <result property="createdAt" column="created_at"/>
                 <result property="updatedAt" column="updated_at"/>
         </resultMap>

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRole {
     private int userRoleId;
-    private int userId;
+    private String usercode;
     private int roleId;
 
     private Role role;

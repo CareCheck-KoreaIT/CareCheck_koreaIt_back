@@ -57,6 +57,7 @@ public class UserService {
                 .usercode(usercode)
                 .password(passwordEncoder.encode(reqSignupDto.getPassword()))
                 .email(reqSignupDto.getEmail())
+                .phoneNumber(reqSignupDto.getPhoneNumber())
                 .accountExpired(1)
                 .accountLocked(1)
                 .credentialsExpired(1)
@@ -65,7 +66,7 @@ public class UserService {
         userRepository.insert(user);
 
         UserRole userRole = UserRole.builder()
-                .userId(user.getIndex())
+                .usercode(user.getUsercode())
                 .roleId(reqSignupDto.getRoleId())
                 .build();
         userRoleRepository.insert(userRole);

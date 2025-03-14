@@ -15,7 +15,7 @@ public class ReqSignupDto {
     @Schema(description = "이메일", example = "test@gmail.com", required = true)
     private String email;
     @Schema(description = "휴대폰 번호", example = "010-1234-5678", required = true)
-    private String phonenumber;
+    private String phoneNumber;
     @Schema(description = "권한 ID", example = "1", required = true)
     private int roleId;
 }

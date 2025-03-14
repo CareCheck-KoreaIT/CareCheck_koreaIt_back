@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @Operation(summary = "로그인", description = "로그인")
-    @GetMapping("/user/auth/signin")
+    @PostMapping("/user/auth/signin")
     public ResponseEntity<?> signin(@RequestBody ReqSigninDto dto) {
         RespTokenDto respTokenDto = RespTokenDto.builder()
                 .type("JWT")
