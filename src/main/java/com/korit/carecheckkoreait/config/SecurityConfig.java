@@ -58,7 +58,8 @@ public class SecurityConfig {
             ).permitAll();
 
             authorizeRequests.requestMatchers(
-                    "/user/auth/**"
+                    "/user/auth/**",
+                    "/order/**"
             ).permitAll();
 
             authorizeRequests.anyRequest().authenticated();
