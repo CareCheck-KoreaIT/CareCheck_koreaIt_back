@@ -9,11 +9,38 @@
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
             <result property="usercode" column="usercode"/>
+            <result property="clinicDeft" column="clinic_deft"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="usercode" column="usercode"/>
+            <result property="clinicDeft" column="clinic_deft"/>
             <result property="createdAt" column="created_at"/>
             <result property="updatedAt" column="updated_at"/>
             <collection property="chart" javaType="java.util.Set" resultMap="chartResultMap"></collection>
+        </resultMap>
+
+        <resultMap id="admDiagnosisResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="usercode" column="usercode"/>
+            <result property="clinicDeft" column="clinic_deft"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="updatedAt" column="updated_at"/>
             <collection property="diagnosis" javaType="java.util.Set" resultMap="diagnosisResultMap"></collection>
             <collection property="diagnosisOrder" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
+        </resultMap>
+
+        <resultMap id="admVitalResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="patientName" column="patient_name"/>
+            <result property="createdAt" column="created_at"/>
+            <collection property="vital" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
 
         <resultMap id="chartResultMap" type="com.korit.carecheckkoreait.entity.Chart">
@@ -45,5 +72,19 @@
                 <result property="updatedAt" column="updated_at"/>
         </resultMap>
 
-        <insert id=""></insert>
+        <resultMap id="patientVitalResultMap" type="com.korit.carecheckkoreait.entity.PatientVital">
+                <id property="patientVitalId" column="patient_vital_id"/>
+                <result property="admId" column="adm_id"/>
+                <result property="usercode" column="user_code"/>
+                <result property="height" column="height"/>
+                <result property="weight" column="weight"/>
+                <result property="fever" column="fever"/>
+                <result property="createdAt" column="created_at"/>
+                <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <insert id="insertAdmission">
+                insert into adm_tb
+                values (default, #{patientId}, #{usercode}, #{clinicDeft}, now(), now())
+        </insert>
 </mapper>

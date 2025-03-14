@@ -16,10 +16,13 @@ public class Admission {
     private int admId;
     private int patientId;
     private int usercode;
+    private String clinicDeft;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private String patientName;
     private List<Chart> chart;
+    private List<PatientVital> vital;
     private List<Diagnosis> diagnosis;
     private List<DiagnosisOrder> diagnosisOrder;
 }
