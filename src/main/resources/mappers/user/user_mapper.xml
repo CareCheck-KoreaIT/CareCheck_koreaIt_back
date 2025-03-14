@@ -55,7 +55,7 @@
         set
             password = #{password}
         where
-            user_id = #{usercode}
+            usercode = #{usercode}
     </update>
 
     <update id="updateEmailById">
@@ -63,7 +63,7 @@
         set
             email = #{email}
         where
-            user_id = #{usercode}
+            usercode = #{usercode}
     </update>
 
     <update id="updatePhoneNumberById">
@@ -71,7 +71,7 @@
         set
             phonenumber = #{phoneNumber}
         where
-            user_id = #{usercode}
+            usercode = #{usercode}
     </update>
 
     <select id="selectById" resultMap="userResultMap">

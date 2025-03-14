@@ -45,4 +45,5 @@ springdoc:
 
 mybatis:
   mapper-locations:
-    - /mappers/*.xml
+    - /mappers/patient/*.xml
+    - /mappers/user/*.xml
