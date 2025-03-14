@@ -7,11 +7,10 @@
 
         <resultMap id="admResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
-            <result property="patientId" column="patient_id"/>
-            <result property="usercode" column="usercode"/>
-            <result property="clinicDeft" column="clinic_deft"/>
-            <result property="createdAt" column="created_at"/>
-            <result property="updatedAt" column="updated_at"/>
+            <result property="patientId" column="adm.patient_id"/>
+            <result property="patientName" column="pt.patient_name"/>
+            <result property="userName" column="adm.username"/>
+            <result property="admDate" column="adm_time"/>
         </resultMap>
 
         <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
@@ -27,10 +26,11 @@
         <resultMap id="admDiagnosisResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
+            <result property="patientName" column="patient_name"/>
             <result property="usercode" column="usercode"/>
+            <result property="username" column="username"/>
             <result property="clinicDeft" column="clinic_deft"/>
             <result property="createdAt" column="created_at"/>
-            <result property="updatedAt" column="updated_at"/>
             <collection property="diagnosis" javaType="java.util.Set" resultMap="diagnosisResultMap"></collection>
             <collection property="diagnosisOrder" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
@@ -39,7 +39,6 @@
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
             <result property="patientName" column="patient_name"/>
-            <result property="createdAt" column="created_at"/>
             <collection property="vital" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
 
@@ -53,38 +52,81 @@
 
         <resultMap id="diagnosisResultMap" type="com.korit.carecheckkoreait.entity.Diagnosis">
                 <id property="diagnosisId" column="diagnosis_id"/>
-                <result property="admId" column="adm_id"/>
                 <result property="diseaseCode" column="disease_code"/>
-                <result property="createdAt" column="created_at"/>
-                <result property="updatedAt" column="updated_at"/>
         </resultMap>
 
         <resultMap id="diagnosisOrderResultMap" type="com.korit.carecheckkoreait.entity.DiagnosisOrder">
                 <id property="diagnosisOrderId" column="diagnosis_order_id"/>
-                <result property="admId" column="adm_id"/>
                 <result property="orderCode" column="order_code"/>
                 <result property="orderDose" column="order_dose"/>
                 <result property="orderCount" column="order_count"/>
                 <result property="orderDays" column="order_days"/>
                 <result property="calculateOrderPay" column="cal_order_pay"/>
                 <result property="orderMethod" column="order_method"/>
-                <result property="createdAt" column="created_at"/>
-                <result property="updatedAt" column="updated_at"/>
         </resultMap>
 
         <resultMap id="patientVitalResultMap" type="com.korit.carecheckkoreait.entity.PatientVital">
                 <id property="patientVitalId" column="patient_vital_id"/>
                 <result property="admId" column="adm_id"/>
-                <result property="usercode" column="user_code"/>
                 <result property="height" column="height"/>
                 <result property="weight" column="weight"/>
                 <result property="fever" column="fever"/>
-                <result property="createdAt" column="created_at"/>
-                <result property="updatedAt" column="updated_at"/>
+                <result property="createdAt" column="vital_check_time"/>
         </resultMap>
 
         <insert id="insertAdmission">
                 insert into adm_tb
                 values (default, #{patientId}, #{usercode}, #{clinicDeft}, now(), now())
         </insert>
+
+        <select id="selectWaitingList" resultMap="admResultMap">
+            select 
+                adm.adm_id,
+	            adm.patient_id,
+                pt.patient_name,
+                adm.username,
+                date_format(adm.created_at, "%H:%i") as adm_time
+            from adm_tb as adm
+            left outer join patient_tb as pt
+            on pt.patient_id = adm.patient_id
+            where date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d") 
+            and adm.usercode = #{usercode}
+            order by adm_time;
+        </select>
+
+        <select id="selectVitalInfo" resultMap="admVitalResultMap">
+            select 
+                adm.adm_id,
+	            adm.patient_id,
+                (select patient_name 
+		            from patient_tb pt
+		            where pt.patient_id = adm.patient_id) as patient_name,
+                pvt.patientVitalId,
+                pvt.height,
+                pvt.weight,
+                pvt.fever,
+                date_format(pvt.created_at, "%H:%i") as vital_check_time
+            from adm_tb as adm
+            left outer join patient_vital_tb as pvt
+            on pvt.adm_id = adm.adm_id
+            where adm.adm_id = #{admId};
+        </select>
+
+        <select id="selectDetailOrderByAdmId" resultMap="admDiagnosisResultMap">
+            select 
+	            distinct adm.adm_id,
+                (select patient_name from patient_tb where patient_tb.patient_id = adm.patient_id) as patient_name,
+                date_format(adm.created_at, "%Y-%m-%d") as adm_date,
+                order_code,
+                order_count,
+                order_days,
+                cal_order_pay
+            from adm_tb as adm
+                left outer join diagnosis_tb as dt
+	            on dt.adm_id = adm.adm_id
+                left outer join diagnosis_order_tb as dot
+	            on dot.adm_id = adm.adm_id
+            where adm.adm_id = #{admId}
+            order by order_code;
+        </select>
 </mapper>
