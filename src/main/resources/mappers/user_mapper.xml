@@ -11,7 +11,7 @@
 
     <resultMap id="userRoleResultMap" type="com.korit.carecheckkoreait.entity.UserRole">
         <id property="userRoleId" column="user_role_id" />
-        <result property="userId" column="urt_user_id" />
+        <result property="usercode" column="urt_usercode" />
         <result property="roleId" column="urt_role_id" />
         <association property="roleId" resultMap="roleResultMap" />
     </resultMap>
@@ -31,7 +31,8 @@
         <result property="updatedAt" column="updated_at" />
         <collection property="userRole" resultMap="userRoleResultMap" />
     </resultMap>
-    <insert id="insert">
+
+    <insert id="insert" keyProperty="index" useGeneratedKeys="true">
         insert into user_tb
         values (
             default,
@@ -48,6 +49,7 @@
             now()
         )
     </insert>
+
     <update id="updatePasswordById">
         update user_tb
         set
@@ -55,6 +57,7 @@
         where
             user_id = #{usercode}
     </update>
+
     <update id="updateEmailById">
         update user_tb
         set
@@ -62,6 +65,7 @@
         where
             user_id = #{usercode}
     </update>
+
     <update id="updatePhoneNumberById">
         update user_tb
         set
@@ -85,18 +89,19 @@
             ut.created_at,
 
             urt.user_role_id,
-            urt.user_id as urt_user_id,
+            urt.usercode as urt_usercode,
             urt.role_id as urt_role_id,
 
             rt.role_id,
             rt.role_name
         from
             user_tb ut
-            left outer join user_role_tb urt on(urt.user_id = ut.index)
+            left outer join user_role_tb urt on(urt.usercode = ut.usercode)
             left outer join role_tb rt on(rt.role_id = urt.role_id)
         where
             ut.index = #{userId}
     </select>
+
     <select id="selectByUsername" resultType="com.korit.carecheckkoreait.entity.User">
 `       select
             ut.index,
@@ -112,18 +117,19 @@
             ut.created_at,
 
             urt.user_role_id,
-            urt.user_id as urt_user_id,
+            urt.usercode as urt_usercode,
             urt.role_id as urt_role_id,
 
             rt.role_id,
             rt.role_name
         from
             user_tb ut
-            left outer join user_role_tb urt on(urt.user_id = ut.index)
+            left outer join user_role_tb urt on(urt.usercode = ut.usercode)
             left outer join role_tb rt on(rt.role_id = urt.role_id)
         where
             ut.username = #{username}
     </select>
+
     <select id="selectUsercode" resultType="java.lang.String">
         select
             concat(year(now()), lpad(#{roleId}, 2, '0'), lpad(count(*) + 1, 4, '0'))
@@ -148,14 +154,14 @@
             ut.created_at,
 
             urt.user_role_id,
-            urt.user_id as urt_user_id,
+            urt.usercode as urt_usercode,
             urt.role_id as urt_role_id,
 
             rt.role_id,
             rt.role_name
         from
             user_tb ut
-            left outer join user_role_tb urt on(urt.user_id = ut.index)
+            left outer join user_role_tb urt on(urt.usercode = ut.usercode)
             left outer join role_tb rt on(rt.role_id = urt.role_id)
         where
             ut.usercode = #{usercode}

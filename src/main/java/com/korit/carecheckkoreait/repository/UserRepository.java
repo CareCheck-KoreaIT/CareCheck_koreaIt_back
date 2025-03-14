@@ -13,6 +13,10 @@ public class UserRepository {
     @Autowired
     private UserMapper userMapper;
 
+    public Optional<User> selectById(int userId) {
+        return Optional.ofNullable(userMapper.selectById(userId));
+    }
+
     public Optional<User> selectByUsercode(String usercode) {
         return Optional.ofNullable(userMapper.selectByUsercode(usercode));
     }
