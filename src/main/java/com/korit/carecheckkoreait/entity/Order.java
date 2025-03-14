@@ -15,6 +15,8 @@ public class Order {
     private String orderCode;
     private String orderName;
     private Double orderScore;
+    private int scorePayId;
+    private int orderPay;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 }
