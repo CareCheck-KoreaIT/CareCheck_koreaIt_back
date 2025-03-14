@@ -1,11 +1,13 @@
 package com.korit.carecheckkoreait.config;
 
 import com.korit.carecheckkoreait.security.filter.JwtAuthenticationFilter;
+import com.korit.carecheckkoreait.security.handler.CustomAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +21,8 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder () {
@@ -40,19 +44,23 @@ public class SecurityConfig {
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.exceptionHandling(exception -> {
-            exception.authenticationEntryPoint(null);
-            //이후 추가
+            exception.authenticationEntryPoint(customAuthenticationEntryPoint);
         });
 
         http.authorizeHttpRequests(authorizeRequests -> {
+
             authorizeRequests.requestMatchers(
-                    "/api/auth/**",
-                    "/image/**",
                     "/swagger-ui/**",
                     "/v2/api-docs/**",
                     "/v3/api-docs/**",
                     "/swagger-resources/**",
-                    "/server/hc").permitAll();
+                    "/server/hc"
+            ).permitAll();
+
+            authorizeRequests.requestMatchers(
+                    "/user/auth/**"
+            ).permitAll();
+
             authorizeRequests.anyRequest().authenticated();
 
         });

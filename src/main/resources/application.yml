@@ -32,8 +32,17 @@ react:
 
 
 ---
+spring:
+  config:
+    activate:
+      on-profile: common
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+springdoc:
+  override-with-generic-response: false
 
 mybatis:
   mapper-locations:
     - /mappers/*.xml
-    - /mappers/user/*.xml
