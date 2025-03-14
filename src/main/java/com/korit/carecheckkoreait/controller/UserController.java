@@ -38,6 +38,11 @@ public class UserController {
         return ResponseEntity.ok().body(respTokenDto);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getLoginUser(@AuthenticationPrincipal PrincipalUser principalUser) {
+        return ResponseEntity.ok().body(principalUser.getUser());
+    }
+
     @PutMapping("/changeInfo/password")
     public ResponseEntity<?> changePassword(
             @AuthenticationPrincipal PrincipalUser principalUser,
