@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ScorePay {
+    private int scorePayId;
     private Double scorePay;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
