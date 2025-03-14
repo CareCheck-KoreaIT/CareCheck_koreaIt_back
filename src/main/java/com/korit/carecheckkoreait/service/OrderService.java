@@ -30,5 +30,8 @@ public class OrderService {
                 .orElseThrow(() -> new NotFoundException("조회된 Order가 없습니다."));
     }
 
-
+    public void updateScorePay(double scorePay) {
+        System.out.println("service"+ scorePay);
+        orderRepository.updateScorePay(scorePay);
+    }
 }

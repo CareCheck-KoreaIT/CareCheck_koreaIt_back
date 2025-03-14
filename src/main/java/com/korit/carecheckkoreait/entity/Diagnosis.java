@@ -14,15 +14,7 @@ import java.time.LocalDateTime;
 public class Diagnosis {
     private int diagnosisId;
     private int admId;
-    private int diseaseId;
-    private String orderCode;
-    private Double orderDose;
-    private int orderCount;
-    private int orderDays;
-    private String orderMethod;
-    private Double orderScore;
-    private Double scorePay;
-    private int totalPay;
+    private int diseaseCode;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 }

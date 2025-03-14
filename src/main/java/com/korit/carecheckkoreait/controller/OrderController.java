@@ -1,5 +1,6 @@
 package com.korit.carecheckkoreait.controller;
 
+import com.korit.carecheckkoreait.CareCheckKoreaItBackApplication;
 import com.korit.carecheckkoreait.dto.request.ReqAddOrderDto;
 import com.korit.carecheckkoreait.dto.request.ReqSearchOrderDto;
 import com.korit.carecheckkoreait.service.OrderService;
@@ -9,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/setting")
 public class OrderController {
 
     @Autowired
@@ -26,5 +27,13 @@ public class OrderController {
     @GetMapping("/list")
     public ResponseEntity<?> searchOrder(@ModelAttribute ReqSearchOrderDto reqSearchOrderDto) throws Exception {
         return ResponseEntity.ok().body(orderService.getAllOrders(reqSearchOrderDto));
+    }
+
+    @Operation(summary = "점수단가 변경", description = "점수단가 변경")
+    @PostMapping("/score")
+    public ResponseEntity<?> updateScorePay(@RequestParam double scorePay) {
+        System.out.println("controller" + scorePay);
+        orderService.updateScorePay(scorePay);
+        return ResponseEntity.ok().build();
     }
 }

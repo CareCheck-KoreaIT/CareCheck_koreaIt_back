@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.carecheckkoreait.mapper.admissionMapper">
+
+        <resultMap id="admResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="usercode" column="usercode"/>
+            <result property="clinicDeft" column="clinic_deft"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="usercode" column="usercode"/>
+            <result property="clinicDeft" column="clinic_deft"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="updatedAt" column="updated_at"/>
+            <collection property="chart" javaType="java.util.Set" resultMap="chartResultMap"></collection>
+        </resultMap>
+
+        <resultMap id="admDiagnosisResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="usercode" column="usercode"/>
+            <result property="clinicDeft" column="clinic_deft"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="updatedAt" column="updated_at"/>
+            <collection property="diagnosis" javaType="java.util.Set" resultMap="diagnosisResultMap"></collection>
+            <collection property="diagnosisOrder" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
+        </resultMap>
+
+        <resultMap id="admVitalResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="patientName" column="patient_name"/>
+            <result property="createdAt" column="created_at"/>
+            <collection property="vital" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
+        </resultMap>
+
+        <resultMap id="chartResultMap" type="com.korit.carecheckkoreait.entity.Chart">
+                <id property="chartId" column="chart_id"/>
+                <result property="admId" column="adm_id"/>
+                <result property="content" column="content"/>
+                <result property="createdAt" column="created_at"/>
+                <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <resultMap id="diagnosisResultMap" type="com.korit.carecheckkoreait.entity.Diagnosis">
+                <id property="diagnosisId" column="diagnosis_id"/>
+                <result property="admId" column="adm_id"/>
+                <result property="diseaseCode" column="disease_code"/>
+                <result property="createdAt" column="created_at"/>
+                <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <resultMap id="diagnosisOrderResultMap" type="com.korit.carecheckkoreait.entity.DiagnosisOrder">
+                <id property="diagnosisOrderId" column="diagnosis_order_id"/>
+                <result property="admId" column="adm_id"/>
+                <result property="orderCode" column="order_code"/>
+                <result property="orderDose" column="order_dose"/>
+                <result property="orderCount" column="order_count"/>
+                <result property="orderDays" column="order_days"/>
+                <result property="calculateOrderPay" column="cal_order_pay"/>
+                <result property="orderMethod" column="order_method"/>
+                <result property="createdAt" column="created_at"/>
+                <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <resultMap id="patientVitalResultMap" type="com.korit.carecheckkoreait.entity.PatientVital">
+                <id property="patientVitalId" column="patient_vital_id"/>
+                <result property="admId" column="adm_id"/>
+                <result property="usercode" column="user_code"/>
+                <result property="height" column="height"/>
+                <result property="weight" column="weight"/>
+                <result property="fever" column="fever"/>
+                <result property="createdAt" column="created_at"/>
+                <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <insert id="insertAdmission">
+                insert into adm_tb
+                values (default, #{patientId}, #{usercode}, #{clinicDeft}, now(), now())
+        </insert>
+</mapper>

@@ -1,6 +1,5 @@
 package com.korit.carecheckkoreait.repository;
 
-import com.korit.carecheckkoreait.dto.request.ReqAddOrderDto;
 import com.korit.carecheckkoreait.entity.Order;
 import com.korit.carecheckkoreait.mapper.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,4 +23,9 @@ public class OrderRepository {
                 ? Optional.empty()
                 : Optional.of(orderMapper.selectAllByOrderNameContaining(orderName));
     }
+
+    public void updateScorePay(double scorePay) {
+        System.out.println("repository" + scorePay);
+        orderMapper.updateScoreById(scorePay);
+    };
 }
