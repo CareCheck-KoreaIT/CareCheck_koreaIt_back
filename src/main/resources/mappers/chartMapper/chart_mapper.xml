@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.carecheckkoreait.mapper.ChartMapper">
+    <resultMap id="patientResultMap" type="com.korit.carecheckkoreait.entity.Patient">
+        <id property="patientId" column="patient_id" />
+        <result property="patientName" column="patient_name" />
+        <result property="regidentNum" column="regident_num" />
+        <result property="phoneNum" column="phone_num" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+    </resultMap>
+
+    <insert id="insertChart">
+        insert into chart_tb
+        values (default, #{admId}, #{content}, now(), now())
+    </insert>
+
+    <select id="selectPatientIdByChartId" resultMap="patientResultMap">
+        select
+            patient_id,
+            patient_name,
+            regident_num,
+            phone_num,
+            created_at,
+            updated_at
+        from
+            patient_tb
+        where
+            patient_id = #{patientId}
+    </select>
+</mapper>
