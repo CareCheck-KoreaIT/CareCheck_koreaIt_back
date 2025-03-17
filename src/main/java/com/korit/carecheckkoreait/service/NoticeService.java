@@ -36,4 +36,13 @@ public class NoticeService {
                 reqNoticeListSearchDto.getLimitCount()
         );
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public int deleteNoticeById(int noticeId) {
+        return  noticeRepository.deleteNoticeById(noticeId);
+
+
+    }
+
+
 }

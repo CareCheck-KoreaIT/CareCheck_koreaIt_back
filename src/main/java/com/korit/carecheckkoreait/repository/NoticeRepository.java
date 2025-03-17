@@ -24,4 +24,11 @@ public class NoticeRepository {
             int limitSize) {
         return noticeMapper.selectAllNoticeList(startIndex, limitSize);
     }
+
+    public int deleteNoticeById(int noticeId) {
+        int result = noticeMapper.deleteNotice(noticeId);
+        return result;
+    }
+
+
 }
