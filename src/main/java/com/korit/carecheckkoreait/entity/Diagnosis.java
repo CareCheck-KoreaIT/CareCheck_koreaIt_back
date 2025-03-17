@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Diagnosis {
     private int diagnosisId;
     private int admId;
-    private int diseaseCode;
+    private String diseaseCode;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 }
