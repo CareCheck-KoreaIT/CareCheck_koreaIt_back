@@ -33,7 +33,8 @@ public class NoticeController {
     ) {
         return ResponseEntity.ok().body(noticeService.createNotice(principalUser.getUser(), reqWriteNoticeDto));
     }
-    
+
+    @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 조회")
     @GetMapping("/list")
     public ResponseEntity<?> searchNoticeList(@ModelAttribute ReqNoticeListSearchDto dto) {
         List<NoticeSearch> NoticeList = noticeService.getNoticeListSearch(dto);
@@ -54,7 +55,3 @@ public class NoticeController {
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 }
-
-    
-}
-
