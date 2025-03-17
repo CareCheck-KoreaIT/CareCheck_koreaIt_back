@@ -52,4 +52,8 @@ public class PrincipalUser implements UserDetails {
     public boolean isEnabled() {
         return user.getAccountEnabled() == 1;
     }
+
+    public String getUsercode() {
+        return user.getUsercode();
+    }
 }
