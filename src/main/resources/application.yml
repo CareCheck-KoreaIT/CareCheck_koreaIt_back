@@ -41,3 +41,4 @@ mybatis:
     - /mappers/user/*.xml
     - /mappers/setting/*.xml
     - /mappers/adminMapper/*.xml
+    - /mappers/notice/*.xml
