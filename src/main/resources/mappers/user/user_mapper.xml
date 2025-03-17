@@ -13,7 +13,7 @@
         <id property="userRoleId" column="user_role_id" />
         <result property="usercode" column="urt_usercode" />
         <result property="roleId" column="urt_role_id" />
-        <association property="roleId" resultMap="roleResultMap" />
+        <association property="role" resultMap="roleResultMap" />
     </resultMap>
 
     <resultMap id="userResultMap" type="com.korit.carecheckkoreait.entity.User" >
@@ -55,7 +55,7 @@
         set
             password = #{password}
         where
-            user_id = #{usercode}
+            usercode = #{usercode}
     </update>
 
     <update id="updateEmailById">
@@ -63,7 +63,7 @@
         set
             email = #{email}
         where
-            user_id = #{usercode}
+            usercode = #{usercode}
     </update>
 
     <update id="updatePhoneNumberById">
@@ -71,7 +71,7 @@
         set
             phonenumber = #{phoneNumber}
         where
-            user_id = #{usercode}
+            usercode = #{usercode}
     </update>
 
     <select id="selectById" resultMap="userResultMap">

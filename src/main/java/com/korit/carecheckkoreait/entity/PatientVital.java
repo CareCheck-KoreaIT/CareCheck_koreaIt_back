@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class PatientVital {
     private int patientVitalId;
     private int admId;
-    private int staffId;
+    private int usercode;
     private Double height;
     private Double weight;
     private Double fever;

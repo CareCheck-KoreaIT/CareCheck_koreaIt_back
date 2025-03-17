@@ -22,14 +22,6 @@ spring:
   config:
     activate:
       on-profile: blue_server
-server:
-  port: 8080
-react:
-  server:
-    protocol: https
-    host: ??? ?? ?? ??(ip ?? ???)
-    port: 5173
-
 
 ---
 spring:
@@ -45,4 +37,7 @@ springdoc:
 
 mybatis:
   mapper-locations:
-    - /mappers/*.xml
+    - /mappers/patient/*.xml
+    - /mappers/user/*.xml
+    - /mappers/setting/*.xml
+    - /mappers/adminMapper/*.xml

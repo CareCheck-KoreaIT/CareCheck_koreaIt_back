@@ -8,6 +8,6 @@
     <insert id="insert" keyProperty="userRoleId" useGeneratedKeys="true">
         insert into user_role_tb
         values
-            (default, #{userId}, #{roleId})
+            (default, #{usercode}, #{roleId})
     </insert>
 </mapper>

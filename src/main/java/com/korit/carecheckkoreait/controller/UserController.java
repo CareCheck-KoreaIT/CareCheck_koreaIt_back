@@ -14,19 +14,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @Operation(summary = "회원가입(사번등록)", description = "사번등록")
-    @PostMapping("/user/auth/signup")
+    @PostMapping("/auth/signup")
     public ResponseEntity<?> signup(@RequestBody ReqSignupDto dto) {
         return ResponseEntity.ok().body(userService.signup(dto));
     }
 
     @Operation(summary = "로그인", description = "로그인")
-    @PostMapping("/user/auth/signin")
+    @PostMapping("/auth/signin")
     public ResponseEntity<?> signin(@RequestBody ReqSigninDto dto) {
         RespTokenDto respTokenDto = RespTokenDto.builder()
                 .type("JWT")
@@ -37,7 +38,12 @@ public class UserController {
         return ResponseEntity.ok().body(respTokenDto);
     }
 
-    @PutMapping("/user/changeInfo/password")
+    @GetMapping("/me")
+    public ResponseEntity<?> getLoginUser(@AuthenticationPrincipal PrincipalUser principalUser) {
+        return ResponseEntity.ok().body(principalUser.getUser());
+    }
+
+    @PutMapping("/changeInfo/password")
     public ResponseEntity<?> changePassword(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
@@ -47,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/user/changeInfo/email")
+    @PutMapping("/changeInfo/email")
     public ResponseEntity<?> changeEmail(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
@@ -56,7 +62,7 @@ public class UserController {
         userService.updateEmail(principalUser.getUser(), email);
         return ResponseEntity.ok().build();
     }
-    @PutMapping("/user/changeInfo/phoneNumber")
+    @PutMapping("/changeInfo/phoneNumber")
     public ResponseEntity<?> changePhoneNumber(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
