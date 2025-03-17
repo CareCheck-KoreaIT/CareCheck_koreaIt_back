@@ -2,9 +2,12 @@ package com.korit.carecheckkoreait.controller;
 
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespNoticeListSearchDto;
+import com.korit.carecheckkoreait.entity.Notice;
 import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.service.NoticeService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,5 +56,16 @@ public class NoticeController {
                         .build();
 
         return ResponseEntity.ok().body(respNoticeListSearchDto);
+    }
+
+    @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
+    @DeleteMapping("/{noticeId}")
+    public ResponseEntity<?> deleteNotice(@PathVariable int noticeId) {
+        int result = noticeService.deleteNoticeById(noticeId);
+        if (result == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("공지사항을 찾을 수 없습니다.");
+        }
+
+        return ResponseEntity.ok().body("공지사항이 삭제되었습니다.");
     }
 }

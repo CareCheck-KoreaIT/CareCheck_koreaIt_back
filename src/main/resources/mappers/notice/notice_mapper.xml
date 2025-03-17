@@ -16,7 +16,7 @@
           now()
         )
     </insert>
-<!--    <select id="selectNoticeAllBySearchText" resultType="java.lang.Integer">-->
+    <!--    <select id="selectNoticeAllBySearchText" resultType="java.lang.Integer">-->
 <!--        select-->
 <!--            count(*)-->
 <!--        from-->
@@ -41,4 +41,25 @@
             LIMIT #{startIndex}, #{limitCount}
         </if>
     </select>
+    <select id="findByid" resultType="com.korit.carecheckkoreait.entity.Notice">
+        SELECT
+            notice_id AS noticeId,
+            usercode,
+            title,
+            content,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM
+            notice_tb
+        WHERE
+            notice_id = #{noticeId}
+    </select>
+
+    <delete id="deleteNotice">
+        delete
+        from
+            notice_tb
+        where
+            notice_id = #{noticeId}
+    </delete>
 </mapper>
