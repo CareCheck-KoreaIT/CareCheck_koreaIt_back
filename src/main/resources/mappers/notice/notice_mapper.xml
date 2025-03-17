@@ -41,20 +41,7 @@
             LIMIT #{startIndex}, #{limitCount}
         </if>
     </select>
-    <select id="findByid" resultType="com.korit.carecheckkoreait.entity.Notice">
-        SELECT
-            notice_id AS noticeId,
-            usercode,
-            title,
-            content,
-            created_at AS createdAt,
-            updated_at AS updatedAt
-        FROM
-            notice_tb
-        WHERE
-            notice_id = #{noticeId}
-    </select>
-
+    
     <delete id="deleteNotice">
         delete
         from
