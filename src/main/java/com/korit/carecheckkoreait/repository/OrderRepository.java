@@ -25,7 +25,6 @@ public class OrderRepository {
     }
 
     public void updateScorePay(double scorePay) {
-        System.out.println("repository" + scorePay);
         orderMapper.updateScoreById(scorePay);
     };
 }

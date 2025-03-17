@@ -7,9 +7,10 @@ import org.apache.ibatis.annotations.Mapper;
 import com.korit.carecheckkoreait.entity.Admission;
 
 @Mapper
-public interface admissionMapper {  
+public interface AdmissionMapper {  
     int insertAdmission (Admission admission);
-    List<Admission> selectWaitingList (String usercode);
-    List<Admission> selectVitalInfo (int admId);
+    int selectAdmissionByPatientIdAndUserCode (int patientId, String usercode);
+    List<Admission> selectWaitingListByUserCode (String usercode);
+    List<Admission> selectVitalInfoByAdmId (int admId);
     List<Admission> selectDetailOrderByAdmId(int admId);
 } 
