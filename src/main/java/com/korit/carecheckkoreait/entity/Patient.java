@@ -17,6 +17,6 @@ public class Patient {
     private String patientName;
     private String regidentNum;
     private String phoneNum;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
