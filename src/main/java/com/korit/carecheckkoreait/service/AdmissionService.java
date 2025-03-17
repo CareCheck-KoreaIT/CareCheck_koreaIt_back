@@ -6,16 +6,20 @@ import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.korit.carecheckkoreait.controller.AdmissionController;
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
+import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
+import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
 import com.korit.carecheckkoreait.entity.Admission;
+import com.korit.carecheckkoreait.entity.Diagnosis;
+import com.korit.carecheckkoreait.entity.DiagnosisOrder;
 import com.korit.carecheckkoreait.exception.DuplicatedValueException;
 import com.korit.carecheckkoreait.exception.FieldError;
 import com.korit.carecheckkoreait.repository.AdmissionRepository;
 
 @Service
 public class AdmissionService {
-    
+
     @Autowired
     private AdmissionRepository admissionRepository;
 
@@ -56,5 +60,31 @@ public class AdmissionService {
     public List<Admission> selectDetailOrderByAdmId(int admId) throws Exception{
         return admissionRepository.selectDetailOrderByAdmId(admId)
         .orElseThrow(()-> new NotFoundException("입력된 내역이 없습니다."));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void insertOrderInAdm(List<ReqAddOrderInAdmDto> dtoList) {
+        for(ReqAddOrderInAdmDto dto : dtoList) {
+            DiagnosisOrder order = DiagnosisOrder.builder()
+                .admId(dto.getAdmId())
+                .orderCode(dto.getOrderCode())
+                .orderDose(dto.getOrderDose())
+                .orderCount(dto.getOrderCount())
+                .orderDays(dto.getOrderDays())
+                .orderMethod(dto.getOrderMethod())
+                .build();
+            admissionRepository.insertOrderInAdm(order);
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void insertDiagnosisInAdm(List<ReqAddDiagnosisInAdmDto> dtoList) {
+        for (ReqAddDiagnosisInAdmDto dto : dtoList) {
+            Diagnosis diagnosis = Diagnosis.builder()
+                .admId(dto.getAdmId())
+                .diseaseCode(dto.getDiseaseCode())
+                .build();
+            admissionRepository.insertDiagnosisInAdm(diagnosis);
+        }
     }
 }
