@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
-    private String orderCode;
-    private String orderName;
-    private Double orderScore;
-    private int scorePayId;
-    private int orderPay;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+public class Notice {
+    private int noticeId;
+    private String usercode;
+    private String title;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    private User user;
 }

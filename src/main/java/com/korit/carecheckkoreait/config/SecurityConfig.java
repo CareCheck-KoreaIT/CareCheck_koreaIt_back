@@ -61,6 +61,9 @@ public class SecurityConfig {
                     "/user/auth/**",
                     "/setting/**",
                     "/adm/**"
+                    "/user/changeInfo/**",
+                    "/notice/**",
+                    "/setting/**"
             ).permitAll();
 
             authorizeRequests.anyRequest().authenticated();
