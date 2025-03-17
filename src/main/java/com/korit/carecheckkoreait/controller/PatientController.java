@@ -24,7 +24,7 @@ public class PatientController {
         Patient patient = Patient.builder()
                 .patientName(reqPatientRegDto.getPatientName())
                 .regidentNum(reqPatientRegDto.getRegidentNum())
-                .phoneNum(reqPatientRegDto.getPhoneNumber())
+                .phoneNum(reqPatientRegDto.getPhoneNum())
                 .createAt(LocalDateTime.now())
                 .updateAt(LocalDateTime.now())
                 .build();

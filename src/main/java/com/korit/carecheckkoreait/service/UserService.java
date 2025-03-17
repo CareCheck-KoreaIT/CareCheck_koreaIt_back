@@ -82,6 +82,7 @@ public class UserService {
     public void updateEmail(User user, String email) {
         userRepository.updateEmail(user.getUsercode(), email);
     }
+    @Transactional(rollbackFor = Exception.class)
     public void updatePhoneNumber(User user, String phoneNumber) {
         userRepository.updatePhoneNumber(user.getUsercode(), phoneNumber);
     }

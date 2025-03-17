@@ -10,6 +10,6 @@ public class ReqPatientRegDto {
     @Schema(description = "주민등록번호", example = "111111-2222222", required = true)
     private String regidentNum;
     @Schema(description = "휴대폰번호", example = "010-1234-5678")
-    private String phoneNumber;
+    private String phoneNum;
 
 }

@@ -30,13 +30,13 @@ public class UserRepository {
         return user;
     }
     public void updatePassword(String usercode, String password) {
-        userMapper.updatePasswordById(usercode, password);
+        userMapper.updatePasswordByUserCode(usercode, password);
     }
     public void updateEmail(String usercode, String email) {
-        userMapper.updateEmailById(usercode, email);
+        userMapper.updateEmailByUserCode(usercode, email);
     }
     public void updatePhoneNumber(String usercode, String phoneNumber) {
-        userMapper.updatePhoneNumberById(usercode, phoneNumber);
+        userMapper.updatePhoneNumberByUserCode(usercode, phoneNumber);
     }
 
 }

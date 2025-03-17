@@ -1,5 +1,6 @@
 package com.korit.carecheckkoreait.controller;
 
+import com.korit.carecheckkoreait.dto.request.ReqChangeEmailDto;
 import com.korit.carecheckkoreait.dto.request.ReqSigninDto;
 import com.korit.carecheckkoreait.dto.request.ReqSignupDto;
 import com.korit.carecheckkoreait.dto.response.RespTokenDto;
@@ -7,6 +8,7 @@ import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 import com.korit.carecheckkoreait.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +41,11 @@ public class UserController {
     }
 
     @PutMapping("/changeInfo/password")
+    @Operation(summary = "비밀번호 변경", description = "사용자의 비밀번호를 변경합니다.")
     public ResponseEntity<?> changePassword(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
+
     ) {
         String password = requestBody.get("password");
         userService.updatePassword(principalUser.getUser(), password);
@@ -51,16 +55,19 @@ public class UserController {
     @PutMapping("/changeInfo/email")
     public ResponseEntity<?> changeEmail(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody Map<String, String> requestBody
-    ) {
+            @RequestBody Map<String, String> requestBody)
+    {
         String email = requestBody.get("email");
         userService.updateEmail(principalUser.getUser(), email);
         return ResponseEntity.ok().build();
     }
+
+
     @PutMapping("/changeInfo/phoneNumber")
     public ResponseEntity<?> changePhoneNumber(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
+
     ) {
         String phoneNumber = requestBody.get("phoneNumber");
         userService.updatePhoneNumber(principalUser.getUser(), phoneNumber);
