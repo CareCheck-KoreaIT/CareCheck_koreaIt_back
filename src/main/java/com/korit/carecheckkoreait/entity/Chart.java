@@ -16,6 +16,6 @@ public class Chart {
     private int chartId;
     private int admId;
     private String content;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -27,17 +27,17 @@
         )
     </insert>
 
-    <select id="selectAllByOrderNameContaining" resultMap="orderResultMap">
-        select
-            order_code,
-            order_name,
-            order_score,
-            order_pay
-        from
-            order_tb
-        where
-            order_name like concat("%", #{orderName}, "%")
-    </select>
+<!--    <select id="selectAllByOrderNameContaining" resultMap="orderResultMap">-->
+<!--        select-->
+<!--            order_code,-->
+<!--            order_name,-->
+<!--            order_score,-->
+<!--            order_pay-->
+<!--        from-->
+<!--            order_tb-->
+<!--        where-->
+<!--            order_name like concat("%", #{orderName}, "%")-->
+<!--    </select>-->
 
     <update id="updateScoreById">
         update score_pay_tb 

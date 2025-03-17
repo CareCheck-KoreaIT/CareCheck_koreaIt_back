@@ -1,8 +1,11 @@
 package com.korit.carecheckkoreait.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +16,15 @@ public class SwaggerConfig {
     public OpenAPI getOpenAPI() {
         OpenAPI openAPI = new OpenAPI();
         openAPI.info(getInfo());
+        openAPI.addSecurityItem(getSecurityRequirement());
+        openAPI.components(new Components().addSecuritySchemes(
+                "Bearer Authentication",
+                new SecurityScheme()
+                        .name("Bearer Authentication")
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+        ));
         return openAPI;
     }
 
@@ -28,7 +40,13 @@ public class SwaggerConfig {
     private Contact getContact() {
         Contact contact = new Contact();
         contact.name("3조");
-        contact.email("tkagns2232@naver.com");
+        contact.email("tkdgns2232@naver.com");
         return contact;
     }
+
+    private SecurityRequirement getSecurityRequirement() {
+        return new SecurityRequirement().addList("Bearer Authentication");
+    }
+
+
 }

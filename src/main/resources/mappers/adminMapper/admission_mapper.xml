@@ -3,14 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.korit.carecheckkoreait.mapper.admissionMapper">
+<mapper namespace="com.korit.carecheckkoreait.mapper.AdmissionMapper">
 
         <resultMap id="admResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="adm.patient_id"/>
             <result property="patientName" column="pt.patient_name"/>
-            <result property="userName" column="adm.username"/>
-            <result property="admDate" column="adm_time"/>
         </resultMap>
 
         <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
@@ -28,7 +26,6 @@
             <result property="patientId" column="patient_id"/>
             <result property="patientName" column="patient_name"/>
             <result property="usercode" column="usercode"/>
-            <result property="username" column="username"/>
             <result property="clinicDeft" column="clinic_deft"/>
             <result property="createdAt" column="created_at"/>
             <collection property="diagnosis" javaType="java.util.Set" resultMap="diagnosisResultMap"></collection>
@@ -79,7 +76,7 @@
                 values (default, #{patientId}, #{usercode}, #{clinicDeft}, now(), now())
         </insert>
 
-        <select id="selectWaitingList" resultMap="admResultMap">
+    <select id="selectWaitingList" resultMap="admResultMap">
             select 
                 adm.adm_id,
 	            adm.patient_id,
@@ -87,10 +84,10 @@
                 adm.username,
                 date_format(adm.created_at, "%H:%i") as adm_time
             from adm_tb as adm
-            left outer join patient_tb as pt
-            on pt.patient_id = adm.patient_id
+                left outer join patient_tb as pt
+                on pt.patient_id = adm.patient_id
             where date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d") 
-            and adm.usercode = #{usercode}
+                and adm.usercode = #{usercode}
             order by adm_time;
         </select>
 
