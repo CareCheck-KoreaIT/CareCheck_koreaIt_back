@@ -12,7 +12,7 @@
             <result property="usercode" column="adm_usercode" />
             <result property="admDate" column="adm_time"/>
         </resultMap>
-<!-- 접수 - 차트 연계 맵맵-->
+<!-- 접수 - 차트 연계 맵-->
         <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
@@ -93,7 +93,7 @@
         </insert>
         <insert id="insertDiagnosisInAdmission">
                 insert into diagnosis_tb
-                values (default, #{admId}, #{diagnosisCode}, now(), now())
+                values (default, #{admId}, #{diseaseCode}, now(), now())
         </insert>
 <!-- 접수 - 오더삭제 -->
         <delete id="deleteOrderInAdmission">
