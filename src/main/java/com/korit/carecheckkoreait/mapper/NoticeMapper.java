@@ -9,10 +9,11 @@ import java.util.List;
 
 @Mapper
 public interface NoticeMapper {
-//    int selectNoticeAllBySearchText(@Param("searchText") String searchText);
+    //    int selectNoticeAllBySearchText(@Param("searchText") String searchText);
     int insertNotice(Notice notice);
-    
+
     List<NoticeSearch> selectAllNoticeList(
             @Param("startIndex") int startIndex,
             @Param("limitCount") int limitCount
     );
+}
