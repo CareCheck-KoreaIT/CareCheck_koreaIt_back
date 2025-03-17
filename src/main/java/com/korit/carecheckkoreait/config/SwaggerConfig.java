@@ -16,8 +16,15 @@ public class SwaggerConfig {
     public OpenAPI getOpenAPI() {
         OpenAPI openAPI = new OpenAPI();
         openAPI.info(getInfo());
-        openAPI.addSecurityItem(new SecurityRequirement().addList("JWT"))
-                .components(new Components().addSecuritySchemes("JWT", createApiKeyScheme()));
+        openAPI.addSecurityItem(getSecurityRequirement());
+        openAPI.components(new Components().addSecuritySchemes(
+                "Bearer Authentication",
+                new SecurityScheme()
+                        .name("Bearer Authentication")
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+        ));
         return openAPI;
     }
 
@@ -33,13 +40,13 @@ public class SwaggerConfig {
     private Contact getContact() {
         Contact contact = new Contact();
         contact.name("3조");
-        contact.email("tkagns2232@naver.com");
+        contact.email("tkdgns2232@naver.com");
         return contact;
     }
 
-    private SecurityScheme createApiKeyScheme() {
-        return new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                .bearerFormat("JWT")
-                .scheme("bearer");
+    private SecurityRequirement getSecurityRequirement() {
+        return new SecurityRequirement().addList("Bearer Authentication");
     }
+
+
 }

@@ -1,5 +1,6 @@
 package com.korit.carecheckkoreait.controller;
 
+import com.korit.carecheckkoreait.dto.request.ReqChangeEmailDto;
 import com.korit.carecheckkoreait.dto.request.ReqSigninDto;
 import com.korit.carecheckkoreait.dto.request.ReqSignupDto;
 import com.korit.carecheckkoreait.dto.response.RespTokenDto;
@@ -58,9 +59,9 @@ public class UserController {
     @PutMapping("/changeInfo/email")
     public ResponseEntity<?> changeEmail(
             @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody Map<String, String> requestBody
-    ) {
-        String email = requestBody.get("email");
+            @RequestBody ReqChangeEmailDto reqChangeEmailDto
+            ) {
+        String email = reqChangeEmailDto.getEmail();
         userService.updateEmail(principalUser.getUser(), email);
         return ResponseEntity.ok().build();
     }
