@@ -25,8 +25,8 @@ public class PatientController {
                 .patientName(reqPatientRegDto.getPatientName())
                 .regidentNum(reqPatientRegDto.getRegidentNum())
                 .phoneNum(reqPatientRegDto.getPhoneNumber())
-                .createAt(LocalDateTime.now())
-                .updateAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.ok().body(patientService.addPatient(patient));

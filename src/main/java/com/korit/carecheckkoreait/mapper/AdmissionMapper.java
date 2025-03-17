@@ -9,7 +9,7 @@ import com.korit.carecheckkoreait.entity.Diagnosis;
 import com.korit.carecheckkoreait.entity.DiagnosisOrder;
 
 @Mapper
-public interface AdmissionMapper {  
+public interface AdmissionMapper {
     int insertAdmission (Admission admission);
     int selectAdmissionByPatientIdAndUserCode (int patientId, String usercode);
     int insertOrderInAdmission (DiagnosisOrder diagnosisOrder);
@@ -18,4 +18,4 @@ public interface AdmissionMapper {
     List<Admission> selectWaitingListByUserCode (String usercode);
     List<Admission> selectVitalInfoByAdmId (int admId);
     List<Admission> selectDetailOrderByAdmId(int admId);
-} 
+}
