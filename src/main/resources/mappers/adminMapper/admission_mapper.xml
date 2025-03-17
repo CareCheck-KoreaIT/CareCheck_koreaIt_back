@@ -91,6 +91,10 @@
                 values (default, #{admId}, #{orderCode}, #{orderDose}, #{orderCount}, 
                         #{orderDays}, default, #{orderMethod}, now(), now())
         </insert>
+        <insert id="insertDiagnosisInAdmission">
+                insert into diagnosis_tb
+                values (default, #{admId}, #{diagnosisCode}, now(), now())
+        </insert>
 <!-- 접수 - 오더삭제 -->
         <delete id="deleteOrderInAdmission">
                 delete from diagnosis_order_tb

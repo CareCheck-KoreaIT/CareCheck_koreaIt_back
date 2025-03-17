@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
+import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
 import com.korit.carecheckkoreait.service.AdmissionService;
 
@@ -57,4 +58,11 @@ public class AdmissionController {
         admissionService.insertOrderInAdm(dto);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "진단입력", description = "선택한 접수번호에 주진단입력")
+    @PostMapping("/insertDiagnosis")
+    public ResponseEntity<?> insertDiagnosisInAdm(@RequestBody List<ReqAddDiagnosisInAdmDto> dto) {
+        admissionService.insertDiagnosisInAdm(dto);
+        return ResponseEntity.ok().build();
+    } 
 }

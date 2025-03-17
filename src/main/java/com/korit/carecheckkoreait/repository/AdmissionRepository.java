@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.korit.carecheckkoreait.controller.AdmissionController;
 import com.korit.carecheckkoreait.entity.Admission;
+import com.korit.carecheckkoreait.entity.Diagnosis;
 import com.korit.carecheckkoreait.entity.DiagnosisOrder;
 import com.korit.carecheckkoreait.mapper.AdmissionMapper;
 
@@ -51,6 +52,10 @@ public class AdmissionRepository {
 
     public void deleteOrderInAdm(int diagnosisOrderId) {
         admissionMapper.deleteOrderInAdmission(diagnosisOrderId);
+    }
+
+    public void insertDiagnosisInAdm(Diagnosis diagnosis) {
+        admissionMapper.insertDiagnosisInAdmission(diagnosis);
     }
 }
 
