@@ -3,13 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.korit.carecheckkoreait.mapper.admissionMapper">
+<mapper namespace="com.korit.carecheckkoreait.mapper.AdmissionMapper">
 
         <resultMap id="admResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
-            <result property="patientId" column="adm.patient_id"/>
-            <result property="patientName" column="pt.patient_name"/>
-            <result property="userName" column="adm.username"/>
+            <result property="patientId" column="adm_patient_id"/>
+            <result property="patientName" column="pt_patient_name"/>
+            <result property="usercode" column="adm_usercode" />
             <result property="admDate" column="adm_time"/>
         </resultMap>
 
@@ -79,12 +79,21 @@
                 values (default, #{patientId}, #{usercode}, #{clinicDeft}, now(), now())
         </insert>
 
-        <select id="selectWaitingList" resultMap="admResultMap">
+        <select id="selectAdmissionByPatientIdAndUserCode" resultType="int">
+            select
+                count(*)
+            from adm_tb as adm
+            where adm.patient_id = #{patientId}
+                and adm.usercode = #{usercode}
+                and date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d")
+        </select>
+
+        <select id="selectWaitingListByUserCode" resultMap="admResultMap">
             select 
-                adm.adm_id,
-	            adm.patient_id,
-                pt.patient_name,
-                adm.username,
+                adm.adm_id as adm_id,
+	            adm.patient_id as adm_patient_id,
+                pt.patient_name as pt_patient_name,
+                adm.usercode as adm_usercode,
                 date_format(adm.created_at, "%H:%i") as adm_time
             from adm_tb as adm
             left outer join patient_tb as pt
@@ -94,7 +103,7 @@
             order by adm_time;
         </select>
 
-        <select id="selectVitalInfo" resultMap="admVitalResultMap">
+        <select id="selectVitalInfoByAdmId" resultMap="admVitalResultMap">
             select 
                 adm.adm_id,
 	            adm.patient_id,
@@ -129,4 +138,6 @@
             where adm.adm_id = #{admId}
             order by order_code;
         </select>
+        
+
 </mapper>
