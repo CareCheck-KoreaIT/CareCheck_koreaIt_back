@@ -19,27 +19,23 @@
             <result property="usercode" column="usercode"/>
             <result property="clinicDeft" column="clinic_deft"/>
             <result property="createdAt" column="created_at"/>
-            <result property="updatedAt" column="updated_at"/>
-            <collection property="chart" javaType="java.util.Set" resultMap="chartResultMap"></collection>
+            <collection property="chart" javaType="java.util.List" resultMap="chartResultMap"></collection>
         </resultMap>
 
         <resultMap id="admDiagnosisResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
             <result property="patientName" column="patient_name"/>
-            <result property="usercode" column="usercode"/>
-            <result property="username" column="username"/>
-            <result property="clinicDeft" column="clinic_deft"/>
-            <result property="createdAt" column="created_at"/>
-            <collection property="diagnosis" javaType="java.util.Set" resultMap="diagnosisResultMap"></collection>
-            <collection property="diagnosisOrder" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
+            <result property="admDate" column="adm_date" />
+            <collection property="diagnosis" javaType="java.util.List" resultMap="diagnosisResultMap"></collection>
+            <collection property="diagnosisOrder" javaType="java.util.List" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
 
         <resultMap id="admVitalResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
             <result property="patientName" column="patient_name"/>
-            <collection property="vital" javaType="java.util.Set" resultMap="diagnosisOrderResultMap"></collection>
+            <collection property="vital" javaType="java.util.List" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
 
         <resultMap id="chartResultMap" type="com.korit.carecheckkoreait.entity.Chart">
@@ -123,7 +119,8 @@
 
         <select id="selectDetailOrderByAdmId" resultMap="admDiagnosisResultMap">
             select 
-	            distinct adm.adm_id,
+	            distinct adm.adm_id as adm_id,
+                patient_id,
                 (select patient_name from patient_tb where patient_tb.patient_id = adm.patient_id) as patient_name,
                 date_format(adm.created_at, "%Y-%m-%d") as adm_date,
                 order_code,

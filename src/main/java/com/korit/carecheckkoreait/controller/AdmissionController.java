@@ -44,6 +44,7 @@ public class AdmissionController {
     @Operation(summary = "진료세부내역", description = "선택한접수번호의 세부내역")
     @PostMapping("/detailBill")
     public ResponseEntity<?> selectDetailBill(@RequestParam int admId) throws Exception{
+        System.out.println(admId);
         return ResponseEntity.ok().body(admissionService.selectDetailOrderByAdmId(admId));
     } 
 }
