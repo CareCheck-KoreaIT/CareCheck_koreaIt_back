@@ -1,11 +1,13 @@
 package com.korit.carecheckkoreait.service;
 
+import com.korit.carecheckkoreait.dto.request.ReqModifyNoticeDto;
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.dto.request.ReqWriteNoticeDto;
 import com.korit.carecheckkoreait.entity.Notice;
 import com.korit.carecheckkoreait.entity.User;
 import com.korit.carecheckkoreait.repository.NoticeRepository;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,12 +39,15 @@ public class NoticeService {
         );
     }
 
+   @Transactional(rollbackFor = Exception.class)
+    public Boolean modiftyNotice(int noticeId, ReqModifyNoticeDto reqModifyNoticeDto) throws NotFoundException {
+        return noticeRepository.updateUserById(reqModifyNoticeDto.toNotice(noticeId))
+                .orElseThrow(() -> new NotFoundException("해당 게시글이 존재하지 않습니다."));
+   }
+
     @Transactional(rollbackFor = Exception.class)
     public int deleteNoticeById(int noticeId) {
         return  noticeRepository.deleteNoticeById(noticeId);
 
-
     }
-
-
 }

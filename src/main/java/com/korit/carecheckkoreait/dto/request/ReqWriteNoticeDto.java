@@ -10,5 +10,4 @@ public class ReqWriteNoticeDto {
     private String title;
     @Schema(description = "내용")
     private String content;
-
 }

@@ -41,6 +41,15 @@
             LIMIT #{startIndex}, #{limitCount}
         </if>
     </select>
+
+    <update id="updateNoticeByNoticeId">
+    update notice_tb
+    set
+        title = #{title},
+        content = #{content}
+    where
+        notice_id = #{noticeId}
+    </update>
     
     <delete id="deleteNotice">
         delete
