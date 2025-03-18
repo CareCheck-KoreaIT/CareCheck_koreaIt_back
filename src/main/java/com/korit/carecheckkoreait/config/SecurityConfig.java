@@ -59,11 +59,10 @@ public class SecurityConfig {
 
             authorizeRequests.requestMatchers(
                     "/user/auth/**",
-                    "/setting/**",
                     "/adm/**",
                     "/user/changeInfo/**",
                     "/notice/**",
-                    "/setting/**",
+                    "/order/**",
                     "/chart/registration",
                     "/chart"
             ).permitAll();
