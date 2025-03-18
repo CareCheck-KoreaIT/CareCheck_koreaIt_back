@@ -1,9 +1,13 @@
 package com.korit.carecheckkoreait.controller;
 
+import com.korit.carecheckkoreait.dto.request.ReqModifyNoticeDto;
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespNoticeListSearchDto;
 import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.service.NoticeService;
+import com.korit.carecheckkoreait.service.UserService;
+import jakarta.validation.constraints.Min;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +28,9 @@ public class NoticeController {
 
     @Autowired
     private NoticeService noticeService;
-    
+    @Autowired
+    private UserService userService;
+
     @Operation(summary = "공지사항 작성", description = "공지사항 작성")
     @PostMapping("/write")
     public ResponseEntity<?> createNotice(
@@ -53,5 +59,15 @@ public class NoticeController {
                         .build();
 
         return ResponseEntity.ok().body(respNoticeListSearchDto);
+    }
+
+    @Operation(summary = "공지사항 수정", description = "공지사항 수정")
+    @PutMapping("/modify/{noticeId}")
+    public ResponseEntity<?> modifyNotice(
+            @Min(value = 1, message = "noticeId는 1이상의 정수입니다.")
+            @PathVariable int noticeId,
+            @RequestBody ReqModifyNoticeDto reqModifyNoticeDto
+    ) throws NotFoundException {
+        return ResponseEntity.ok().body(noticeService.modiftyNotice(noticeId, reqModifyNoticeDto));
     }
 }
