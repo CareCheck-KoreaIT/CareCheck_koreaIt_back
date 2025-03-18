@@ -12,7 +12,7 @@
             <result property="usercode" column="adm_usercode" />
             <result property="admDate" column="adm_time"/>
         </resultMap>
-<!-- 접수 - 차트 연계 맵맵-->
+<!-- 접수 - 차트 연계 맵-->
         <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
@@ -85,7 +85,21 @@
                 and adm.usercode = #{usercode}
                 and date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d")
         </select>
-
+<!-- 접수 - 오더등록 -->
+        <insert id="insertOrderInAdmission">
+                insert into diagnosis_order_tb
+                values (default, #{admId}, #{orderCode}, #{orderDose}, #{orderCount}, 
+                        #{orderDays}, default, #{orderMethod}, now(), now())
+        </insert>
+        <insert id="insertDiagnosisInAdmission">
+                insert into diagnosis_tb
+                values (default, #{admId}, #{diseaseCode}, now(), now())
+        </insert>
+<!-- 접수 - 오더삭제 -->
+        <delete id="deleteOrderInAdmission">
+                delete from diagnosis_order_tb
+                where diagnosis_order_id = #{diagnosisOrderId}
+        </delete>
 <!-- 의사사번 기준 등록된 진료대기자 명단 sql -->
         <select id="selectWaitingListByUserCode" resultMap="admResultMap">
             select 

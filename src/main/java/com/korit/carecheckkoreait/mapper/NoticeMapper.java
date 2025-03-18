@@ -16,4 +16,9 @@ public interface NoticeMapper {
             @Param("startIndex") int startIndex,
             @Param("limitCount") int limitCount
     );
+
+    int updateNoticeByNoticeId(Notice notice);
+
+    int deleteNotice(int noticeId);
+
 }
