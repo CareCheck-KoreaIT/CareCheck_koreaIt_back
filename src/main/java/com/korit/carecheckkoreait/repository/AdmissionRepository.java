@@ -44,7 +44,6 @@ public class AdmissionRepository {
     }
     //처방에 대한 세부내역
     public Optional<List<Admission>> selectDetailOrderByAdmId(Admission admission){
-        System.out.println(admission);
         List<Admission> detailBilList = admissionMapper.selectDetailOrderByAdmId(admission);
         return detailBilList.isEmpty()
             ? Optional.empty()
