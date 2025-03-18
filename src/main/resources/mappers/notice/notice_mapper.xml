@@ -41,6 +41,7 @@
             LIMIT #{startIndex}, #{limitCount}
         </if>
     </select>
+
     <update id="updateNoticeByNoticeId">
     update notice_tb
     set
@@ -49,4 +50,12 @@
     where
         notice_id = #{noticeId}
     </update>
+    
+    <delete id="deleteNotice">
+        delete
+        from
+            notice_tb
+        where
+            notice_id = #{noticeId}
+    </delete>
 </mapper>

@@ -1,5 +1,7 @@
 package com.korit.carecheckkoreait.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
+import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
+import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
 import com.korit.carecheckkoreait.service.AdmissionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,5 +50,19 @@ public class AdmissionController {
     public ResponseEntity<?> selectDetailBill(@RequestParam int admId) throws Exception{
         System.out.println(admId);
         return ResponseEntity.ok().body(admissionService.selectDetailOrderByAdmId(admId));
+    } 
+
+    @Operation(summary = "오더입력", description = "선택한 접수번호에 처방입력")
+    @PostMapping("/insertOrder")
+    public ResponseEntity<?> insertOrderInAdm(@RequestBody List<ReqAddOrderInAdmDto> dto) {
+        admissionService.insertOrderInAdm(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "진단입력", description = "선택한 접수번호에 주진단입력")
+    @PostMapping("/insertDiagnosis")
+    public ResponseEntity<?> insertDiagnosisInAdm(@RequestBody List<ReqAddDiagnosisInAdmDto> dto) {
+        admissionService.insertDiagnosisInAdm(dto);
+        return ResponseEntity.ok().build();
     } 
 }

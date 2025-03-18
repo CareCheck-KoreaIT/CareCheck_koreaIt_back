@@ -30,7 +30,9 @@ public class NoticeRepository {
 
     public Optional<Boolean> updateUserById(Notice notice) {
         return noticeMapper.updateNoticeByNoticeId(notice) < 1 ? Optional.empty() : Optional.of(true);
+
+    public int deleteNoticeById(int noticeId) {
+        int result = noticeMapper.deleteNotice(noticeId);
+        return result;
     }
-
-
 }

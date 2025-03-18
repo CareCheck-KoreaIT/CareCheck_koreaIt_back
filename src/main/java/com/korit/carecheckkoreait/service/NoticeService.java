@@ -44,4 +44,10 @@ public class NoticeService {
         return noticeRepository.updateUserById(reqModifyNoticeDto.toNotice(noticeId))
                 .orElseThrow(() -> new NotFoundException("해당 게시글이 존재하지 않습니다."));
    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public int deleteNoticeById(int noticeId) {
+        return  noticeRepository.deleteNoticeById(noticeId);
+
+    }
 }

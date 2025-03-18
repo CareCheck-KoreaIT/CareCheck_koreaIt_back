@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.korit.carecheckkoreait.mapper.AdmissionMapper">
-
+<!-- 접수 기본 맵 -->
         <resultMap id="admResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="adm_patient_id"/>
@@ -12,7 +12,7 @@
             <result property="usercode" column="adm_usercode" />
             <result property="admDate" column="adm_time"/>
         </resultMap>
-
+<!-- 접수 - 차트 연계 맵-->
         <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
@@ -21,7 +21,7 @@
             <result property="createdAt" column="created_at"/>
             <collection property="chart" javaType="java.util.List" resultMap="chartResultMap"></collection>
         </resultMap>
-
+<!-- 접수 진단 + 처방 맵 -->
         <resultMap id="admDiagnosisResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
@@ -30,14 +30,14 @@
             <collection property="diagnosis" javaType="java.util.List" resultMap="diagnosisResultMap"></collection>
             <collection property="diagnosisOrder" javaType="java.util.List" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
-
+<!-- 접수 + 바이탈탈 맵 -->
         <resultMap id="admVitalResultMap" type="com.korit.carecheckkoreait.entity.Admission">
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
             <result property="patientName" column="patient_name"/>
             <collection property="vital" javaType="java.util.List" resultMap="diagnosisOrderResultMap"></collection>
         </resultMap>
-
+<!-- 접수 차트 맵 -->
         <resultMap id="chartResultMap" type="com.korit.carecheckkoreait.entity.Chart">
                 <id property="chartId" column="chart_id"/>
                 <result property="admId" column="adm_id"/>
@@ -45,12 +45,12 @@
                 <result property="createdAt" column="created_at"/>
                 <result property="updatedAt" column="updated_at"/>
         </resultMap>
-
+<!-- 진단 맵 -->
         <resultMap id="diagnosisResultMap" type="com.korit.carecheckkoreait.entity.Diagnosis">
                 <id property="diagnosisId" column="diagnosis_id"/>
                 <result property="diseaseCode" column="disease_code"/>
         </resultMap>
-
+<!-- 처방 맵 -->
         <resultMap id="diagnosisOrderResultMap" type="com.korit.carecheckkoreait.entity.DiagnosisOrder">
                 <id property="diagnosisOrderId" column="diagnosis_order_id"/>
                 <result property="orderCode" column="order_code"/>
@@ -60,7 +60,7 @@
                 <result property="calculateOrderPay" column="cal_order_pay"/>
                 <result property="orderMethod" column="order_method"/>
         </resultMap>
-
+<!-- 바이탈 등록결과 맵 -->
         <resultMap id="patientVitalResultMap" type="com.korit.carecheckkoreait.entity.PatientVital">
                 <id property="patientVitalId" column="patient_vital_id"/>
                 <result property="admId" column="adm_id"/>
@@ -70,11 +70,13 @@
                 <result property="createdAt" column="vital_check_time"/>
         </resultMap>
 
+<!-- 접수 추가 삽입 sql -->
         <insert id="insertAdmission">
                 insert into adm_tb
                 values (default, #{patientId}, #{usercode}, #{clinicDeft}, now(), now())
         </insert>
 
+<!-- 접수 중복 조회 목적, 환자id+사번으로 접수기록 확인후 count 반환, 1일 경우 중복으로 확인 sql -->
         <select id="selectAdmissionByPatientIdAndUserCode" resultType="int">
             select
                 count(*)
@@ -83,7 +85,22 @@
                 and adm.usercode = #{usercode}
                 and date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d")
         </select>
-
+<!-- 접수 - 오더등록 -->
+        <insert id="insertOrderInAdmission">
+                insert into diagnosis_order_tb
+                values (default, #{admId}, #{orderCode}, #{orderDose}, #{orderCount}, 
+                        #{orderDays}, default, #{orderMethod}, now(), now())
+        </insert>
+        <insert id="insertDiagnosisInAdmission">
+                insert into diagnosis_tb
+                values (default, #{admId}, #{diseaseCode}, now(), now())
+        </insert>
+<!-- 접수 - 오더삭제 -->
+        <delete id="deleteOrderInAdmission">
+                delete from diagnosis_order_tb
+                where diagnosis_order_id = #{diagnosisOrderId}
+        </delete>
+<!-- 의사사번 기준 등록된 진료대기자 명단 sql -->
         <select id="selectWaitingListByUserCode" resultMap="admResultMap">
             select 
                 adm.adm_id as adm_id,
@@ -99,6 +116,7 @@
             order by adm_time;
         </select>
 
+<!-- 접수 번호 기준 바이탈 정보 sql -->
         <select id="selectVitalInfoByAdmId" resultMap="admVitalResultMap">
             select 
                 adm.adm_id,
@@ -106,10 +124,10 @@
                 (select patient_name 
 		            from patient_tb pt
 		            where pt.patient_id = adm.patient_id) as patient_name,
-                pvt.patientVitalId,
-                pvt.height,
-                pvt.weight,
-                pvt.fever,
+                patient_vital_id,
+                height,
+                weight,
+                fever,
                 date_format(pvt.created_at, "%H:%i") as vital_check_time
             from adm_tb as adm
             left outer join patient_vital_tb as pvt
@@ -117,6 +135,7 @@
             where adm.adm_id = #{admId};
         </select>
 
+<!-- 접수 번호 기준 세부 내역 sql -->
         <select id="selectDetailOrderByAdmId" resultMap="admDiagnosisResultMap">
             select 
 	            distinct adm.adm_id as adm_id,
