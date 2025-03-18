@@ -3,13 +3,10 @@ package com.korit.carecheckkoreait.controller;
 import com.korit.carecheckkoreait.dto.request.ReqModifyNoticeDto;
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespNoticeListSearchDto;
-import com.korit.carecheckkoreait.entity.Notice;
 import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.service.NoticeService;
-import com.korit.carecheckkoreait.service.UserService;
 import jakarta.validation.constraints.Min;
 import org.apache.ibatis.javassist.NotFoundException;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +23,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/notice")
+@RequestMapping("/notices")
 public class NoticeController {
 
     @Autowired
     private NoticeService noticeService;
-    @Autowired
-    private UserService userService;
 
     @Operation(summary = "공지사항 작성", description = "공지사항 작성")
-    @PostMapping("/write")
+    @PostMapping("")
     public ResponseEntity<?> createNotice(
             @RequestBody ReqWriteNoticeDto reqWriteNoticeDto,
             @AuthenticationPrincipal PrincipalUser principalUser
@@ -44,7 +39,7 @@ public class NoticeController {
     }
 
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 조회")
-    @GetMapping("/list")
+    @GetMapping("")
     public ResponseEntity<?> searchNoticeList(@ModelAttribute ReqNoticeListSearchDto dto) {
         List<NoticeSearch> NoticeList = noticeService.getNoticeListSearch(dto);
         int totalNoticeListCount = NoticeList.size();
@@ -64,8 +59,14 @@ public class NoticeController {
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
+    @Operation(summary = "공지사항 단건 조회")
+    @GetMapping("/{noticeId}")
+    public ResponseEntity<?> searchNotice() {
+        return ResponseEntity.ok().body(null);
+    }
+
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
-    @PutMapping("/modify/{noticeId}")
+    @PutMapping("/{noticeId}")
     public ResponseEntity<?> modifyNotice(
             @Min(value = 1, message = "noticeId는 1이상의 정수입니다.")
             @PathVariable int noticeId,
