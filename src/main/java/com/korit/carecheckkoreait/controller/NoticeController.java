@@ -72,7 +72,8 @@ public class NoticeController {
             @RequestBody ReqModifyNoticeDto reqModifyNoticeDto
     ) throws NotFoundException {
         return ResponseEntity.ok().body(noticeService.modiftyNotice(noticeId, reqModifyNoticeDto));
-
+    }
+    
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
     @DeleteMapping("/{noticeId}")
     public ResponseEntity<?> deleteNotice(@PathVariable int noticeId) {
