@@ -37,7 +37,6 @@ public class AdmissionController {
     public ResponseEntity<?> selectWaitingList(
         @Parameter(description = "직원코드", example = "2025020003", required = true)
         @RequestParam String usercode) throws Exception {
-            System.out.println(usercode);
         return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(usercode));
     }
 

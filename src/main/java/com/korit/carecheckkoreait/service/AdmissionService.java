@@ -32,7 +32,6 @@ public class AdmissionService {
 
     @Transactional(rollbackFor = Exception.class)
     public Admission insertAdmission(ReqAddAdmissionDto dto) {
-        System.out.println("service"+dto);
         if (duplicatedAdmission(Integer.parseInt(dto.getPatientId()), dto.getUserCode())==1) {
             throw new DuplicatedValueException(List.of(FieldError.builder()
             .field("admId")
