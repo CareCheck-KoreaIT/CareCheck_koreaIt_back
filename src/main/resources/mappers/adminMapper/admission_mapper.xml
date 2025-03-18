@@ -161,7 +161,7 @@
 	            on dot.adm_id = adm.adm_id
                 left outer join order_tb as ot
                     on dot.order_code = ot.order_code
-            where adm.adm_id = #{admId}
+            where adm.adm_id = #{admId} and adm_date = #{admDate}
             order by order_code;
         </select>
         

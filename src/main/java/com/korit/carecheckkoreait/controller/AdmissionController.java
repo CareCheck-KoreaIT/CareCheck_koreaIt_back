@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
-@RequestMapping("/adm")
+@RequestMapping("/admission")
 public class AdmissionController {
     
     @Autowired
@@ -48,10 +48,11 @@ public class AdmissionController {
     }
 
     @Operation(summary = "진료세부내역", description = "선택한접수번호의 세부내역")
-    @GetMapping("/{admId}/detailBill")
-    public ResponseEntity<?> selectDetailBill(@PathVariable int admId) throws Exception{
-        System.out.println(admId);
-        return ResponseEntity.ok().body(admissionService.selectDetailOrderByAdmId(admId));
+    @GetMapping("/{admissionId}/billings")
+    public ResponseEntity<?> selectDetailBill(
+        @PathVariable int admissionId,
+        @RequestParam String admDate) throws Exception{
+        return ResponseEntity.ok().body(admissionService.selectDetailOrderByAdmId(admissionId, admDate));
     } 
 
     @Operation(summary = "오더입력", description = "선택한 접수번호에 처방입력")
