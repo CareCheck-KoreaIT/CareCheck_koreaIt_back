@@ -19,7 +19,7 @@ public class PatientController {
     private PatientService patientService;
 
     @Operation(summary = "환자등록추가", description = "환자등록")
-    @PostMapping("/patient/registration")
+    @PostMapping("/patients")
     public ResponseEntity<?> registerPatient(@RequestBody ReqPatientRegDto reqPatientRegDto) {
         Patient patient = Patient.builder()
                 .patientName(reqPatientRegDto.getPatientName())
@@ -32,3 +32,7 @@ public class PatientController {
         return ResponseEntity.ok().body(patientService.addPatient(patient));
     }
 }
+
+
+// ========> PatientController <========
+//url: /patients, method: post
