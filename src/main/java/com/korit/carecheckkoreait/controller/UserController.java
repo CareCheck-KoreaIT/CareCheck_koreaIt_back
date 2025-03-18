@@ -27,19 +27,6 @@ public class UserController {
         return ResponseEntity.ok().body(userService.signup(dto));
     }
 
-    @Operation(summary = "로그인", description = "로그인")
-    @PostMapping("/auth/signin")
-    public ResponseEntity<?> signin(@RequestBody ReqSigninDto dto) {
-        RespTokenDto respTokenDto = RespTokenDto.builder()
-                .type("JWT")
-                .name("AccessToken")
-                .token(userService.signin(dto))
-                .build();
-//        System.out.println(respTokenDto);     // 테스트
-
-        return ResponseEntity.ok().body(respTokenDto);
-    }
-
     @GetMapping("/me")
     public ResponseEntity<?> getLoginUser(@AuthenticationPrincipal PrincipalUser principalUser) {
 //        System.out.println(principalUser.getUser());      // 테스트
