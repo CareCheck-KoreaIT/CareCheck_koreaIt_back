@@ -1,5 +1,6 @@
 package com.korit.carecheckkoreait.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,21 +30,25 @@ public class AdmissionRepository {
     }
     //진료대기자 명단 (usercode)별 조회
     public Optional<List<Admission>> selectWaitingListByUserCode(String usercode) {
-        return admissionMapper.selectWaitingListByUserCode(usercode).isEmpty()
+        List<Admission> waitingList = admissionMapper.selectWaitingListByUserCode(usercode);
+        return waitingList.isEmpty()
             ? Optional.empty()   
-            : Optional.of(admissionMapper.selectWaitingListByUserCode(usercode));
+            : Optional.of(waitingList);
     }
     //환자의 바이탈 정보 조회(admId)
     public Optional<List<Admission>> selectVitalInfoByAdmId(int admId) {
-        return admissionMapper.selectVitalInfoByAdmId(admId).isEmpty()
+        List<Admission> vitalInfo = admissionMapper.selectVitalInfoByAdmId(admId);
+        return vitalInfo.isEmpty()
             ? Optional.empty()
-            : Optional.of(admissionMapper.selectVitalInfoByAdmId(admId));
+            : Optional.of(vitalInfo);
     }
     //처방에 대한 세부내역
-    public Optional<List<Admission>> selectDetailOrderByAdmId(int admId){
-        return admissionMapper.selectDetailOrderByAdmId(admId).isEmpty()
+    public Optional<List<Admission>> selectDetailOrderByAdmId(Admission admission){
+        System.out.println(admission);
+        List<Admission> detailBilList = admissionMapper.selectDetailOrderByAdmId(admission);
+        return detailBilList.isEmpty()
             ? Optional.empty()
-            : Optional.of(admissionMapper.selectDetailOrderByAdmId(admId));
+            : Optional.of(detailBilList);
     }
 
     public void insertOrderInAdm(DiagnosisOrder diagnosisOrders) {
