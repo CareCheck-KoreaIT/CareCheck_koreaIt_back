@@ -4,6 +4,8 @@ import com.korit.carecheckkoreait.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     User selectById(int userId);
@@ -23,5 +25,14 @@ public interface UserMapper {
     int updatePhoneNumberById(
             @Param("usercode") String usercode,
             @Param("phoneNumber") String phoneNumber);
+
+    List<User> selectUserListBySearchOptions(
+            @Param("startIndex") int startIndex,
+            @Param("limitCount") int limitCount,
+            @Param("order") String order,
+            @Param("searchName") String searchName
+    );
+
+    int selectUserCountAllBySearchName(@Param("searchName") String searchName);
 
 }

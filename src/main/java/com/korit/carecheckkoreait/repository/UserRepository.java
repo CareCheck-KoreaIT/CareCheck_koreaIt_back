@@ -5,6 +5,7 @@ import com.korit.carecheckkoreait.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -37,6 +38,20 @@ public class UserRepository {
     }
     public void updatePhoneNumber(String usercode, String phoneNumber) {
         userMapper.updatePhoneNumberById(usercode, phoneNumber);
+    }
+
+    public List<User> selectUserListAllBySearchOption(
+            int startIndex,
+            int limitCount,
+            String order,
+            String searchName) {
+        List<User> foundUser = userMapper.selectUserListBySearchOptions(startIndex, limitCount, order, searchName);
+//        System.out.println("Repository : " + foundUser);
+        return foundUser;
+    }
+
+    public int selectUserListCountAllBySearchName(String searchName) {
+        return userMapper.selectUserCountAllBySearchName(searchName);
     }
 
 }
