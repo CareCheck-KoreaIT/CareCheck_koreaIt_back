@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -18,6 +17,8 @@ public class Admission {
     private int patientId;
     private String usercode;
     private String clinicDeft;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
