@@ -1,5 +1,8 @@
 package com.korit.carecheckkoreait.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.ibatis.javassist.NotFoundException;
@@ -29,7 +32,6 @@ public class AdmissionService {
 
     @Transactional(rollbackFor = Exception.class)
     public Admission insertAdmission(ReqAddAdmissionDto dto) {
-        System.out.println("service"+dto);
         if (duplicatedAdmission(Integer.parseInt(dto.getPatientId()), dto.getUserCode())==1) {
             throw new DuplicatedValueException(List.of(FieldError.builder()
             .field("admId")
@@ -57,8 +59,12 @@ public class AdmissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Admission> selectDetailOrderByAdmId(int admId) throws Exception{
-        return admissionRepository.selectDetailOrderByAdmId(admId)
+    public List<Admission> selectDetailOrderByAdmId(int admId, String admDate) throws Exception{
+        Admission admission = Admission.builder()
+                                .admId(admId)
+                                .admDate(admDate)
+                                .build();
+        return admissionRepository.selectDetailOrderByAdmId(admission)
         .orElseThrow(()-> new NotFoundException("입력된 내역이 없습니다."));
     }
 

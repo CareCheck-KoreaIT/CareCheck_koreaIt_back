@@ -8,8 +8,6 @@
         <id property="orderCode" column="order_code" />
         <result property="orderName" column="order_name" />
         <result property="orderScore" column="order_score" />
-        <result property="scorePayId" column="score_pay_id" />
-        <result property="orderPay" column="order_pay" />
         <result property="createAt" column="created_at" />
         <result property="updateAt" column="updated_at" />
     </resultMap>
@@ -20,8 +18,6 @@
             #{orderCode},
             #{orderName},
             #{orderScore},
-            default,
-            default,
             now(),
             now()
         )
@@ -31,8 +27,7 @@
         select
             order_code,
             order_name,
-            order_score,
-            order_pay
+            order_score
         from
             order_tb
         where
