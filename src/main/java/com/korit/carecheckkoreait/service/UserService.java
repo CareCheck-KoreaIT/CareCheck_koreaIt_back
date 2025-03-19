@@ -1,5 +1,6 @@
 package com.korit.carecheckkoreait.service;
 
+import com.korit.carecheckkoreait.dto.request.ReqSearchUserDto;
 import com.korit.carecheckkoreait.dto.request.ReqSigninDto;
 import com.korit.carecheckkoreait.dto.request.ReqSignupDto;
 import com.korit.carecheckkoreait.entity.User;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -84,6 +86,24 @@ public class UserService {
     }
     public void updatePhoneNumber(User user, String phoneNumber) {
         userRepository.updatePhoneNumber(user.getUsercode(), phoneNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getUserListSearchBySearchOption(ReqSearchUserDto reqSearchUserDto) {
+        int startIndex = (reqSearchUserDto.getPage() - 1) * reqSearchUserDto.getLimitCount();
+        List<User> foundUser = userRepository.selectUserListAllBySearchOption(
+                startIndex,
+                reqSearchUserDto.getLimitCount(),
+                reqSearchUserDto.getOrder(),
+                reqSearchUserDto.getSearchName()
+        );
+//        System.out.println("Service : " + foundUser);
+        return foundUser;
+    }
+
+    @Transactional(readOnly = true)
+    public int getUserListCountBySearchName(String searchName) {
+        return userRepository.selectUserListCountAllBySearchName(searchName);
     }
 
 }
