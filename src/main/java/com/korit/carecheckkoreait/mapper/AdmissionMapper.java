@@ -16,5 +16,5 @@ public interface AdmissionMapper {
     int insertDiagnosisInAdmission (Diagnosis diagnosis);
     List<Admission> selectWaitingListByUserCode (String usercode);
     List<Admission> selectVitalInfoByAdmId (int admId);
-    List<Admission> selectDetailOrderByAdmId(int admId);
+    List<Admission> selectDetailOrderByAdmId(Admission admission);
 }

@@ -58,8 +58,9 @@ public class SecurityConfig {
             ).permitAll();
 
             authorizeRequests.requestMatchers(
-                    "/auth/**",
                     "/adm/**",
+                    "/user/auth/**",
+                    "/admission/**",
                     "/user/changeInfo/**",
                     "/notice/**",
                     "/order/**",

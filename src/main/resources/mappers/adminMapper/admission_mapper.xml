@@ -147,13 +147,13 @@
 	            distinct adm.adm_id as adm_id,
                 patient_id,
                 (select patient_name from patient_tb where patient_tb.patient_id = adm.patient_id) as patient_name,
-                date_format(adm.created_at, "%Y-%m-%d") as adm_date,
+                date_format(adm.created_at, "%Y년 %m월 %d일") as adm_date,
                 dot.order_code as order_code,
                 order_name,
                 order_pay,
                 order_count,
                 order_days,
-                cal_order_pay
+                total_order_pay
             from adm_tb as adm
                 left outer join diagnosis_tb as dt
 	            on dt.adm_id = adm.adm_id
@@ -161,7 +161,7 @@
 	            on dot.adm_id = adm.adm_id
                 left outer join order_tb as ot
                     on dot.order_code = ot.order_code
-            where adm.adm_id = #{admId}
+            where adm.adm_id = #{admId} and date_format(adm.created_at, "%Y-%m-%d") = #{admDate}
             order by order_code;
         </select>
         
