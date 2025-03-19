@@ -97,7 +97,7 @@ public class UserService {
                 reqSearchUserDto.getOrder(),
                 reqSearchUserDto.getSearchName()
         );
-//        System.out.println("Service : " + foundUser);
+//        System.out.println("Service : " + foundUser);         // for test
         return foundUser;
     }
 
