@@ -28,6 +28,14 @@ public class NoticeRepository {
         return noticeMapper.selectAllNoticeList(startIndex, limitSize);
     }
 
+    public List<NoticeSearch> findNoticeListAllBySearchOption(
+            int startIndex,
+            int limitSize,
+            String order,
+            String searchText) {
+        return noticeMapper.selectNoticeBySearchOption(startIndex, limitSize, order, searchText);
+    }
+
     public Optional<Boolean> updateUserById(Notice notice) {
         return noticeMapper.updateNoticeByNoticeId(notice) < 1 ? Optional.empty() : Optional.of(true);
     }

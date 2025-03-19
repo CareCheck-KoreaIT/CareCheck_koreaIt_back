@@ -42,11 +42,37 @@
         </if>
     </select>
 
+    <select id="selectNoticeBySearchOption" resultType="com.korit.carecheckkoreait.entity.NoticeSearch">
+        select
+            notice_id as noticeId,
+            usercode,
+            title,
+            created_at as createdAt,
+            updated_at as updatedAt
+        from
+            notice_tb
+        <where>
+            <if test="searchText != null and searchText != ''">
+                title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+        <choose>
+            <when test="order == 'oldest'">
+                noticeId asc,
+            </when>
+            <otherwise>
+                order by notice_id desc
+            </otherwise>
+        </choose>
+        limit #{startIndex}, #{limitCount}
+    </select>
+
     <update id="updateNoticeByNoticeId">
     update notice_tb
     set
         title = #{title},
-        content = #{content}
+        content = #{content},
+        updatedAt = #{updated_at}
     where
         notice_id = #{noticeId}
     </update>
