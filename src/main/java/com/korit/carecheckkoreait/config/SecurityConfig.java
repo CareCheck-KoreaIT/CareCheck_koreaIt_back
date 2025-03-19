@@ -59,7 +59,7 @@ public class SecurityConfig {
 
             authorizeRequests.requestMatchers(
                     "/adm/**",
-                    "/user/auth/**",
+                    "/auth/**",
                     "/admission/**",
                     "/user/changeInfo/**",
                     "/notice/**",
