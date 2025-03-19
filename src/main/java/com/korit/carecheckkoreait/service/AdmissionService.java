@@ -1,15 +1,10 @@
 package com.korit.carecheckkoreait.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.korit.carecheckkoreait.controller.AdmissionController;
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
@@ -47,24 +42,26 @@ public class AdmissionService {
         return admission;
     }
     @Transactional(readOnly = true)
+    public Admission selectPatientInfoByAdmId(int admissionId) throws Exception {
+        return admissionRepository.selectPatientInfoByUserCode(admissionId)
+            .orElseThrow(()-> new NotFoundException("해당 접수번호에 맞는 환자정보가 없습니다."));
+    }
+
+    @Transactional(readOnly = true)
     public List<Admission> selectWaitingListUserCode(String usercode) throws Exception {
         return admissionRepository.selectWaitingListByUserCode(usercode)
         .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
     }
 
     @Transactional(readOnly = true)
-    public List<Admission> selectVitalByAdmId(int admId) throws Exception{
-        return admissionRepository.selectVitalInfoByAdmId(admId)
+    public List<Admission> selectVitalByAdmId(int admissionId) throws Exception{
+        return admissionRepository.selectVitalInfoByAdmId(admissionId)
         .orElseThrow(()->new NotFoundException("바이탈 체크 내역이 없습니다."));
     }
 
     @Transactional(readOnly = true)
-    public List<Admission> selectDetailOrderByAdmId(int admId, String admDate) throws Exception{
-        Admission admission = Admission.builder()
-                                .admId(admId)
-                                .admDate(admDate)
-                                .build();
-        return admissionRepository.selectDetailOrderByAdmId(admission)
+    public Admission selectDetailOrderByAdmId(int admissionId) throws Exception{
+        return admissionRepository.selectDetailOrderByAdmId(admissionId)
         .orElseThrow(()-> new NotFoundException("입력된 내역이 없습니다."));
     }
 
@@ -92,5 +89,9 @@ public class AdmissionService {
                 .build();
             admissionRepository.insertDiagnosisInAdm(diagnosis);
         }
+    }
+    @Transactional(readOnly = true)
+    public Integer selectTotalPayInAdm(int admissionId) {
+        return admissionRepository.selectTotalPayInAdm(admissionId);
     }
 }
