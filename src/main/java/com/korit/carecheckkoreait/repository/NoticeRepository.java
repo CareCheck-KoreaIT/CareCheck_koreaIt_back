@@ -30,6 +30,10 @@ public class NoticeRepository {
         return noticeMapper.selectNoticeBySearchOption(startIndex, limitSize, order, searchText);
     }
 
+    public List<NoticeSearch> findNoticeListSearchByUsercode(String usercode) {
+        return noticeMapper.selectNoticeByUsercode(usercode);
+    }
+
     public Optional<Boolean> updateUserById(Notice notice) {
         return noticeMapper.updateNoticeByNoticeId(notice) < 1 ? Optional.empty() : Optional.of(true);
     }

@@ -22,4 +22,6 @@ public interface NoticeMapper {
             @Param("order") String order,
             @Param("searchText") String searchText
     );
+
+    List<NoticeSearch> selectNoticeByUsercode(@Param("usercode") String usercode);
 }
