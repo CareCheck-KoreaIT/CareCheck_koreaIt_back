@@ -11,11 +11,6 @@ import java.util.List;
 public interface NoticeMapper {
 
     int insertNotice(Notice notice);
-    
-    List<NoticeSearch> selectAllNoticeList(
-            @Param("startIndex") int startIndex,
-            @Param("limitCount") int limitCount
-    );
 
     int updateNoticeByNoticeId(Notice notice);
 

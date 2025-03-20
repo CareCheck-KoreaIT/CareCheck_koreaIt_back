@@ -29,15 +29,6 @@ public class NoticeService {
                 .build();
         return noticeRepository.saveNotice(notice);
     }
-  
-    @Transactional(readOnly = true) //읽기전용 최적화
-    public List<NoticeSearch> getNoticeListSearch(ReqNoticeListSearchDto reqNoticeListSearchDto) {
-        int startIndex = (reqNoticeListSearchDto.getPage() - 1) * reqNoticeListSearchDto.getLimitCount();
-        return noticeRepository.findNoticeListAll(
-                startIndex,
-                reqNoticeListSearchDto.getLimitCount()
-        );
-    }
 
     public List<NoticeSearch> getNoticeListSearchBySearchOption(ReqNoticeListSearchDto dto) {
         int startIndex = dto.getPage() * dto.getLimitCount() - dto.getLimitCount(); // 페이지 인덱스 계산

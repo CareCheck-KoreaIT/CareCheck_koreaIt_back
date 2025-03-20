@@ -21,12 +21,6 @@ public class NoticeRepository {
         noticeMapper.insertNotice(notice);
         return notice;
     }
-  
-    public List<NoticeSearch> findNoticeListAll(
-            int startIndex,
-            int limitSize) {
-        return noticeMapper.selectAllNoticeList(startIndex, limitSize);
-    }
 
     public List<NoticeSearch> findNoticeListAllBySearchOption(
             int startIndex,
