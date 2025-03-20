@@ -37,7 +37,7 @@
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="patient_id"/>
             <result property="patientName" column="patient_name"/>
-            <collection property="vital" javaType="java.util.List" resultMap="diagnosisOrderResultMap"></collection>
+            <collection property="vital" javaType="java.util.List" resultMap="patientVitalResultMap"></collection>
         </resultMap>
 <!-- 접수 차트 맵 -->
         <resultMap id="chartResultMap" type="com.korit.carecheckkoreait.entity.Chart">
@@ -71,7 +71,7 @@
                 <result property="height" column="height"/>
                 <result property="weight" column="weight"/>
                 <result property="fever" column="fever"/>
-                <result property="createdAt" column="vital_check_time"/>
+                <result property="vitalCheckTime" column="vital_check_time"/>
         </resultMap>
 
 <!-- 접수 추가 삽입 sql -->
@@ -104,6 +104,11 @@
                 delete from diagnosis_order_tb
                 where diagnosis_order_id = #{diagnosisOrderId}
         </delete>
+
+        <insert id="insertVitalInAdmId">
+                insert into patient_vital_tb
+                values (default, #{admId}, #{usercode}, #{height}, #{weight}, #{fever}, now(), now())
+        </insert>
 <!-- 의사사번 기준 등록된 진료대기자 명단 sql -->
         <select id="selectWaitingListByUserCode" resultMap="admResultMap">
             select 
@@ -118,7 +123,7 @@
             left outer join patient_tb as pt
             on pt.patient_id = adm.patient_id
             where date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d") 
-            and adm.usercode = #{usercode}
+            and adm.usercode = #{usercode} and adm.start_date is null
             order by adm_time;
         </select>
 
@@ -138,7 +143,8 @@
             from adm_tb as adm
             left outer join patient_vital_tb as pvt
             on pvt.adm_id = adm.adm_id
-            where adm.adm_id = #{admId};
+            where adm.adm_id = #{admId}
+            order by date_format(pvt.created_at, "%H:%i") desc
         </select>
 
 <!-- 접수 번호 기준 세부 내역 sql -->
