@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Disease {
-    private int diseaseId;
-    private String eName;
-    private String kName;
+    private String diseaseCode;
+    private String diaseseEName;
+    private String diseaseKName;
 }

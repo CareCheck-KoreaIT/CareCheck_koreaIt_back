@@ -65,7 +65,8 @@ public class SecurityConfig {
                     "/notice/**",
                     "/order/**",
                     "/chart/registration",
-                    "/chart"
+                    "/chart",
+                    "/diseases/**"
             ).permitAll();
 
             authorizeRequests.anyRequest().authenticated();
