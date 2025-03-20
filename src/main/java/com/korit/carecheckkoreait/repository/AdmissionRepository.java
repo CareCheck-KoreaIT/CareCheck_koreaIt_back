@@ -1,6 +1,5 @@
 package com.korit.carecheckkoreait.repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +14,7 @@ import com.korit.carecheckkoreait.mapper.AdmissionMapper;
 @Repository
 public class AdmissionRepository {
 
+
     @Autowired
     private AdmissionMapper admissionMapper;
 
@@ -28,6 +28,16 @@ public class AdmissionRepository {
     public int findAdmissionByPatientIdAndUsercode(int patientId, String usercode) {
         return admissionMapper.selectAdmissionByPatientIdAndUserCode(patientId, usercode);
     }
+
+    //접수 번호로 환자정보 가져오기
+    public Optional<Admission> selectPatientInfoByUserCode(int admissionId) {
+        Admission admPatientInfo = admissionMapper.selectPatientInfoByAdmId(admissionId);
+        if (admPatientInfo == null) {
+            return Optional.empty();
+        }
+        return Optional.of(admPatientInfo);
+    }
+
     //진료대기자 명단 (usercode)별 조회
     public Optional<List<Admission>> selectWaitingListByUserCode(String usercode) {
         List<Admission> waitingList = admissionMapper.selectWaitingListByUserCode(usercode);
@@ -43,11 +53,12 @@ public class AdmissionRepository {
             : Optional.of(vitalInfo);
     }
     //처방에 대한 세부내역
-    public Optional<List<Admission>> selectDetailOrderByAdmId(Admission admission){
-        List<Admission> detailBilList = admissionMapper.selectDetailOrderByAdmId(admission);
-        return detailBilList.isEmpty()
-            ? Optional.empty()
-            : Optional.of(detailBilList);
+    public Optional<Admission> selectDetailOrderByAdmId(int admissionId){
+        Admission detailBillList = admissionMapper.selectDetailOrderByAdmId(admissionId);
+        if(detailBillList == null) {
+            return Optional.empty();
+        }
+        return Optional.of(detailBillList);
     }
 
     public void insertOrderInAdm(DiagnosisOrder diagnosisOrders) {
@@ -60,6 +71,11 @@ public class AdmissionRepository {
 
     public void insertDiagnosisInAdm(Diagnosis diagnosis) {
         admissionMapper.insertDiagnosisInAdmission(diagnosis);
+    }
+    public Integer selectTotalPayInAdm(int admissionId) {
+        Integer result = admissionMapper.selectTotalPayByAdmId(admissionId);
+        System.out.println(result);
+        return admissionMapper.selectTotalPayByAdmId(admissionId);
     }
 }
 

@@ -3,6 +3,7 @@ package com.korit.carecheckkoreait.controller;
 import com.korit.carecheckkoreait.dto.request.ReqModifyNoticeDto;
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespNoticeListSearchDto;
+import com.korit.carecheckkoreait.entity.Notice;
 import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.service.NoticeService;
 import jakarta.validation.constraints.Min;
@@ -59,11 +60,27 @@ public class NoticeController {
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
-    @Operation(summary = "공지사항 단건 조회")
-    @GetMapping("/{noticeId}")
-    public ResponseEntity<?> searchNotice() {
-        return ResponseEntity.ok().body(null);
+    @Operation(summary = "공지사항 제목 검색 조회", description = "공지사항 제목 검색 조회")
+    @GetMapping("/title")
+    public ResponseEntity<?> searchNoticeListByTitle(@ModelAttribute ReqNoticeListSearchDto dto) {
+        List<NoticeSearch> NoticeListByTitle = noticeService.getNoticeListSearch(dto);
+        int totalNoticeListCount = NoticeListByTitle.size();
+        int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
+                ? totalNoticeListCount / dto.getLimitCount()
+                : totalNoticeListCount / dto.getLimitCount() + 1;
+
+        RespNoticeListSearchDto respNoticeListSearchDto =
+                RespNoticeListSearchDto.builder()
+                        .page(dto.getPage())
+                        .limitCount(dto.getLimitCount())
+                        .totalPages(totalPages)
+                        .totalElements(totalNoticeListCount)
+                        .noticeList(noticeService.getNoticeListSearchBySearchOption(dto))
+                        .build();
+
+        return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
+
 
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
     @PutMapping("/{noticeId}")

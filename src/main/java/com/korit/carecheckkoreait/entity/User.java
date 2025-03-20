@@ -26,6 +26,5 @@ public class User {
     private int accountEnabled;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     private UserRole userRole;
 }

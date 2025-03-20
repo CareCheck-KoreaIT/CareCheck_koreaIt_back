@@ -39,6 +39,16 @@ public class NoticeService {
         );
     }
 
+    public List<NoticeSearch> getNoticeListSearchBySearchOption(ReqNoticeListSearchDto dto) {
+        int startIndex = dto.getPage() * dto.getLimitCount() - dto.getLimitCount(); // 페이지 인덱스 계산
+        int limitSize = dto.getLimitCount();
+        String order = dto.getOrder();
+        String searchText = dto.getSearchText();
+        return noticeRepository.findNoticeListAllBySearchOption(
+                startIndex, limitSize, order, searchText
+        );
+    }
+
    @Transactional(rollbackFor = Exception.class)
     public Boolean modiftyNotice(int noticeId, ReqModifyNoticeDto reqModifyNoticeDto) throws NotFoundException {
         return noticeRepository.updateUserById(reqModifyNoticeDto.toNotice(noticeId))

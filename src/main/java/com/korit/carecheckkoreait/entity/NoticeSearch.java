@@ -14,4 +14,5 @@ public class NoticeSearch {
     private String usercode;
     private String title;
     private LocalDate createdAt;
+    private LocalDate updatedAt;
 }

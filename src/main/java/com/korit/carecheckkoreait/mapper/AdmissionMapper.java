@@ -11,10 +11,12 @@ import com.korit.carecheckkoreait.entity.DiagnosisOrder;
 public interface AdmissionMapper {
     int insertAdmission (Admission admission);
     int selectAdmissionByPatientIdAndUserCode (int patientId, String usercode);
+    Admission selectPatientInfoByAdmId(int admissionId);
     int insertOrderInAdmission (DiagnosisOrder diagnosisOrder);
     int deleteOrderInAdmission (int diagnosisOrderId);
     int insertDiagnosisInAdmission (Diagnosis diagnosis);
+    Integer selectTotalPayByAdmId(int admissionId);
     List<Admission> selectWaitingListByUserCode (String usercode);
-    List<Admission> selectVitalInfoByAdmId (int admId);
-    List<Admission> selectDetailOrderByAdmId(Admission admission);
+    List<Admission> selectVitalInfoByAdmId (int admissionId);
+    Admission selectDetailOrderByAdmId(int admissionId);
 }

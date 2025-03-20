@@ -144,7 +144,7 @@
 <!-- 접수 번호 기준 세부 내역 sql -->
         <select id="selectDetailOrderByAdmId" resultMap="admDiagnosisResultMap">
             select 
-	            distinct adm.adm_id as adm_id,
+	        distinct adm.adm_id as adm_id,
                 patient_id,
                 (select patient_name from patient_tb where patient_tb.patient_id = adm.patient_id) as patient_name,
                 date_format(adm.created_at, "%Y년 %m월 %d일") as adm_date,
@@ -161,9 +161,32 @@
 	            on dot.adm_id = adm.adm_id
                 left outer join order_tb as ot
                     on dot.order_code = ot.order_code
-            where adm.adm_id = #{admId} and date_format(adm.created_at, "%Y-%m-%d") = #{admDate}
+            where adm.adm_id = #{admId}
             order by order_code;
         </select>
         
+        <select id="selectPatientInfoByAdmId" resultMap="admResultMap">
+            select 
+                adm.adm_id as adm_id,
+	        adm.patient_id as adm_patient_id,
+                pt.patient_name as pt_patient_name,
+                adm.usercode as adm_usercode,
+                date_format(adm.created_at, "%Y-%m-%d") as adm_time,
+                adm.start_date as start_date,
+                adm.end_date as end_date
+            from adm_tb as adm
+            left outer join patient_tb as pt
+            on pt.patient_id = adm.patient_id
+            where adm.adm_id = #{admissionId}
+        </select>
 
+        <select id="selectTotalPayByAdmId" resultType="java.lang.Integer">
+        select 
+        coalesce(sum(total_order_pay), 0) as totalPay
+        from adm_tb as adm
+        left outer join diagnosis_order_tb as dot
+                on dot.adm_id = adm.adm_id
+        where adm.adm_id = #{admissionId}
+        group by adm.adm_id;
+        </select>
 </mapper>
