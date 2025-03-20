@@ -50,7 +50,7 @@
         )
     </insert>
 
-    <update id="updatePasswordById">
+    <update id="updatePasswordByCode">
         update user_tb
         set
             password = #{password}
@@ -58,7 +58,7 @@
             usercode = #{usercode}
     </update>
 
-    <update id="updateEmailById">
+    <update id="updateEmailByCode">
         update user_tb
         set
             email = #{email}
@@ -66,7 +66,7 @@
             usercode = #{usercode}
     </update>
 
-    <update id="updatePhoneNumberById">
+    <update id="updatePhoneNumberByCode">
         update user_tb
         set
             phonenumber = #{phoneNumber}

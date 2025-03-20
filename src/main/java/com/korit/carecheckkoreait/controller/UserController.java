@@ -1,20 +1,13 @@
 package com.korit.carecheckkoreait.controller;
 
-import com.korit.carecheckkoreait.dto.request.ReqChangeEmailDto;
 import com.korit.carecheckkoreait.dto.request.ReqSearchUserDto;
-import com.korit.carecheckkoreait.dto.request.ReqSigninDto;
 import com.korit.carecheckkoreait.dto.request.ReqSignupDto;
-import com.korit.carecheckkoreait.dto.response.RespTokenDto;
 import com.korit.carecheckkoreait.dto.response.RespUserListSearchDto;
-import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 import com.korit.carecheckkoreait.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -51,7 +44,5 @@ public class UserController {
 //        System.out.println("Controller : " + respUserListSearchDto);
         return ResponseEntity.ok().body(respUserListSearchDto);
     }
-
-
 
 }

@@ -81,11 +81,15 @@ public class UserService {
         userRepository.updatePassword(user.getUsercode(), encodedPassword);
     }
     @Transactional(rollbackFor = Exception.class)
-    public void updateEmail(User user, String email) {
-        userRepository.updateEmail(user.getUsercode(), email);
+    public void updateEmail(String usercode, String email) {
+        User foundUser = userRepository.selectByUsercode(usercode)
+                .orElseThrow(() -> new BadCredentialsException("사용자의 정보를 조회할 수 없습니다."));
+        userRepository.updateEmail(foundUser.getUsercode(), email);
     }
-    public void updatePhoneNumber(User user, String phoneNumber) {
-        userRepository.updatePhoneNumber(user.getUsercode(), phoneNumber);
+    public void updatePhoneNumber(String usercode, String phoneNumber) {
+        User foundUser = userRepository.selectByUsercode(usercode)
+                .orElseThrow(() -> new BadCredentialsException("사용자의 정보를 조회할 수 없습니다."));
+        userRepository.updatePhoneNumber(foundUser.getUsercode(), phoneNumber);
     }
 
     @Transactional(readOnly = true)
