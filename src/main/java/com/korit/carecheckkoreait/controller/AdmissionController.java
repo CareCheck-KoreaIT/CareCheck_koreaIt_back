@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
+import com.korit.carecheckkoreait.dto.request.ReqAddVitalInAdmDto;
 import com.korit.carecheckkoreait.service.AdmissionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,11 +45,19 @@ public class AdmissionController {
     public ResponseEntity<?> selectWaitingList(
         @Parameter(description = "직원코드", example = "2025020003", required = true)
         @RequestParam String usercode) throws Exception {
+            System.out.println(usercode);
         return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(usercode));
     }
 
-    @Operation(summary = "환자바이탈정보", description = "선택환자의 바이탈 정보")
+    @Operation(summary ="환자바이탈입력", description ="해당접수번호에 등록된 바이탈 정보")
     @PostMapping("/{admissionId}/vitals")
+    public ResponseEntity<?> insertVitalInfoByAdmId(@RequestBody ReqAddVitalInAdmDto dto) {
+        admissionService.insertVitalInAdm(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "환자바이탈정보", description = "선택환자의 바이탈 정보")
+    @GetMapping("/{admissionId}/vitals")
     public ResponseEntity<?> selectVitalInfo(@RequestParam int admId ) throws Exception{
         return ResponseEntity.ok().body(admissionService.selectVitalByAdmId(admId));
     }
@@ -56,7 +65,9 @@ public class AdmissionController {
     @Operation(summary = "진료세부내역", description = "선택한접수번호의 세부내역")
     @GetMapping("/{admissionId}/billings")
     public ResponseEntity<?> selectDetailBill(
-        @PathVariable int admissionId) throws Exception{
+        
+    
+    @PathVariable int admissionId) throws Exception{
         return ResponseEntity.ok().body(admissionService.selectDetailOrderByAdmId(admissionId));
     } 
 
@@ -73,6 +84,7 @@ public class AdmissionController {
         admissionService.insertDiagnosisInAdm(dto);
         return ResponseEntity.ok().build();
     } 
+
     @Operation(summary = "금액 조회", description = "선택한 접수번호의 총금액")
     @GetMapping("/{admissionId}/totalpay")
     public ResponseEntity<?> selectTotalPayInAdm(@PathVariable int admissionId) {

@@ -5,15 +5,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.korit.carecheckkoreait.controller.AdmissionController;
 import com.korit.carecheckkoreait.entity.Admission;
 import com.korit.carecheckkoreait.entity.Diagnosis;
 import com.korit.carecheckkoreait.entity.DiagnosisOrder;
+import com.korit.carecheckkoreait.entity.PatientVital;
 import com.korit.carecheckkoreait.mapper.AdmissionMapper;
 
 @Repository
 public class AdmissionRepository {
-
 
     @Autowired
     private AdmissionMapper admissionMapper;
@@ -23,6 +22,7 @@ public class AdmissionRepository {
         admissionMapper.insertAdmission(admission);
         return admission;
     }
+
 
     //환자 접수 조회
     public int findAdmissionByPatientIdAndUsercode(int patientId, String usercode) {
@@ -48,6 +48,7 @@ public class AdmissionRepository {
     //환자의 바이탈 정보 조회(admId)
     public Optional<List<Admission>> selectVitalInfoByAdmId(int admId) {
         List<Admission> vitalInfo = admissionMapper.selectVitalInfoByAdmId(admId);
+        System.out.println(vitalInfo);
         return vitalInfo.isEmpty()
             ? Optional.empty()
             : Optional.of(vitalInfo);
@@ -67,6 +68,10 @@ public class AdmissionRepository {
 
     public void deleteOrderInAdm(int diagnosisOrderId) {
         admissionMapper.deleteOrderInAdmission(diagnosisOrderId);
+    }
+
+    public void insertVitalInAdm(PatientVital patientVital) {
+        admissionMapper.insertVitalInAdmId(patientVital);
     }
 
     public void insertDiagnosisInAdm(Diagnosis diagnosis) {
