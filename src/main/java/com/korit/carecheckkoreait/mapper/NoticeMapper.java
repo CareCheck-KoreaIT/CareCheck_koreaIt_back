@@ -22,4 +22,8 @@ public interface NoticeMapper {
             @Param("order") String order,
             @Param("searchText") String searchText
     );
+
+    int selectNoticeCountAllBySearchText(@Param("searchText") String searchText);
+
+    int increaseViewCount(int noticeId);
 }

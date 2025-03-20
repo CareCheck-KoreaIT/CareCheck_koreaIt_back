@@ -51,4 +51,14 @@ public class NoticeService {
         return  noticeRepository.deleteNoticeById(noticeId);
 
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public int updateViewCount(int noticeId) {
+        return noticeRepository.updateViewCount(noticeId);
+    }
+
+    @Transactional(readOnly = true)
+    public int getNoticeListCountBySearchText(String searchText) {
+        return noticeRepository.findNoticeCountAllBySearchText(searchText);
+    }
 }
