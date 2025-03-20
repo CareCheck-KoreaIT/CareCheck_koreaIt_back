@@ -44,6 +44,17 @@
         </choose>
         limit #{startIndex}, #{limitCount}
     </select>
+    <select id="selectNoticeCountAllBySearchText" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            notice_tb
+        <where>
+            <if test="searchText != null and searchText != ''">
+                title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+    </select>
 
     <update id="updateNoticeByNoticeId">
     update notice_tb
@@ -54,7 +65,16 @@
     where
         notice_id = #{noticeId}
     </update>
-    
+
+    <update id="increaseViewCount">
+        update
+            notice_tb
+        set
+            view_count = view_count + 1
+        where
+            notice_id = #{noticeId}
+    </update>
+
     <delete id="deleteNotice">
         delete
         from
