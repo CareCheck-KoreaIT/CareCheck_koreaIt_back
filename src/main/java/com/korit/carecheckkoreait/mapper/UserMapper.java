@@ -16,13 +16,13 @@ public interface UserMapper {
     String selectUsercode(int roleId);
     int insert(User user);
 
-    int updatePasswordById(
+    int updatePasswordByCode(
             @Param("usercode") String usercode,
             @Param("password") String password);
-    int updateEmailById(
+    int updateEmailByCode(
             @Param("usercode") String usercode,
             @Param("email") String email);
-    int updatePhoneNumberById(
+    int updatePhoneNumberByCode(
             @Param("usercode") String usercode,
             @Param("phoneNumber") String phoneNumber);
 
