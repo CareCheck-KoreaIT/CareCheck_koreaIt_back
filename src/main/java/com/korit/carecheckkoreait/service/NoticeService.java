@@ -40,6 +40,10 @@ public class NoticeService {
         );
     }
 
+    public List<NoticeSearch> getNoticeListSearchByUsercode(String usercode) {
+        return noticeRepository.findNoticeListSearchByUsercode(usercode);
+    }
+
    @Transactional(rollbackFor = Exception.class)
     public Boolean modiftyNotice(int noticeId, ReqModifyNoticeDto reqModifyNoticeDto) throws NotFoundException {
         return noticeRepository.updateUserById(reqModifyNoticeDto.toNotice(noticeId))

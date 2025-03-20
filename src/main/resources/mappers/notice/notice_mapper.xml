@@ -27,7 +27,7 @@
             nt.updated_at as updatedAt
         from
             notice_tb nt
-        left join user_tb ut on(ut.usercode = nt.usercode)
+            left join user_tb ut on(ut.usercode = nt.usercode)
         <where>
             <if test="searchText != null and searchText != ''">
                 nt.title like concat("%", #{searchText}, "%")
@@ -55,6 +55,25 @@
             </if>
         </where>
     </select>
+
+    <select id="selectNoticeByUsercode" resultType="com.korit.carecheckkoreait.entity.NoticeSearch">
+        select
+            nt.notice_id as noticeId,
+            ut.username as username,
+            nt.usercode as usercode,
+            nt.title as title,
+            nt.content as content,
+            nt.created_at as createdAt,
+            nt.updated_at as updatedAt
+        from
+            notice_tb nt
+            left join user_tb ut on(ut.usercode = nt.usercode)
+        where
+            nt.usercode = #{usercode}
+        order by
+            nt.created_at desc
+    </select>
+
 
     <update id="updateNoticeByNoticeId">
     update notice_tb

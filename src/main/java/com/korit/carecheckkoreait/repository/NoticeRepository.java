@@ -30,6 +30,10 @@ public class NoticeRepository {
         return noticeMapper.selectNoticeBySearchOption(startIndex, limitSize, order, searchText);
     }
 
+    public List<NoticeSearch> findNoticeListSearchByUsercode(String usercode) {
+        return noticeMapper.selectNoticeByUsercode(usercode);
+    }
+
     public int findNoticeCountAllBySearchText(String searchText) {
         return noticeMapper.selectNoticeCountAllBySearchText(searchText);
     }
@@ -41,10 +45,5 @@ public class NoticeRepository {
     public int deleteNoticeById(int noticeId) {
         int result = noticeMapper.deleteNotice(noticeId);
         return result;
-    }
-
-    public int updateViewCount(int noticeId) {
-        noticeMapper.increaseViewCount(noticeId);
-        return noticeId;
     }
 }
