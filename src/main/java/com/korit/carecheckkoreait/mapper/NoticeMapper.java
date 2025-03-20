@@ -24,4 +24,9 @@ public interface NoticeMapper {
     );
 
     List<NoticeSearch> selectNoticeByUsercode(@Param("usercode") String usercode);
+
+    int selectNoticeCountAllBySearchText(@Param("searchText") String searchText);
+
+    int increaseViewCount(int noticeId);
+
 }

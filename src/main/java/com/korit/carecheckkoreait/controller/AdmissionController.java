@@ -58,15 +58,13 @@ public class AdmissionController {
 
     @Operation(summary = "환자바이탈정보", description = "선택환자의 바이탈 정보")
     @GetMapping("/{admissionId}/vitals")
-    public ResponseEntity<?> selectVitalInfo(@RequestParam int admId ) throws Exception{
-        return ResponseEntity.ok().body(admissionService.selectVitalByAdmId(admId));
+    public ResponseEntity<?> selectVitalInfo(@PathVariable int admissionId ) throws Exception{
+        return ResponseEntity.ok().body(admissionService.selectVitalByAdmId(admissionId));
     }
 
     @Operation(summary = "진료세부내역", description = "선택한접수번호의 세부내역")
     @GetMapping("/{admissionId}/billings")
     public ResponseEntity<?> selectDetailBill(
-        
-    
     @PathVariable int admissionId) throws Exception{
         return ResponseEntity.ok().body(admissionService.selectDetailOrderByAdmId(admissionId));
     } 

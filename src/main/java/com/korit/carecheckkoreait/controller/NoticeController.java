@@ -41,8 +41,7 @@ public class NoticeController {
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 조회")
     @GetMapping("")
     public ResponseEntity<?> searchNoticeList(@ModelAttribute ReqNoticeListSearchDto dto) {
-        List<NoticeSearch> noticeList = noticeService.getNoticeListSearchBySearchOption(dto);
-        int totalNoticeListCount = noticeList.size();
+        int totalNoticeListCount = noticeService.getNoticeListCountBySearchText(dto.getSearchText());
         int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
                 ? totalNoticeListCount / dto.getLimitCount()
                 : totalNoticeListCount / dto.getLimitCount() + 1;
@@ -56,7 +55,7 @@ public class NoticeController {
                         .isFirstPage(dto.getPage() == 1)
                         .isLastPage(dto.getPage() == totalPages)
                         .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
-                        .noticeList(noticeList)
+                        .noticeList(noticeService.getNoticeListSearchBySearchOption(dto))
                         .build();
 
         System.out.println("controller : " + respNoticeListSearchDto);
@@ -70,7 +69,6 @@ public class NoticeController {
         List<NoticeSearch> noticeList = noticeService.getNoticeListSearchByUsercode(usercode);
         return ResponseEntity.ok().body(noticeList);
     }
-
 
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
     @PutMapping("/{noticeId}")
@@ -92,4 +90,11 @@ public class NoticeController {
 
         return ResponseEntity.ok().body("공지사항이 삭제되었습니다.");
     }
+
+    @Operation(summary = "조회수 증가", description = "조회수 추가")
+    @GetMapping("/{noticeId}")
+    public ResponseEntity<?> updateViewCount(@RequestParam int noticeId) {
+        return ResponseEntity.ok().body(noticeService.updateViewCount(noticeId));
+    }
+
 }

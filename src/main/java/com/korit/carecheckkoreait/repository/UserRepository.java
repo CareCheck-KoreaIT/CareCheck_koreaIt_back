@@ -31,13 +31,13 @@ public class UserRepository {
         return user;
     }
     public void updatePassword(String usercode, String password) {
-        userMapper.updatePasswordById(usercode, password);
+        userMapper.updatePasswordByCode(usercode, password);
     }
     public void updateEmail(String usercode, String email) {
-        userMapper.updateEmailById(usercode, email);
+        userMapper.updateEmailByCode(usercode, email);
     }
     public void updatePhoneNumber(String usercode, String phoneNumber) {
-        userMapper.updatePhoneNumberById(usercode, phoneNumber);
+        userMapper.updatePhoneNumberByCode(usercode, phoneNumber);
     }
 
     public List<User> selectUserListAllBySearchOption(

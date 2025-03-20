@@ -60,12 +60,14 @@ public class SecurityConfig {
             authorizeRequests.requestMatchers(
                     "/auth/**",
                     "/adm/**",
+                    "/account/**",
                     "/admission/**",
                     "/user/changeInfo/**",
                     "/notices/**",
                     "/order/**",
                     "/chart/registration",
-                    "/chart"
+                    "/chart",
+                    "/diseases/**"
             ).permitAll();
 
             authorizeRequests.anyRequest().authenticated();

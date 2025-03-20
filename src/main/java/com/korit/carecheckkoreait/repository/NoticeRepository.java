@@ -34,6 +34,10 @@ public class NoticeRepository {
         return noticeMapper.selectNoticeByUsercode(usercode);
     }
 
+    public int findNoticeCountAllBySearchText(String searchText) {
+        return noticeMapper.selectNoticeCountAllBySearchText(searchText);
+    }
+
     public Optional<Boolean> updateUserById(Notice notice) {
         return noticeMapper.updateNoticeByNoticeId(notice) < 1 ? Optional.empty() : Optional.of(true);
     }
