@@ -16,52 +16,30 @@
           now()
         )
     </insert>
-    <!--    <select id="selectNoticeAllBySearchText" resultType="java.lang.Integer">-->
-<!--        select-->
-<!--            count(*)-->
-<!--        from-->
-<!--            notice_tb-->
-<!--        <where>-->
-<!--            <if test="searchText != null and searchText != ''">-->
-<!--                title like concat("%", #{searchText}, "%")-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </select>-->
-    <select id="selectAllNoticeList" resultType="com.korit.carecheckkoreait.entity.NoticeSearch">
-        select
-            notice_id as noticeId,
-            usercode,
-            title,
-            content,
-            created_at as createdAt,
-            updated_at as updateAt
-        from
-            notice_tb
-        <if test="startIndex != null and limitCount != null">
-            LIMIT #{startIndex}, #{limitCount}
-        </if>
-    </select>
 
     <select id="selectNoticeBySearchOption" resultType="com.korit.carecheckkoreait.entity.NoticeSearch">
         select
-            notice_id as noticeId,
-            usercode,
-            title,
-            created_at as createdAt,
-            updated_at as updatedAt
+            nt.notice_id as noticeId,
+            ut.username as username,
+            nt.title as title,
+            nt.view_count as viewCount,
+            nt.created_at as createdAt,
+            nt.updated_at as updatedAt
         from
-            notice_tb
+            notice_tb nt
+        left join user_tb ut on(ut.usercode = nt.usercode)
         <where>
             <if test="searchText != null and searchText != ''">
-                title like concat("%", #{searchText}, "%")
+                nt.title like concat("%", #{searchText}, "%")
             </if>
         </where>
+        order by
         <choose>
             <when test="order == 'oldest'">
-                noticeId asc,
+                 nt.notice_Id asc
             </when>
             <otherwise>
-                order by notice_id desc
+                 nt.notice_id desc
             </otherwise>
         </choose>
         limit #{startIndex}, #{limitCount}

@@ -42,8 +42,8 @@ public class NoticeController {
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 조회")
     @GetMapping("")
     public ResponseEntity<?> searchNoticeList(@ModelAttribute ReqNoticeListSearchDto dto) {
-        List<NoticeSearch> NoticeList = noticeService.getNoticeListSearch(dto);
-        int totalNoticeListCount = NoticeList.size();
+        List<NoticeSearch> noticeList = noticeService.getNoticeListSearchBySearchOption(dto);
+        int totalNoticeListCount = noticeList.size();
         int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
                 ? totalNoticeListCount / dto.getLimitCount()
                 : totalNoticeListCount / dto.getLimitCount() + 1;
@@ -54,8 +54,13 @@ public class NoticeController {
                         .limitCount(dto.getLimitCount())
                         .totalPages(totalPages)
                         .totalElements(totalNoticeListCount)
-                        .noticeList(noticeService.getNoticeListSearch(dto))
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
+                        .noticeList(noticeList)
                         .build();
+
+        System.out.println("controller : " + respNoticeListSearchDto);
 
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
@@ -63,8 +68,8 @@ public class NoticeController {
     @Operation(summary = "공지사항 제목 검색 조회", description = "공지사항 제목 검색 조회")
     @GetMapping("/title")
     public ResponseEntity<?> searchNoticeListByTitle(@ModelAttribute ReqNoticeListSearchDto dto) {
-        List<NoticeSearch> NoticeListByTitle = noticeService.getNoticeListSearch(dto);
-        int totalNoticeListCount = NoticeListByTitle.size();
+        List<NoticeSearch> noticeListByTitle = noticeService.getNoticeListSearchBySearchOption(dto);
+        int totalNoticeListCount = noticeListByTitle.size();
         int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
                 ? totalNoticeListCount / dto.getLimitCount()
                 : totalNoticeListCount / dto.getLimitCount() + 1;
@@ -75,7 +80,10 @@ public class NoticeController {
                         .limitCount(dto.getLimitCount())
                         .totalPages(totalPages)
                         .totalElements(totalNoticeListCount)
-                        .noticeList(noticeService.getNoticeListSearchBySearchOption(dto))
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
+                        .noticeList(noticeListByTitle)
                         .build();
 
         return ResponseEntity.ok().body(respNoticeListSearchDto);
