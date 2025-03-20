@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
+import com.korit.carecheckkoreait.dto.request.ReqAddVitalInAdmDto;
 import com.korit.carecheckkoreait.entity.Admission;
 import com.korit.carecheckkoreait.entity.Diagnosis;
 import com.korit.carecheckkoreait.entity.DiagnosisOrder;
+import com.korit.carecheckkoreait.entity.PatientVital;
 import com.korit.carecheckkoreait.exception.DuplicatedValueException;
 import com.korit.carecheckkoreait.exception.FieldError;
 import com.korit.carecheckkoreait.repository.AdmissionRepository;
@@ -53,6 +55,17 @@ public class AdmissionService {
         .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void insertVitalInAdm(ReqAddVitalInAdmDto dto) {
+        PatientVital patientVital = PatientVital.builder()
+                .admId(dto.getAdmId())
+                .usercode(dto.getUsercode())
+                .height(dto.getHeight())
+                .weight(dto.getWeight())
+                .fever(dto.getFever())
+                .build();
+        admissionRepository.insertVitalInAdm(patientVital);
+    }
     @Transactional(readOnly = true)
     public List<Admission> selectVitalByAdmId(int admissionId) throws Exception{
         return admissionRepository.selectVitalInfoByAdmId(admissionId)
