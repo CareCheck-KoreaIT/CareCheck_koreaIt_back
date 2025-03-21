@@ -1,6 +1,7 @@
 package com.korit.carecheckkoreait.controller.advice;
 
 import com.korit.carecheckkoreait.exception.DuplicatedValueException;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,6 +31,11 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<?> disabledException(DisabledException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> badRequestException(BadRequestException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
 }
