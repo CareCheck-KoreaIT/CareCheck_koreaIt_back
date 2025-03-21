@@ -23,8 +23,8 @@ public class AccountController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
     ) throws Exception {
-        User user = principalUser.getUser();
-        userService.updatePassword(user, requestBody.get("currentPassword"), requestBody.get("newPassword"));
+
+        userService.updatePassword(principalUser, requestBody.get("currentPassword"), requestBody.get("newPassword"));
         return ResponseEntity.ok().build();
     }
 
@@ -33,9 +33,8 @@ public class AccountController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
     ) {
-        User user = principalUser.getUser();
         String newEmail = requestBody.get("email");
-        userService.updateEmail(user, newEmail);
+        userService.updateEmail(principalUser, newEmail);
         return ResponseEntity.ok().build();
     }
 
@@ -44,9 +43,8 @@ public class AccountController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
     ) {
-        User user = principalUser.getUser();
         String newPhoneNumber = requestBody.get("phoneNumber");
-        userService.updatePhoneNumber(user, newPhoneNumber);
+        userService.updatePhoneNumber(principalUser, newPhoneNumber);
         return ResponseEntity.ok().build();
     }
 
