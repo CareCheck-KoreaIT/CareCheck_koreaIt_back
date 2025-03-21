@@ -48,7 +48,6 @@ public class AdmissionRepository {
     //환자의 바이탈 정보 조회(admId)
     public Optional<List<Admission>> selectVitalInfoByAdmId(int admId) {
         List<Admission> vitalInfo = admissionMapper.selectVitalInfoByAdmId(admId);
-        System.out.println(vitalInfo);
         return vitalInfo.isEmpty()
             ? Optional.empty()
             : Optional.of(vitalInfo);
@@ -78,9 +77,15 @@ public class AdmissionRepository {
         admissionMapper.insertDiagnosisInAdmission(diagnosis);
     }
     public Integer selectTotalPayInAdm(int admissionId) {
-        Integer result = admissionMapper.selectTotalPayByAdmId(admissionId);
-        System.out.println(result);
         return admissionMapper.selectTotalPayByAdmId(admissionId);
+    }
+
+    public void updateAdmissionStartDate(int admissionId) {
+        admissionMapper.updateAdmissionStartDate(admissionId);
+    }
+
+    public void updateAdmissionEndDate(int admissionId) {
+        admissionMapper.updateAdmissionEndDate(admissionId);
     }
 }
 

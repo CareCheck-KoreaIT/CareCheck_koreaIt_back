@@ -58,7 +58,8 @@ public class NoticeService {
 
     @Transactional(rollbackFor = Exception.class)
     public int updateViewCount(int noticeId) {
-        return noticeRepository.updateViewCount(noticeId);
+        return 0; 
+        // noticeRepository.updateViewCount(noticeId);
     }
 
     @Transactional(readOnly = true)

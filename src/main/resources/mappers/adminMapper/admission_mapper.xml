@@ -197,4 +197,13 @@
         where adm.adm_id = #{admissionId}
         group by adm.adm_id;
         </select>
+
+        <update id="updateAdmissionStartDate">
+        update adm_tb set start_date = now() 
+        where adm_id = #{admissionId}
+        </update>
+        <update id="updateAdmissionEndDate">
+        update adm_tb set end_date = now() 
+        where adm_id = #{admissionId}
+        </update>
 </mapper>
