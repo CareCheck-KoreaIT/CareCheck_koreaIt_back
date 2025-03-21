@@ -29,7 +29,6 @@ public class DiseaseController {
     @GetMapping
     public ResponseEntity<?> selectDiseaseByDiseaseName(
         @RequestParam String diseaseName) throws Exception {
-            System.out.println(diseaseName);
         return ResponseEntity.ok().body(diseaseService.selectDiseaseByDiseaseName(diseaseName));
     }
 }
