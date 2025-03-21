@@ -12,6 +12,7 @@
           #{usercode},
           #{title},
           #{content},
+          #{viewCount},
           now(),
           now()
         )
@@ -36,12 +37,16 @@
         order by
         <choose>
             <when test="order == 'oldest'">
-                 nt.notice_Id asc
+                noticeId asc,
             </when>
-            <otherwise>
-                 nt.notice_id desc
-            </otherwise>
+            <when test="order == 'viewsDesc'">
+                viewCount desc,
+            </when>
+            <when test="order == 'viewsAsc'">
+                viewCount asc,
+            </when>
         </choose>
+        noticeId desc
         limit #{startIndex}, #{limitCount}
     </select>
     <select id="selectNoticeCountAllBySearchText" resultType="java.lang.Integer">

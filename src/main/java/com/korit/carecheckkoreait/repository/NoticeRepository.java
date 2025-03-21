@@ -43,8 +43,7 @@ public class NoticeRepository {
         return result;
     }
 
-    public int updateViewCount(int noticeId) {
+    public void updateViewCount(int noticeId) {
         noticeMapper.increaseViewCount(noticeId);
-        return noticeId;
     }
 }
