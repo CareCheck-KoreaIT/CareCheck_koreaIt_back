@@ -1,6 +1,5 @@
 package com.korit.carecheckkoreait.controller;
 
-import com.korit.carecheckkoreait.dto.request.ReqChangeEmailDto;
 import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 import com.korit.carecheckkoreait.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,22 +26,24 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/changeInfo/email")
+    @PutMapping("/{usercode}/email")
     public ResponseEntity<?> changeEmail(
-            @AuthenticationPrincipal PrincipalUser principalUser,
-            @RequestBody ReqChangeEmailDto reqChangeEmailDto
-    ) {
-        String email = reqChangeEmailDto.getEmail();
-        userService.updateEmail(principalUser.getUser(), email);
-        return ResponseEntity.ok().build();
-    }
-    @PutMapping("/changeInfo/phoneNumber")
-    public ResponseEntity<?> changePhoneNumber(
-            @AuthenticationPrincipal PrincipalUser principalUser,
+            @PathVariable String usercode,
             @RequestBody Map<String, String> requestBody
     ) {
-        String phoneNumber = requestBody.get("phoneNumber");
-        userService.updatePhoneNumber(principalUser.getUser(), phoneNumber);
+        String newEmail = requestBody.get("email");
+        System.out.println(usercode + " " + newEmail);
+        userService.updateEmail(usercode, newEmail);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{usercode}/phoneNumber")
+    public ResponseEntity<?> changePhoneNumber(
+            @PathVariable String usercode,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        String newPhoneNumber = requestBody.get("phoneNumber");
+        userService.updatePhoneNumber(usercode, newPhoneNumber);
         return ResponseEntity.ok().build();
     }
 

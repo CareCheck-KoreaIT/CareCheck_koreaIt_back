@@ -16,39 +16,37 @@
           now()
         )
     </insert>
-    <!--    <select id="selectNoticeAllBySearchText" resultType="java.lang.Integer">-->
-<!--        select-->
-<!--            count(*)-->
-<!--        from-->
-<!--            notice_tb-->
-<!--        <where>-->
-<!--            <if test="searchText != null and searchText != ''">-->
-<!--                title like concat("%", #{searchText}, "%")-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </select>-->
-    <select id="selectAllNoticeList" resultType="com.korit.carecheckkoreait.entity.NoticeSearch">
-        select
-            notice_id as noticeId,
-            usercode,
-            title,
-            content,
-            created_at as createdAt,
-            updated_at as updateAt
-        from
-            notice_tb
-        <if test="startIndex != null and limitCount != null">
-            LIMIT #{startIndex}, #{limitCount}
-        </if>
-    </select>
 
     <select id="selectNoticeBySearchOption" resultType="com.korit.carecheckkoreait.entity.NoticeSearch">
         select
-            notice_id as noticeId,
-            usercode,
-            title,
-            created_at as createdAt,
-            updated_at as updatedAt
+            nt.notice_id as noticeId,
+            ut.username as username,
+            nt.title as title,
+            nt.view_count as viewCount,
+            nt.created_at as createdAt,
+            nt.updated_at as updatedAt
+        from
+            notice_tb nt
+            left join user_tb ut on(ut.usercode = nt.usercode)
+        <where>
+            <if test="searchText != null and searchText != ''">
+                nt.title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+        order by
+        <choose>
+            <when test="order == 'oldest'">
+                 nt.notice_Id asc
+            </when>
+            <otherwise>
+                 nt.notice_id desc
+            </otherwise>
+        </choose>
+        limit #{startIndex}, #{limitCount}
+    </select>
+    <select id="selectNoticeCountAllBySearchText" resultType="java.lang.Integer">
+        select
+            count(*)
         from
             notice_tb
         <where>
@@ -56,16 +54,26 @@
                 title like concat("%", #{searchText}, "%")
             </if>
         </where>
-        <choose>
-            <when test="order == 'oldest'">
-                noticeId asc,
-            </when>
-            <otherwise>
-                order by notice_id desc
-            </otherwise>
-        </choose>
-        limit #{startIndex}, #{limitCount}
     </select>
+
+    <select id="selectNoticeByUsercode" resultType="com.korit.carecheckkoreait.entity.NoticeSearch">
+        select
+            nt.notice_id as noticeId,
+            ut.username as username,
+            nt.usercode as usercode,
+            nt.title as title,
+            nt.content as content,
+            nt.created_at as createdAt,
+            nt.updated_at as updatedAt
+        from
+            notice_tb nt
+            left join user_tb ut on(ut.usercode = nt.usercode)
+        where
+            nt.usercode = #{usercode}
+        order by
+            nt.created_at desc
+    </select>
+
 
     <update id="updateNoticeByNoticeId">
     update notice_tb
@@ -76,7 +84,16 @@
     where
         notice_id = #{noticeId}
     </update>
-    
+
+    <update id="increaseViewCount">
+        update
+            notice_tb
+        set
+            view_count = view_count + 1
+        where
+            notice_id = #{noticeId}
+    </update>
+
     <delete id="deleteNotice">
         delete
         from
