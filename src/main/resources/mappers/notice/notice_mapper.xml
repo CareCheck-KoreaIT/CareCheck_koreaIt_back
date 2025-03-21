@@ -23,6 +23,7 @@
             nt.notice_id as noticeId,
             ut.username as username,
             nt.title as title,
+            nt.content as content,
             nt.view_count as viewCount,
             nt.created_at as createdAt,
             nt.updated_at as updatedAt

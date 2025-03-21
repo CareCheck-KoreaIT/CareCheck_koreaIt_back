@@ -57,7 +57,7 @@ public class NoticeController {
                         .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
                         .noticeList(noticeService.getNoticeListSearchBySearchOption(dto))
                         .build();
-        
+
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
