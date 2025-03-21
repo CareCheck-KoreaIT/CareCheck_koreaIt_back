@@ -11,6 +11,6 @@ public interface OrderMapper {
 
     int insertOrder(Order order);
     List<Order> selectAllByOrderNameContaining(@Param("orderName") String orderName);
-
+    int insertScorePay(double scorePay);
     int updateScoreById(@Param("scorePay") double scorePay);
 }
