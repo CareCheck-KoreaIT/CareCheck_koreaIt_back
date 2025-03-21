@@ -3,7 +3,6 @@ package com.korit.carecheckkoreait.controller;
 import com.korit.carecheckkoreait.dto.request.ReqModifyNoticeDto;
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespNoticeListSearchDto;
-import com.korit.carecheckkoreait.entity.Notice;
 import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.service.NoticeService;
 import jakarta.validation.constraints.Min;
@@ -60,6 +59,13 @@ public class NoticeController {
                         .build();
         
         return ResponseEntity.ok().body(respNoticeListSearchDto);
+    }
+
+    @Operation(summary = "공지사항 usecode 조회", description = "공지사항 usecode로 조회")
+    @GetMapping("/{usercode}")
+    public ResponseEntity<?> searchNoticeByUsercode(@PathVariable String usercode) {
+        List<NoticeSearch> noticeList = noticeService.getNoticeListSearchByUsercode(usercode);
+        return ResponseEntity.ok().body(noticeList);
     }
 
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
