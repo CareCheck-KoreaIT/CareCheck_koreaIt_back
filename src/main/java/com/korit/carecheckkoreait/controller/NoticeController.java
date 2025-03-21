@@ -57,9 +57,7 @@ public class NoticeController {
                         .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
                         .noticeList(noticeService.getNoticeListSearchBySearchOption(dto))
                         .build();
-
-        System.out.println("controller : " + respNoticeListSearchDto);
-
+        
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
@@ -92,9 +90,10 @@ public class NoticeController {
     }
 
     @Operation(summary = "조회수 증가", description = "조회수 추가")
-    @GetMapping("/{noticeId}")
-    public ResponseEntity<?> updateViewCount(@RequestParam int noticeId) {
-        return ResponseEntity.ok().body(noticeService.updateViewCount(noticeId));
+    @PostMapping("/{noticeId}")
+    public ResponseEntity<?> updateViewCount(@PathVariable int noticeId) {
+        noticeService.updateViewCount(noticeId);
+        return ResponseEntity.ok().build();
     }
 
 }
