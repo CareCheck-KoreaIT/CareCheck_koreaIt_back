@@ -79,27 +79,27 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updatePassword(User user, String currentPassword, String newPassword) throws BadRequestException {
+    public void updatePassword(PrincipalUser principalUser, String currentPassword, String newPassword) throws BadRequestException {
         String encodedNewPassword = passwordEncoder.encode(newPassword);
 
-        if(!passwordEncoder.matches(currentPassword, user.getPassword())) {
+        if(!passwordEncoder.matches(currentPassword, principalUser.getPassword())) {
             throw new BadCredentialsException("사용자의 정보를 조회할 수 없습니다.");
         }
         if(passwordEncoder.matches(currentPassword, encodedNewPassword)) {
             throw new BadRequestException("현재 비밀번호와 새 비밀번호는 같을 수 없습니다.");
         }
 
-        userRepository.updatePassword(user.getUsercode(), encodedNewPassword);
+        userRepository.updatePassword(principalUser.getUsercode(), encodedNewPassword);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updateEmail(User user, String email) {
+    public void updateEmail(PrincipalUser principalUser, String email) {
 
-        userRepository.updateEmail(user.getUsercode(), email);
+        userRepository.updateEmail(principalUser.getUsercode(), email);
     }
-    public void updatePhoneNumber(User user, String phoneNumber) {
+    public void updatePhoneNumber(PrincipalUser principalUser, String phoneNumber) {
 
-        userRepository.updatePhoneNumber(user.getUsercode(), phoneNumber);
+        userRepository.updatePhoneNumber(principalUser.getUsercode(), phoneNumber);
     }
 
     @Transactional(readOnly = true)
