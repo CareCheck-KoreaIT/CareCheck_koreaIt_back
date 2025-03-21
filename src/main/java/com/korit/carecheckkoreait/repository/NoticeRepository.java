@@ -21,12 +21,6 @@ public class NoticeRepository {
         noticeMapper.insertNotice(notice);
         return notice;
     }
-  
-    public List<NoticeSearch> findNoticeListAll(
-            int startIndex,
-            int limitSize) {
-        return noticeMapper.selectAllNoticeList(startIndex, limitSize);
-    }
 
     public List<NoticeSearch> findNoticeListAllBySearchOption(
             int startIndex,
@@ -34,6 +28,14 @@ public class NoticeRepository {
             String order,
             String searchText) {
         return noticeMapper.selectNoticeBySearchOption(startIndex, limitSize, order, searchText);
+    }
+
+    public List<NoticeSearch> findNoticeListSearchByUsercode(String usercode) {
+        return noticeMapper.selectNoticeByUsercode(usercode);
+    }
+
+    public int findNoticeCountAllBySearchText(String searchText) {
+        return noticeMapper.selectNoticeCountAllBySearchText(searchText);
     }
 
     public Optional<Boolean> updateUserById(Notice notice) {

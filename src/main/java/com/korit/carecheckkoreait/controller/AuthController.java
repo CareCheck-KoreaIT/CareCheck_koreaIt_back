@@ -26,7 +26,7 @@ public class AuthController {
                 .name("AccessToken")
                 .token(userService.signin(dto))
                 .build();
-        System.out.println(respTokenDto);     // 테스트
+//        System.out.println(respTokenDto);     // 테스트
 
         return ResponseEntity.ok().body(respTokenDto);
     }

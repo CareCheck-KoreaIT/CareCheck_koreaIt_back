@@ -11,11 +11,6 @@ import java.util.List;
 public interface NoticeMapper {
 
     int insertNotice(Notice notice);
-    
-    List<NoticeSearch> selectAllNoticeList(
-            @Param("startIndex") int startIndex,
-            @Param("limitCount") int limitCount
-    );
 
     int updateNoticeByNoticeId(Notice notice);
 
@@ -27,4 +22,11 @@ public interface NoticeMapper {
             @Param("order") String order,
             @Param("searchText") String searchText
     );
+
+    List<NoticeSearch> selectNoticeByUsercode(@Param("usercode") String usercode);
+
+    int selectNoticeCountAllBySearchText(@Param("searchText") String searchText);
+
+    int increaseViewCount(int noticeId);
+
 }

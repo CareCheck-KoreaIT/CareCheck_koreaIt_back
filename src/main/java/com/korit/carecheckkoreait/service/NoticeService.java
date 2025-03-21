@@ -29,15 +29,6 @@ public class NoticeService {
                 .build();
         return noticeRepository.saveNotice(notice);
     }
-  
-    @Transactional(readOnly = true) //읽기전용 최적화
-    public List<NoticeSearch> getNoticeListSearch(ReqNoticeListSearchDto reqNoticeListSearchDto) {
-        int startIndex = (reqNoticeListSearchDto.getPage() - 1) * reqNoticeListSearchDto.getLimitCount();
-        return noticeRepository.findNoticeListAll(
-                startIndex,
-                reqNoticeListSearchDto.getLimitCount()
-        );
-    }
 
     public List<NoticeSearch> getNoticeListSearchBySearchOption(ReqNoticeListSearchDto dto) {
         int startIndex = dto.getPage() * dto.getLimitCount() - dto.getLimitCount(); // 페이지 인덱스 계산
@@ -47,6 +38,10 @@ public class NoticeService {
         return noticeRepository.findNoticeListAllBySearchOption(
                 startIndex, limitSize, order, searchText
         );
+    }
+
+    public List<NoticeSearch> getNoticeListSearchByUsercode(String usercode) {
+        return noticeRepository.findNoticeListSearchByUsercode(usercode);
     }
 
    @Transactional(rollbackFor = Exception.class)
@@ -59,5 +54,15 @@ public class NoticeService {
     public int deleteNoticeById(int noticeId) {
         return  noticeRepository.deleteNoticeById(noticeId);
 
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public int updateViewCount(int noticeId) {
+        return noticeRepository.updateViewCount(noticeId);
+    }
+
+    @Transactional(readOnly = true)
+    public int getNoticeListCountBySearchText(String searchText) {
+        return noticeRepository.findNoticeCountAllBySearchText(searchText);
     }
 }
