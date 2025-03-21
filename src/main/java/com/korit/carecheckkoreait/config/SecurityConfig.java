@@ -63,7 +63,7 @@ public class SecurityConfig {
                     "/admission/**",
                     "/user/changeInfo/**",
                     "/notice/**",
-                    "/order/**",
+                    "/orders/**",
                     "/chart/registration",
                     "/chart",
                     "/diseases/**"
