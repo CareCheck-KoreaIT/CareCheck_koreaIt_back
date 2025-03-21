@@ -23,7 +23,10 @@ public interface NoticeMapper {
             @Param("searchText") String searchText
     );
 
+    List<NoticeSearch> selectNoticeByUsercode(@Param("usercode") String usercode);
+
     int selectNoticeCountAllBySearchText(@Param("searchText") String searchText);
 
     int increaseViewCount(int noticeId);
+
 }

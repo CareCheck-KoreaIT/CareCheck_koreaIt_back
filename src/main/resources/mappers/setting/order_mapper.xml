@@ -7,7 +7,6 @@
     <resultMap id="orderResultMap" type="com.korit.carecheckkoreait.entity.Order">
         <id property="orderCode" column="order_code" />
         <result property="orderName" column="order_name" />
-        <result property="orderScore" column="order_score" />
         <result property="createAt" column="created_at" />
         <result property="updateAt" column="updated_at" />
     </resultMap>
@@ -26,13 +25,17 @@
     <select id="selectAllByOrderNameContaining" resultMap="orderResultMap">
         select
             order_code,
-            order_name,
-            order_score
+            order_name
         from
             order_tb
         where
             order_name like concat("%", #{orderName}, "%")
     </select>
+
+    <insert id="insertScorePay">
+        insert score_pay_tb
+        values(default, #{scorePay}, now(), now())
+    </insert>
 
     <update id="updateScoreById">
         update score_pay_tb 

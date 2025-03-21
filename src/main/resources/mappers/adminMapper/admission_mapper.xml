@@ -9,6 +9,7 @@
             <id property="admId" column="adm_id"/>
             <result property="patientId" column="adm_patient_id"/>
             <result property="patientName" column="pt_patient_name"/>
+            <result property="clinicDeft" column="clinic_deft"/>
             <result property="usercode" column="adm_usercode" />
             <result property="admDate" column="adm_time"/>
             <result property="startDate" column="start_date"/>
@@ -177,6 +178,7 @@
 	        adm.patient_id as adm_patient_id,
                 pt.patient_name as pt_patient_name,
                 adm.usercode as adm_usercode,
+                adm.clinic_deft as clinic_deft,
                 date_format(adm.created_at, "%Y-%m-%d") as adm_time,
                 adm.start_date as start_date,
                 adm.end_date as end_date
