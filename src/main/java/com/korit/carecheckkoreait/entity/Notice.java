@@ -16,6 +16,7 @@ public class Notice {
     private String usercode;
     private String title;
     private String content;
+    private int viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

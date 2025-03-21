@@ -13,6 +13,8 @@ public class NoticeSearch {
     private int noticeId;
     private String usercode;
     private String title;
+    private int viewCount;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+    private String username;
 }
