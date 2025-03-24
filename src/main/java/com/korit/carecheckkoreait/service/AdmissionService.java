@@ -1,6 +1,8 @@
 package com.korit.carecheckkoreait.service;
 
 import java.util.List;
+
+import com.korit.carecheckkoreait.entity.*;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,10 +11,6 @@ import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddVitalInAdmDto;
-import com.korit.carecheckkoreait.entity.Admission;
-import com.korit.carecheckkoreait.entity.Diagnosis;
-import com.korit.carecheckkoreait.entity.DiagnosisOrder;
-import com.korit.carecheckkoreait.entity.PatientVital;
 import com.korit.carecheckkoreait.exception.DuplicatedValueException;
 import com.korit.carecheckkoreait.exception.FieldError;
 import com.korit.carecheckkoreait.repository.AdmissionRepository;
@@ -103,6 +101,7 @@ public class AdmissionService {
             admissionRepository.insertDiagnosisInAdm(diagnosis);
         }
     }
+
     @Transactional(readOnly = true)
     public Integer selectTotalPayInAdm(int admissionId) {
         return admissionRepository.selectTotalPayInAdm(admissionId);
@@ -116,5 +115,11 @@ public class AdmissionService {
     @Transactional(rollbackFor = Exception.class)
     public void updateAdmissionEndDate(int admissionId) {
         admissionRepository.updateAdmissionEndDate(admissionId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PatientSearch> getAllWaitingListKeyword(String keyword) throws Exception {
+        return admissionRepository.selectAllWaitingListByAdmId(keyword)
+                .orElseThrow(() -> new NotFoundException("대기자가 없습니다."));
     }
 }

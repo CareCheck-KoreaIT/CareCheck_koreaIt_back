@@ -57,7 +57,7 @@ public class AdmissionController {
     }
 
     @Operation(summary = "환자바이탈정보", description = "선택환자의 바이탈 정보")
-    @GetMapping("/{admissionId}/vitals")
+        @GetMapping("/{admissionId}/vitals")
     public ResponseEntity<?> selectVitalInfo(@PathVariable int admissionId ) throws Exception{
         return ResponseEntity.ok().body(admissionService.selectVitalByAdmId(admissionId));
     }
@@ -103,5 +103,12 @@ public class AdmissionController {
     public ResponseEntity<?> updateAdmissionStart(@PathVariable int admissionId) {
         admissionService.updateAdmissionStartDate(admissionId);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "전체대기자명단", description = "접수된 전체 대기자 명단")
+    @GetMapping("/allWaitings")
+    public ResponseEntity<?> getAllWaitingList(
+            @RequestParam(value = "keyword", required = false) String keyword) throws Exception {
+        return ResponseEntity.ok().body(admissionService.getAllWaitingListKeyword(keyword));
     }
 }
