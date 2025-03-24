@@ -53,7 +53,8 @@
     <update id="updatePasswordByCode">
         update user_tb
         set
-            password = #{password}
+            password = #{password},
+            updated_at = now()
         where
             usercode = #{usercode}
     </update>
@@ -61,7 +62,8 @@
     <update id="updateEmailByCode">
         update user_tb
         set
-            email = #{email}
+            email = #{email},
+            updated_at = now()
         where
             usercode = #{usercode}
     </update>
@@ -69,7 +71,8 @@
     <update id="updatePhoneNumberByCode">
         update user_tb
         set
-            phonenumber = #{phoneNumber}
+            phonenumber = #{phoneNumber},
+            updated_at = now()
         where
             usercode = #{usercode}
     </update>

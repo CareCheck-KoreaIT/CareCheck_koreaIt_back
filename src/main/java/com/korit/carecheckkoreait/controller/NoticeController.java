@@ -58,8 +58,6 @@ public class NoticeController {
                         .noticeList(noticeService.getNoticeListSearchBySearchOption(dto))
                         .build();
 
-        System.out.println("controller : " + respNoticeListSearchDto);
-
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
@@ -114,10 +112,10 @@ public class NoticeController {
         return ResponseEntity.ok().body("공지사항이 삭제되었습니다.");
     }
 
-//    @Operation(summary = "조회수 증가", description = "조회수 추가")
-//    @GetMapping("/{noticeId}")
-//    public ResponseEntity<?> updateViewCount(@RequestParam int noticeId) {
-//        return ResponseEntity.ok().body(noticeService.updateViewCount(noticeId));
-//    }
-
+    @Operation(summary = "조회수 증가", description = "조회수 추가")
+    @PostMapping("/{noticeId}")
+    public ResponseEntity<?> updateViewCount(@PathVariable int noticeId) {
+        noticeService.updateViewCount(noticeId);
+        return ResponseEntity.ok().build();
+    }
 }

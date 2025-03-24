@@ -30,13 +30,11 @@ public class NoticeService {
         return noticeRepository.saveNotice(notice);
     }
 
+    @Transactional(readOnly = true)
     public List<NoticeSearch> getNoticeListSearchBySearchOption(ReqNoticeListSearchDto dto) {
-        int startIndex = dto.getPage() * dto.getLimitCount() - dto.getLimitCount(); // 페이지 인덱스 계산
-        int limitSize = dto.getLimitCount();
-        String order = dto.getOrder();
-        String searchText = dto.getSearchText();
+        int startIndex = (dto.getPage() -1) * dto.getLimitCount(); // 페이지 인덱스 계산
         return noticeRepository.findNoticeListAllBySearchOption(
-                startIndex, limitSize, order, searchText
+                startIndex, dto.getLimitCount(), dto.getOrder(), dto.getSearchText()
         );
     }
 
@@ -60,10 +58,10 @@ public class NoticeService {
 
     }
 
-//    @Transactional(rollbackFor = Exception.class)
-//    public int updateViewCount(int noticeId) {
-//        return noticeRepository.updateViewCount(noticeId);
-//    }
+    @Transactional(rollbackFor = Exception.class)
+    public void updateViewCount(int noticeId) {
+        noticeRepository.updateViewCount(noticeId);
+    }
 
     @Transactional(readOnly = true)
     public int getNoticeListCountBySearchText(String searchText) {

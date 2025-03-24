@@ -1,7 +1,9 @@
 package com.korit.carecheckkoreait.controller;
 
+import com.korit.carecheckkoreait.entity.User;
 import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 import com.korit.carecheckkoreait.service.UserService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,34 +18,33 @@ public class AccountController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/changeInfo/password")
+    @PutMapping("/password")
     public ResponseEntity<?> changePassword(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
-    ) {
-        String password = requestBody.get("password");
-        userService.updatePassword(principalUser.getUser(), password);
+    ) throws Exception {
+
+        userService.updatePassword(principalUser, requestBody.get("currentPassword"), requestBody.get("newPassword"));
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{usercode}/email")
+    @PutMapping("/email")
     public ResponseEntity<?> changeEmail(
-            @PathVariable String usercode,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
     ) {
         String newEmail = requestBody.get("email");
-        System.out.println(usercode + " " + newEmail);
-        userService.updateEmail(usercode, newEmail);
+        userService.updateEmail(principalUser, newEmail);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{usercode}/phoneNumber")
+    @PutMapping("/phoneNumber")
     public ResponseEntity<?> changePhoneNumber(
-            @PathVariable String usercode,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
     ) {
         String newPhoneNumber = requestBody.get("phoneNumber");
-        userService.updatePhoneNumber(usercode, newPhoneNumber);
+        userService.updatePhoneNumber(principalUser, newPhoneNumber);
         return ResponseEntity.ok().build();
     }
 

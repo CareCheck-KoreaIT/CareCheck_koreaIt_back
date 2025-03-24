@@ -55,4 +55,9 @@ public class NoticeRepository {
         int result = noticeMapper.deleteNotice(noticeId);
         return result;
     }
+
+    public void updateViewCount(int noticeId) {
+        noticeMapper.increaseViewCount(noticeId);
+    }
+
 }

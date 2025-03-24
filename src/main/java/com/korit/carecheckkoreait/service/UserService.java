@@ -8,6 +8,8 @@ import com.korit.carecheckkoreait.entity.UserRole;
 import com.korit.carecheckkoreait.repository.UserRepository;
 import com.korit.carecheckkoreait.repository.UserRoleRepository;
 import com.korit.carecheckkoreait.security.jwt.JwtUtil;
+import com.korit.carecheckkoreait.security.principal.PrincipalUser;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -75,21 +77,29 @@ public class UserService {
 
         return user;
     }
+
     @Transactional(rollbackFor = Exception.class)
-    public void updatePassword(User user, String password) {
-        String encodedPassword = passwordEncoder.encode(password);
-        userRepository.updatePassword(user.getUsercode(), encodedPassword);
+    public void updatePassword(PrincipalUser principalUser, String currentPassword, String newPassword) throws BadRequestException {
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+
+        if(!passwordEncoder.matches(currentPassword, principalUser.getPassword())) {
+            throw new BadCredentialsException("사용자의 정보를 조회할 수 없습니다.");
+        }
+        if(passwordEncoder.matches(currentPassword, encodedNewPassword)) {
+            throw new BadRequestException("현재 비밀번호와 새 비밀번호는 같을 수 없습니다.");
+        }
+
+        userRepository.updatePassword(principalUser.getUsercode(), encodedNewPassword);
     }
+
     @Transactional(rollbackFor = Exception.class)
-    public void updateEmail(String usercode, String email) {
-        User foundUser = userRepository.selectByUsercode(usercode)
-                .orElseThrow(() -> new BadCredentialsException("사용자의 정보를 조회할 수 없습니다."));
-        userRepository.updateEmail(foundUser.getUsercode(), email);
+    public void updateEmail(PrincipalUser principalUser, String email) {
+
+        userRepository.updateEmail(principalUser.getUsercode(), email);
     }
-    public void updatePhoneNumber(String usercode, String phoneNumber) {
-        User foundUser = userRepository.selectByUsercode(usercode)
-                .orElseThrow(() -> new BadCredentialsException("사용자의 정보를 조회할 수 없습니다."));
-        userRepository.updatePhoneNumber(foundUser.getUsercode(), phoneNumber);
+    public void updatePhoneNumber(PrincipalUser principalUser, String phoneNumber) {
+
+        userRepository.updatePhoneNumber(principalUser.getUsercode(), phoneNumber);
     }
 
     @Transactional(readOnly = true)

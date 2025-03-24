@@ -107,4 +107,14 @@ public class AdmissionService {
     public Integer selectTotalPayInAdm(int admissionId) {
         return admissionRepository.selectTotalPayInAdm(admissionId);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAdmissionStartDate(int admissionId) {
+        admissionRepository.updateAdmissionStartDate(admissionId);  
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAdmissionEndDate(int admissionId) {
+        admissionRepository.updateAdmissionEndDate(admissionId);
+    }
 }
