@@ -40,11 +40,15 @@ public class NoticeService {
         );
     }
 
-    public List<NoticeSearch> getNoticeListSearchByUsercode(String usercode) {
-        return noticeRepository.findNoticeListSearchByUsercode(usercode);
+    public List<NoticeSearch> getNoticeListSearchByUsercode(String usercode, String searchText, int page, int limitCount, String order) {
+        int startIndex = (page - 1) * limitCount;
+        int limitSize = limitCount;
+
+        return noticeRepository.findNoticeListSearchByUsercode(usercode, startIndex, limitSize, order, searchText);
     }
 
-   @Transactional(rollbackFor = Exception.class)
+
+    @Transactional(rollbackFor = Exception.class)
     public Boolean modiftyNotice(int noticeId, ReqModifyNoticeDto reqModifyNoticeDto) throws NotFoundException {
         return noticeRepository.updateUserById(reqModifyNoticeDto.toNotice(noticeId))
                 .orElseThrow(() -> new NotFoundException("해당 게시글이 존재하지 않습니다."));
@@ -56,13 +60,18 @@ public class NoticeService {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public int updateViewCount(int noticeId) {
-        return noticeRepository.updateViewCount(noticeId);
-    }
+//    @Transactional(rollbackFor = Exception.class)
+//    public int updateViewCount(int noticeId) {
+//        return noticeRepository.updateViewCount(noticeId);
+//    }
 
     @Transactional(readOnly = true)
     public int getNoticeListCountBySearchText(String searchText) {
         return noticeRepository.findNoticeCountAllBySearchText(searchText);
+    }
+
+    @Transactional(readOnly = true)
+    public int getNoticeListCountUsercodeBySearchText(String usercode, String searchText) {
+        return noticeRepository.findNoticeCountUsercodeBySearchText(usercode, searchText);
     }
 }

@@ -63,11 +63,34 @@ public class NoticeController {
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
-    @Operation(summary = "공지사항 usecode 조회", description = "공지사항 usecode로 조회")
+    @Operation(summary = "공지사항 usecode 조회", description = "공지사항 usercode로 조회")
     @GetMapping("/{usercode}")
-    public ResponseEntity<?> searchNoticeByUsercode(@PathVariable String usercode) {
-        List<NoticeSearch> noticeList = noticeService.getNoticeListSearchByUsercode(usercode);
-        return ResponseEntity.ok().body(noticeList);
+    public ResponseEntity<?> searchNoticeByUsercode(
+            @PathVariable String usercode,  // URL 경로에서 usercode를 받음
+            @RequestParam(required = false) String searchText,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "15") int limitCount,
+            @RequestParam(required = false) String order) {
+
+        int totalNoticeListCount = noticeService.getNoticeListCountUsercodeBySearchText(usercode, searchText);
+
+        int totalPages = totalNoticeListCount % limitCount == 0
+                ? totalNoticeListCount / limitCount
+                : totalNoticeListCount / limitCount + 1;
+
+        RespNoticeListSearchDto respNoticeListSearchDto =
+                RespNoticeListSearchDto.builder()
+                        .page(page)
+                        .limitCount(limitCount)
+                        .totalPages(totalPages)
+                        .totalElements(totalNoticeListCount)
+                        .isFirstPage(page == 1)
+                        .isLastPage(page == totalPages)
+                        .nextPage(page != totalPages ? page + 1 : 0)
+                        .noticeList(noticeService.getNoticeListSearchByUsercode(usercode, searchText, page, limitCount, order))
+                        .build();
+
+        return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
@@ -91,10 +114,10 @@ public class NoticeController {
         return ResponseEntity.ok().body("공지사항이 삭제되었습니다.");
     }
 
-    @Operation(summary = "조회수 증가", description = "조회수 추가")
-    @GetMapping("/{noticeId}")
-    public ResponseEntity<?> updateViewCount(@RequestParam int noticeId) {
-        return ResponseEntity.ok().body(noticeService.updateViewCount(noticeId));
-    }
+//    @Operation(summary = "조회수 증가", description = "조회수 추가")
+//    @GetMapping("/{noticeId}")
+//    public ResponseEntity<?> updateViewCount(@RequestParam int noticeId) {
+//        return ResponseEntity.ok().body(noticeService.updateViewCount(noticeId));
+//    }
 
 }
