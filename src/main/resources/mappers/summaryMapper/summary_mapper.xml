@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.carecheckkoreait.mapper.SummaryMapper">
+<resultMap id="totalSummaryMap" type="com.korit.carecheckkoreait.entity.TotalSummary">
+    <id property="quarterly" column="분기"/>
+    <result property="totalSummary" column="총합"/>
+</resultMap>
+
+    <select id="selectTotalSummaryByYear" resultMap="totalSummaryMap">
+    WITH Quarters AS (
+        SELECT '1분기' AS 분기
+        UNION ALL
+        SELECT '2분기'
+        UNION ALL
+        SELECT '3분기'
+        UNION ALL
+        SELECT '4분기'
+    )
+    SELECT 
+        Q.분기 as "분기",
+        COALESCE(SUM(O.total_order_pay), 0) AS "총합"
+    FROM 
+        Quarters Q
+    LEFT JOIN 
+        diagnosis_order_tb O
+    ON 
+    CASE
+        WHEN MONTH(O.created_at) IN (1, 2, 3) THEN '1분기'
+        WHEN MONTH(O.created_at) IN (4, 5, 6) THEN '2분기'
+        WHEN MONTH(O.created_at) IN (7, 8, 9) THEN '3분기'
+        WHEN MONTH(O.created_at) IN (10, 11, 12) THEN '4분기'
+    END = Q.분기
+    WHERE 
+        YEAR(O.created_at) = #{year} OR O.created_at IS NULL
+    GROUP BY 
+        Q.분기;
+    </select>
+</mapper>
