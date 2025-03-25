@@ -92,13 +92,14 @@ public class NoticeController {
     }
 
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
-    @PutMapping("/{noticeId}")
+    @PutMapping("/{usercode}/{noticeId}")
     public ResponseEntity<?> modifyNotice(
             @Min(value = 1, message = "noticeId는 1이상의 정수입니다.")
             @PathVariable int noticeId,
+            @PathVariable String usercode,
             @RequestBody ReqModifyNoticeDto reqModifyNoticeDto
     ) throws NotFoundException {
-        return ResponseEntity.ok().body(noticeService.modiftyNotice(noticeId, reqModifyNoticeDto));
+        return ResponseEntity.ok().body(noticeService.modiftyNotice(usercode, noticeId, reqModifyNoticeDto));
     }
     
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
