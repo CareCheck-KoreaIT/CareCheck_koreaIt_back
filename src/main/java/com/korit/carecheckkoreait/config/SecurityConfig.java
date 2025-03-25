@@ -70,6 +70,10 @@ public class SecurityConfig {
                     "/diseases/**"
             ).permitAll();
 
+            authorizeRequests.requestMatchers(
+                    "/admin/**"
+            ).hasRole("ADMIN");
+
             authorizeRequests.anyRequest().authenticated();
 
         });

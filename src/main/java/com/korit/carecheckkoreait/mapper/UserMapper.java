@@ -18,13 +18,15 @@ public interface UserMapper {
 
     int updatePasswordByCode(
             @Param("usercode") String usercode,
-            @Param("password") String password);
+            @Param("password") String password
+    );
     int updateEmailByCode(
             @Param("usercode") String usercode,
             @Param("email") String email);
     int updatePhoneNumberByCode(
             @Param("usercode") String usercode,
-            @Param("phoneNumber") String phoneNumber);
+            @Param("phoneNumber") String phoneNumber
+    );
 
     List<User> selectUserListBySearchOptions(
             @Param("startIndex") int startIndex,
@@ -34,5 +36,12 @@ public interface UserMapper {
     );
 
     int selectUserCountAllBySearchName(@Param("searchName") String searchName);
+
+    int updateUserByCode(User user);
+    int updateUserPasswordByCode(
+            @Param("usercode") String usercode,
+            @Param("password") String password
+    );
+    int deleteUserByCode(@Param("usercode") String usercode);
 
 }
