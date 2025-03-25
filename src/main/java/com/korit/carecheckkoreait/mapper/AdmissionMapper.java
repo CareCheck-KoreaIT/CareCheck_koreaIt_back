@@ -2,11 +2,9 @@ package com.korit.carecheckkoreait.mapper;
 
 import java.util.List;
 
+import com.korit.carecheckkoreait.entity.*;
 import org.apache.ibatis.annotations.Mapper;
-import com.korit.carecheckkoreait.entity.Admission;
-import com.korit.carecheckkoreait.entity.Diagnosis;
-import com.korit.carecheckkoreait.entity.DiagnosisOrder;
-import com.korit.carecheckkoreait.entity.PatientVital;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface AdmissionMapper {
@@ -23,4 +21,6 @@ public interface AdmissionMapper {
     Admission selectDetailOrderByAdmId(int admissionId);
     int updateAdmissionStartDate(int admissionId);
     int updateAdmissionEndDate(int admissionId);
+    List<PatientSearch> selectAllWaitingListAdmId (String keyword);
+    int deleteAllWaitingByAdmId(int admId);
 }

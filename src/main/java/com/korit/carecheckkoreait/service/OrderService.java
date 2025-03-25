@@ -34,4 +34,6 @@ public class OrderService {
         System.out.println("service"+ scorePay);
         orderRepository.updateScorePay(scorePay);
     }
+
+
 }
