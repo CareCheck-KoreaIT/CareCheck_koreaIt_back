@@ -74,10 +74,28 @@
         from
             notice_tb nt
             left join user_tb ut on(ut.usercode = nt.usercode)
-        where
+        <where>
             nt.usercode = #{usercode}
+            <if test="searchText != null and searchText != ''">
+                AND nt.title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
         order by
             nt.created_at desc
+        limit #{startIndex}, #{limitCount}
+    </select>
+
+    <select id="selectNoticeCountUsercodeBySearchText" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            notice_tb nt
+        <where>
+            nt.usercode = #{usercode}
+            <if test="searchText != null and searchText != ''">
+                AND nt.title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
     </select>
 
 
