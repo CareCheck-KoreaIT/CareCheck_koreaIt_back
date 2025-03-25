@@ -230,7 +230,8 @@
     <update id="updateUserPasswordByCode">
         update user_tb
         set
-            password = #{password}
+            password = #{password},
+            updated_at = now()
         where
             usercode = #{usercode}
     </update>
