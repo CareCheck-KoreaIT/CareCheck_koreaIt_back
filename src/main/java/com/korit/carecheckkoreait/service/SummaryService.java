@@ -20,4 +20,10 @@ public class SummaryService {
         return summaryRepository.selectSummaryByYear(year)
             .orElseThrow(()-> new NotFoundException("해당년도에 정보가 없습니다."));
     }
+
+    @Transactional(readOnly = true)
+    public List<TotalSummary> selectSummaryTotalByUsercode(String usercode, int year) throws Exception {
+        return summaryRepository.selectSummaryByUsercodeAndYear(usercode, year)
+            .orElseThrow(()-> new NotFoundException("조회된 정보가 없습니다."));
+    }
 }

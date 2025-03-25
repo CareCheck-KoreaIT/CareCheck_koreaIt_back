@@ -9,4 +9,5 @@ import com.korit.carecheckkoreait.entity.TotalSummary;
 @Mapper
 public interface SummaryMapper {
     List<TotalSummary> selectTotalSummaryByYear(int year);
+    List<TotalSummary> selectTotalSummaryByUsercode(String usercode, int year);
 }

@@ -10,32 +10,51 @@
 </resultMap>
 
     <select id="selectTotalSummaryByYear" resultMap="totalSummaryMap">
-    WITH Quarters AS (
-        SELECT '1분기' AS 분기
-        UNION ALL
-        SELECT '2분기'
-        UNION ALL
-        SELECT '3분기'
-        UNION ALL
-        SELECT '4분기'
-    )
-    SELECT 
-        Q.분기 as "분기",
-        COALESCE(SUM(O.total_order_pay), 0) AS "총합"
+    SELECT  
+        CASE
+            WHEN MONTH(dot.created_at) IN (1, 2, 3) THEN '1분기'
+            WHEN MONTH(dot.created_at) IN (4, 5, 6) THEN '2분기'
+            WHEN MONTH(dot.created_at) IN (7, 8, 9) THEN '3분기'
+            WHEN MONTH(dot.created_at) IN (10, 11, 12) THEN '4분기'
+        END AS "분기",
+        COALESCE(SUM(dot.total_order_pay), 0) AS "총합"
     FROM 
-        Quarters Q
-    LEFT JOIN 
-        diagnosis_order_tb O
-    ON 
-    CASE
-        WHEN MONTH(O.created_at) IN (1, 2, 3) THEN '1분기'
-        WHEN MONTH(O.created_at) IN (4, 5, 6) THEN '2분기'
-        WHEN MONTH(O.created_at) IN (7, 8, 9) THEN '3분기'
-        WHEN MONTH(O.created_at) IN (10, 11, 12) THEN '4분기'
-    END = Q.분기
+        diagnosis_order_tb dot
     WHERE 
-        YEAR(O.created_at) = #{year} OR O.created_at IS NULL
+        YEAR(dot.created_at) = #{year}
     GROUP BY 
-        Q.분기;
+        CASE
+            WHEN MONTH(dot.created_at) IN (1, 2, 3) THEN '1분기'
+            WHEN MONTH(dot.created_at) IN (4, 5, 6) THEN '2분기'
+            WHEN MONTH(dot.created_at) IN (7, 8, 9) THEN '3분기'
+            WHEN MONTH(dot.created_at) IN (10, 11, 12) THEN '4분기'
+        END;
+
+    </select>
+
+    <select id="selectTotalSummaryByUsercode" resultMap="totalSummaryMap">
+    SELECT  
+        CASE
+            WHEN MONTH(dot.created_at) IN (1, 2, 3) THEN '1분기'
+            WHEN MONTH(dot.created_at) IN (4, 5, 6) THEN '2분기'
+            WHEN MONTH(dot.created_at) IN (7, 8, 9) THEN '3분기'
+            WHEN MONTH(dot.created_at) IN (10, 11, 12) THEN '4분기'
+        END AS '분기',
+        SUM(total_order_pay) AS '총합'
+        FROM 
+            diagnosis_order_tb AS dot
+        LEFT OUTER JOIN 
+            adm_tb AS adm
+        ON 
+            adm.adm_id = dot.adm_id
+    WHERE 
+        adm.usercode = #{usercode} AND YEAR(dot.created_at) = #{year}
+    GROUP BY 
+        CASE
+            WHEN MONTH(dot.created_at) IN (1, 2, 3) THEN '1분기'
+            WHEN MONTH(dot.created_at) IN (4, 5, 6) THEN '2분기'
+            WHEN MONTH(dot.created_at) IN (7, 8, 9) THEN '3분기'
+            WHEN MONTH(dot.created_at) IN (10, 11, 12) THEN '4분기'
+        END;
     </select>
 </mapper>

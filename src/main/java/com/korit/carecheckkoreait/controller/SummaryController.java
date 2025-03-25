@@ -26,4 +26,15 @@ public class SummaryController {
     ) throws Exception {
         return ResponseEntity.ok().body(summaryService.selectSummaryTotal(year));
     }
+
+    @Operation(summary = "직원 사번에 따른 분기별 금액", description = "직원사번에 따른 병원 총 수익")
+    @GetMapping("/usercode")
+    public ResponseEntity<?> selectTotalByUserCodeAndYear(
+        @Parameter(description = "조회할 년도", example = "2025", required = true)
+        @RequestParam int year,
+        @Parameter(description = "조회할 사번", example = "2025020003", required = true)
+        @RequestParam String usercode
+    ) throws Exception{
+        return ResponseEntity.ok().body(summaryService.selectSummaryTotalByUsercode(usercode, year));
+    }
 }

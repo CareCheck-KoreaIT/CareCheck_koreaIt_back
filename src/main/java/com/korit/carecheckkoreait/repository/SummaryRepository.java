@@ -21,4 +21,12 @@ public class SummaryRepository {
         }
         return Optional.of(summaryInfo);
     } 
+
+    public Optional<List<TotalSummary>> selectSummaryByUsercodeAndYear(String usercode, int year) {
+        List<TotalSummary> summaryInfo = summaryMapper.selectTotalSummaryByUsercode(usercode, year);
+        if (summaryInfo == null) {
+            return Optional.empty();
+        }
+        return Optional.of(summaryInfo);
+    }
 }
