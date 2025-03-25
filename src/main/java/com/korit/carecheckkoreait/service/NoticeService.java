@@ -62,6 +62,10 @@ public class NoticeService {
     public void updateViewCount(int noticeId) {
         noticeRepository.updateViewCount(noticeId);
     }
+//    @Transactional(rollbackFor = Exception.class)
+//    public int updateViewCount(int noticeId) {
+//        return noticeRepository.updateViewCount(noticeId);
+//    }
 
     @Transactional(readOnly = true)
     public int getNoticeListCountBySearchText(String searchText) {
