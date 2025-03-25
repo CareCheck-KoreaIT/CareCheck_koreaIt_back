@@ -118,10 +118,4 @@ public class NoticeController {
         noticeService.updateViewCount(noticeId);
         return ResponseEntity.ok().build();
     }
-//    @Operation(summary = "조회수 증가", description = "조회수 추가")
-//    @GetMapping("/{noticeId}")
-//    public ResponseEntity<?> updateViewCount(@RequestParam int noticeId) {
-//        return ResponseEntity.ok().body(noticeService.updateViewCount(noticeId));
-//    }
-
 }

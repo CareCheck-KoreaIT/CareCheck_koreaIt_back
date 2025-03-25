@@ -122,4 +122,9 @@ public class AdmissionService {
         return admissionRepository.selectAllWaitingListByAdmId(keyword)
                 .orElseThrow(() -> new NotFoundException("대기자가 없습니다."));
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAllWaitingByAdmId(int admId) {
+        admissionRepository.deleteAllWaitingByAdmId(admId);
+    }
 }

@@ -93,5 +93,9 @@ public class AdmissionRepository {
                 ? Optional.empty()
                 : Optional.of(allWaitingList);
     }
+
+    public void deleteAllWaitingByAdmId(int admId) {
+        admissionMapper.deleteAllWaitingByAdmId(admId);
+    }
 }
 

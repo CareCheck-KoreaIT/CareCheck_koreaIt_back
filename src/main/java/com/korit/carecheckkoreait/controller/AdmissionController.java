@@ -4,14 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
 import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
@@ -57,7 +50,7 @@ public class AdmissionController {
     }
 
     @Operation(summary = "환자바이탈정보", description = "선택환자의 바이탈 정보")
-        @GetMapping("/{admissionId}/vitals")
+    @GetMapping("/{admissionId}/vitals")
     public ResponseEntity<?> selectVitalInfo(@PathVariable int admissionId ) throws Exception{
         return ResponseEntity.ok().body(admissionService.selectVitalByAdmId(admissionId));
     }
@@ -72,7 +65,6 @@ public class AdmissionController {
     @Operation(summary = "오더입력", description = "선택한 접수번호에 처방입력")
     @PostMapping("/{admissionId}/orders")
     public ResponseEntity<?> insertOrderInAdm(@RequestBody List<ReqAddOrderInAdmDto> dto) {
-        System.out.println("오더입력창" + dto);
         admissionService.insertOrderInAdm(dto);
         return ResponseEntity.ok().build();
     }
@@ -80,7 +72,6 @@ public class AdmissionController {
     @Operation(summary = "진단입력", description = "선택한 접수번호에 주진단입력")
     @PostMapping("/{admissionId}/diagnosis")
     public ResponseEntity<?> insertDiagnosisInAdm(@RequestBody List<ReqAddDiagnosisInAdmDto> dto) {
-        System.out.println("진단입력력창" + dto);
         admissionService.insertDiagnosisInAdm(dto);
         return ResponseEntity.ok().build();
     } 
@@ -110,5 +101,12 @@ public class AdmissionController {
     public ResponseEntity<?> getAllWaitingList(
             @RequestParam(value = "keyword", required = false) String keyword) throws Exception {
         return ResponseEntity.ok().body(admissionService.getAllWaitingListKeyword(keyword));
+    }
+    @Operation(summary = "접수된 전체 대기자 명단", description = "접수된 대기자 명단 삭제")
+    @DeleteMapping("/{admissionId}")
+    public String deletePatientByAdmId(@PathVariable int admissionId) {
+        System.out.println("삭제 시행함: " + admissionId);
+        admissionService.deleteAllWaitingByAdmId(admissionId);
+        return "환자가 삭제되었습니다.";
     }
 }
