@@ -217,5 +217,27 @@
         </where>
     </select>
 
-
+    <update id="updateUserByCode">
+        update user_tb
+        set
+            username = #{username},
+            email = #{email},
+            phonenumber = #{phoneNumber},
+            updated_at = now()
+        where
+            usercode = #{usercode}
+    </update>
+    <update id="updateUserPasswordByCode">
+        update user_tb
+        set
+            password = #{password}
+        where
+            usercode = #{usercode}
+    </update>
+    <delete id="deleteUserByCode">
+        delete from
+            user_tb
+        where
+            usercode = #{usercode}
+    </delete>
 </mapper>
