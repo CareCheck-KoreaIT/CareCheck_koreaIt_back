@@ -43,7 +43,6 @@ public class UserController {
                         .isLastPage(dto.getPage() == totalPages)
                         .userSearchList(userService.getUserListSearchBySearchOption(dto))
                         .build();
-//        System.out.println("Controller : " + respUserListSearchDto);
         return ResponseEntity.ok().body(respUserListSearchDto);
     }
 
