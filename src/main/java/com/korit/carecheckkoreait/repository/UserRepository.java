@@ -54,4 +54,14 @@ public class UserRepository {
         return userMapper.selectUserCountAllBySearchName(searchName);
     }
 
+    public void updateUserByCode(User user) {
+        userMapper.updateUserByCode(user);
+    }
+    public void updateUserPasswordByCode(String usercode, String password) {
+        userMapper.updateUserPasswordByCode(usercode, password);
+    }
+    public void deleteUserByCode(String usercode) {
+        userMapper.deleteUserByCode(usercode);
+    }
+
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/admin")
 public class UserController {
@@ -42,6 +44,34 @@ public class UserController {
                         .userSearchList(userService.getUserListSearchBySearchOption(dto))
                         .build();
         return ResponseEntity.ok().body(respUserListSearchDto);
+    }
+
+    @PutMapping("/users/{usercode}")
+    public ResponseEntity<?> updateUser(
+            @PathVariable String usercode,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        System.out.println(requestBody);
+        userService.updateUser(usercode, requestBody);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/users/{usercode}/password")
+    public ResponseEntity<?> initialUserPassword(
+            @PathVariable String usercode,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        System.out.println(usercode + ": " + requestBody.get("password"));
+        String initialPassword = requestBody.get("password");
+        userService.initialPassword(usercode, initialPassword);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/users/{usercode}")
+    public ResponseEntity<?> deleteUser(@PathVariable String usercode) {
+        System.out.println(usercode);
+        userService.deleteUser(usercode);
+        return ResponseEntity.ok().build();
     }
 
 }

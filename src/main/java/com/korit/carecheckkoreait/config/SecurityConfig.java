@@ -68,8 +68,14 @@ public class SecurityConfig {
                     "/chart/registration",
                     "/chart",
                     "/diseases/**",
-                    "/allWaitings"
+                    "/allWaitings",
+                    "/summary/**",
+                    "/roles/**"
             ).permitAll();
+
+            authorizeRequests.requestMatchers(
+                    "/admin/**"
+            ).hasRole("ADMIN");
 
             authorizeRequests.anyRequest().authenticated();
 
