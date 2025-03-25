@@ -72,6 +72,10 @@ public class SecurityConfig {
                     "/roles/**"
             ).permitAll();
 
+            authorizeRequests.requestMatchers(
+                    "/admin/**"
+            ).hasRole("ADMIN");
+
             authorizeRequests.anyRequest().authenticated();
 
         });

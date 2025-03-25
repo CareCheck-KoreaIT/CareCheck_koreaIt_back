@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -118,6 +119,25 @@ public class UserService {
     @Transactional(readOnly = true)
     public int getUserListCountBySearchName(String searchName) {
         return userRepository.selectUserListCountAllBySearchName(searchName);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateUser(String usercode, Map<String, String> requestBody) {
+        User user = User.builder()
+                .usercode(usercode)
+                .username(requestBody.get("username"))
+                .email(requestBody.get("email"))
+                .phoneNumber(requestBody.get("phoneNumber"))
+                .build();
+        userRepository.updateUserByCode(user);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void initialPassword(String usercode, String initialPassword) {
+        userRepository.updateUserPasswordByCode(usercode, passwordEncoder.encode(initialPassword));
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteUser(String usercode) {
+        userRepository.deleteUserByCode(usercode);
     }
 
 }
