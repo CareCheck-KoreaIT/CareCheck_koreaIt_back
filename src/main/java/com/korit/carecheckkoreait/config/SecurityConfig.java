@@ -67,7 +67,9 @@ public class SecurityConfig {
                     "/orders/**",
                     "/chart/registration",
                     "/chart",
-                    "/diseases/**"
+                    "/diseases/**",
+                    "/summary/**",
+                    "/roles/**"
             ).permitAll();
 
             authorizeRequests.requestMatchers(
