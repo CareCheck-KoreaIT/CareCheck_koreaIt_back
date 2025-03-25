@@ -3,12 +3,10 @@ package com.korit.carecheckkoreait.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.korit.carecheckkoreait.entity.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.korit.carecheckkoreait.entity.Admission;
-import com.korit.carecheckkoreait.entity.Diagnosis;
-import com.korit.carecheckkoreait.entity.DiagnosisOrder;
-import com.korit.carecheckkoreait.entity.PatientVital;
 import com.korit.carecheckkoreait.mapper.AdmissionMapper;
 
 @Repository
@@ -87,6 +85,17 @@ public class AdmissionRepository {
     public void updateAdmissionEndDate(int admissionId) {
         admissionMapper.updateAdmissionEndDate(admissionId);
     }
-}
+//    전체 진료대기자 명단 조회
+    public Optional<List<PatientSearch>> selectAllWaitingListByAdmId (String keyword) {
+        List<PatientSearch> allWaitingList = admissionMapper.selectAllWaitingListAdmId(keyword);
+        System.out.println(allWaitingList);
+        return allWaitingList.isEmpty()
+                ? Optional.empty()
+                : Optional.of(allWaitingList);
+    }
 
+    public void deleteAllWaitingByAdmId(int admId) {
+        admissionMapper.deleteAllWaitingByAdmId(admId);
+    }
+}
 
