@@ -21,4 +21,6 @@ public interface AdmissionMapper {
     List<Admission> selectWaitingListByUserCode (String usercode);
     List<Admission> selectVitalInfoByAdmId (int admissionId);
     Admission selectDetailOrderByAdmId(int admissionId);
+    int updateAdmissionStartDate(int admissionId);
+    int updateAdmissionEndDate(int admissionId);
 }

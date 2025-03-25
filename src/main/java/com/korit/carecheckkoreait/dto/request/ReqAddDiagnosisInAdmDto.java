@@ -9,4 +9,6 @@ public class ReqAddDiagnosisInAdmDto {
     private int admId;
     @Schema(description = "상병코드", example = "j00", required = true)
     private String diseaseCode;
+    @Schema(description = "상병이름")
+    private String diseaseKName;
 }

@@ -14,5 +14,6 @@ public class UserRole {
     private String usercode;
     private int roleId;
 
+    private String username;
     private Role role;
 }

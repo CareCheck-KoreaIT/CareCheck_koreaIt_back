@@ -13,7 +13,7 @@
             <result property="usercode" column="adm_usercode" />
             <result property="admDate" column="adm_time"/>
             <result property="startDate" column="start_date"/>
-            <result property="endDeate" column="end_date"/>
+            <result property="endDate" column="end_date"/>
         </resultMap>
 <!-- 접수 - 차트 연계 맵-->
         <resultMap id="admChartResultMap" type="com.korit.carecheckkoreait.entity.Admission">
@@ -124,7 +124,7 @@
             left outer join patient_tb as pt
             on pt.patient_id = adm.patient_id
             where date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d") 
-            and adm.usercode = #{usercode} and adm.start_date is null
+            and adm.usercode = #{usercode} and adm.end_date is null
             order by adm_time;
         </select>
 
@@ -146,6 +146,7 @@
             on pvt.adm_id = adm.adm_id
             where adm.adm_id = #{admId}
             order by date_format(pvt.created_at, "%H:%i") desc
+            limit 1
         </select>
 
 <!-- 접수 번호 기준 세부 내역 sql -->
@@ -197,4 +198,13 @@
         where adm.adm_id = #{admissionId}
         group by adm.adm_id;
         </select>
+
+        <update id="updateAdmissionStartDate">
+        update adm_tb set start_date = now() 
+        where adm_id = #{admissionId}
+        </update>
+        <update id="updateAdmissionEndDate">
+        update adm_tb set end_date = now() 
+        where adm_id = #{admissionId}
+        </update>
 </mapper>

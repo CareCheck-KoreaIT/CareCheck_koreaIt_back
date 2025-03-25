@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +46,6 @@ public class AdmissionController {
     public ResponseEntity<?> selectWaitingList(
         @Parameter(description = "직원코드", example = "2025020003", required = true)
         @RequestParam String usercode) throws Exception {
-            System.out.println(usercode);
         return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(usercode));
     }
 
@@ -72,6 +72,7 @@ public class AdmissionController {
     @Operation(summary = "오더입력", description = "선택한 접수번호에 처방입력")
     @PostMapping("/{admissionId}/orders")
     public ResponseEntity<?> insertOrderInAdm(@RequestBody List<ReqAddOrderInAdmDto> dto) {
+        System.out.println("오더입력창" + dto);
         admissionService.insertOrderInAdm(dto);
         return ResponseEntity.ok().build();
     }
@@ -79,6 +80,7 @@ public class AdmissionController {
     @Operation(summary = "진단입력", description = "선택한 접수번호에 주진단입력")
     @PostMapping("/{admissionId}/diagnosis")
     public ResponseEntity<?> insertDiagnosisInAdm(@RequestBody List<ReqAddDiagnosisInAdmDto> dto) {
+        System.out.println("진단입력력창" + dto);
         admissionService.insertDiagnosisInAdm(dto);
         return ResponseEntity.ok().build();
     } 
@@ -87,5 +89,19 @@ public class AdmissionController {
     @GetMapping("/{admissionId}/totalpay")
     public ResponseEntity<?> selectTotalPayInAdm(@PathVariable int admissionId) {
         return ResponseEntity.ok().body(admissionService.selectTotalPayInAdm(admissionId));
+    }
+
+    @Operation(summary = "진료완료", description = "선택한 접수번호의 진료완료")
+    @PutMapping("/{admissionId}/complete")
+    public ResponseEntity<?> updateAdmissionComplete(@PathVariable int admissionId) {
+        admissionService.updateAdmissionEndDate(admissionId);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "진료시작", description = "선택한 접수번호의 진료시작")
+    @PutMapping("/{admissionId}/start")
+    public ResponseEntity<?> updateAdmissionStart(@PathVariable int admissionId) {
+        admissionService.updateAdmissionStartDate(admissionId);
+        return ResponseEntity.ok().build();
     }
 }

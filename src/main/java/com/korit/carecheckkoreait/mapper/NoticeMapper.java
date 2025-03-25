@@ -12,7 +12,10 @@ public interface NoticeMapper {
 
     int insertNotice(Notice notice);
 
-    int updateNoticeByNoticeId(Notice notice);
+    int updateNoticeByNoticeId(
+            @Param("usercode") String usercode,
+            @Param("notice") Notice notice,
+            @Param("noticeId") int noticeId);
 
     int deleteNotice(int noticeId);
 
@@ -23,9 +26,15 @@ public interface NoticeMapper {
             @Param("searchText") String searchText
     );
 
-    List<NoticeSearch> selectNoticeByUsercode(@Param("usercode") String usercode);
+    List<NoticeSearch> selectNoticeByUsercode(
+            @Param("usercode") String usercode,
+            @Param("startIndex") int startIndex,
+            @Param("limitCount") int limitCount,
+            @Param("order") String order,
+            @Param("searchText") String searchText);
 
     int selectNoticeCountAllBySearchText(@Param("searchText") String searchText);
+    int selectNoticeCountUsercodeBySearchText(@Param("usercode") String usercode, @Param("searchText") String searchText);
 
     int increaseViewCount(int noticeId);
 

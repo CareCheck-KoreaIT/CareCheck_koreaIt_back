@@ -30,16 +30,27 @@ public class NoticeRepository {
         return noticeMapper.selectNoticeBySearchOption(startIndex, limitSize, order, searchText);
     }
 
-    public List<NoticeSearch> findNoticeListSearchByUsercode(String usercode) {
-        return noticeMapper.selectNoticeByUsercode(usercode);
+    public List<NoticeSearch> findNoticeListSearchByUsercode(
+            String usercode,
+            int startIndex,
+            int limitSize,
+            String order,
+            String searchText) {
+        return noticeMapper.selectNoticeByUsercode(usercode, startIndex, limitSize, order, searchText);
     }
 
     public int findNoticeCountAllBySearchText(String searchText) {
         return noticeMapper.selectNoticeCountAllBySearchText(searchText);
     }
 
-    public Optional<Boolean> updateUserById(Notice notice) {
-        return noticeMapper.updateNoticeByNoticeId(notice) < 1 ? Optional.empty() : Optional.of(true);
+    public int findNoticeCountUsercodeBySearchText(String usercode, String searchText) {
+        return noticeMapper.selectNoticeCountUsercodeBySearchText(usercode, searchText);
+    }
+
+    public Optional<Boolean> updateUserById(String usercode, Notice notice, int noticeId) {
+        return noticeMapper.updateNoticeByNoticeId(usercode, notice, noticeId) < 1
+                ? Optional.empty()
+                : Optional.of(true);
     }
     
     public int deleteNoticeById(int noticeId) {
