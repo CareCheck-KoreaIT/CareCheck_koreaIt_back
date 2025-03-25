@@ -125,7 +125,8 @@
             on pt.patient_id = adm.patient_id
             where date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d") 
             and adm.usercode = #{usercode} and adm.end_date is null
-            order by adm_time;
+            order by adm_time
+            limit 15;
         </select>
 
 <!-- 접수 번호 기준 바이탈 정보 sql -->
