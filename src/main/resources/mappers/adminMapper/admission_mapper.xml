@@ -236,7 +236,7 @@
             from adm_tb as adm
                 left join patient_tb pt on pt.patient_id = adm.patient_id
             where '2025-03-24' = date_format(adm.created_at, "%Y-%m-%d")
-                and pt.patient_name like concat('%', #{keyword}, '%'); <!-- 이름검색 조회 -->
+                and pt.patient_name like concat('%', #{keyword}, '%') or #{keyword} is null or #{keyword} = '';
         </select>
         <delete id="deleteAllWaitingByAdmId">
             delete from adm_tb
