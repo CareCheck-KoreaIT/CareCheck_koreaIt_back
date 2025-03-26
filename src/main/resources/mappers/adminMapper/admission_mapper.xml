@@ -167,8 +167,8 @@
         <select id="selectDetailOrderByAdmId" resultMap="admDiagnosisResultMap">
             select
 	        distinct adm.adm_id as adm_id,
-                patient_id,
-                (select patient_name from patient_tb where patient_tb.patient_id = adm.patient_id) as patient_name,
+                adm.patient_id as patient_id,
+                patient_name,
                 date_format(adm.created_at, "%Y년 %m월 %d일") as adm_date,
                 dot.order_code as order_code,
                 order_name,
@@ -183,6 +183,8 @@
 	            on dot.adm_id = adm.adm_id
                 left outer join order_tb as ot
                     on dot.order_code = ot.order_code
+                left outer join patient_tb as pt
+                    on pt.patient_id = adm.patient_id
             where adm.adm_id = #{admId}
             order by order_code;
         </select>
