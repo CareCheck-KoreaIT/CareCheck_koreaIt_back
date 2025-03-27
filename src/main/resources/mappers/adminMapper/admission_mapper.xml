@@ -235,7 +235,7 @@
             where adm_id = #{admissionId}
         </update>
     <!-- 전체 대기자 명단 sql -->
-        <select id="selectAllWaitingListAdmId" resultMap="patientSearchResultMap">
+        <select id="selectAllWaitingListAdmId" resultType="com.korit.carecheckkoreait.dto.response.RespWaitingListDto">
             select
                 adm.adm_id as adm_id,
                 adm.patient_id as patient_id,
@@ -247,9 +247,22 @@
                 adm.end_date as end_date
             from adm_tb as adm
             left join patient_tb pt on pt.patient_id = adm.patient_id
-            where date(adm.created_at) = curdate() and
-                (pt.patient_name like concat('%', #{keyword}, '%') or #{keyword} is null or #{keyword} = '')
-            order by patient_id asc;
+            where date(adm.created_at) = curdate()
+                <if test="keyword != null and keyword != ''">
+                    and pt.patient_name like concat('%', #{keyword}, '%')
+                </if>
+            order by patient_id asc
+            limit #{startIndex}, #{limitCount}
+        </select>
+        <select id="selectAllWaitingListCount" resultType="int">
+            select
+                count(*)
+            from adm_tb as adm
+            left join patient_tb pt on pt.patient_id = adm.patient_id
+            where date(adm.created_at) = curdate()
+                <if test="keyword != null and keyword != ''">
+                    and pt.patient_name like concat('%', #{keyword}, '%')
+                </if>
         </select>
         <delete id="deleteAllWaitingByAdmId">
             delete from adm_tb
@@ -258,12 +271,12 @@
 
         <!-- 접수번호 찾기 환자이름 기준 -->
         <select id="selectAdmissionIdByPatientName" resultMap="findAdmInfoResultMap">
-        select 
-                adm_id, 
+        select
+                adm_id,
                 adm.patient_id as patient_id,
-                patient_name, 
-                regident_num, 
-                phone_num, 
+                patient_name,
+                regident_num,
+                phone_num,
                 date_format(adm.created_at, "%Y-%m-%d") as created_at
         from adm_tb as adm
         left outer join patient_tb as pt
