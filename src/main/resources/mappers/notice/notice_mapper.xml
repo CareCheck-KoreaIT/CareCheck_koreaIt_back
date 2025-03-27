@@ -100,13 +100,13 @@
 
 
     <update id="updateNoticeByNoticeId">
-    update notice_tb
-    set
-        title = #{title},
-        content = #{content},
-        updatedAt = #{updated_at}
-    where
-        notice_id = #{noticeId}
+        update notice_tb
+        set
+            title = #{notice.title},
+            content = #{notice.content}
+        where
+            usercode = #{usercode}
+            and notice_id = #{noticeId}
     </update>
 
     <update id="increaseViewCount">

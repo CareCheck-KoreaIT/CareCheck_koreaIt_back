@@ -45,8 +45,8 @@
                 <id property="chartId" column="chart_id"/>
                 <result property="admId" column="adm_id"/>
                 <result property="content" column="content"/>
-                <result property="createdAt" column="created_at"/>
-                <result property="updatedAt" column="updated_at"/>
+                <result property="createAt" column="created_at"/>
+                <result property="updateAt" column="updated_at"/>
         </resultMap>
 <!-- 진단 맵 -->
         <resultMap id="diagnosisResultMap" type="com.korit.carecheckkoreait.entity.Diagnosis">
@@ -73,6 +73,30 @@
                 <result property="weight" column="weight"/>
                 <result property="fever" column="fever"/>
                 <result property="vitalCheckTime" column="vital_check_time"/>
+        </resultMap>
+
+        <resultMap id="patientSearchResultMap" type="com.korit.carecheckkoreait.entity.PatientSearch">
+                <id property="admId" column="adm_id"/>
+                <result property="patientId" column="patient_id"/>
+                <result property="usercode" column="usercode"/>
+                <result property="clinicDeft" column="clinic_deft"/>
+                <result property="startDate" column="start_date"/>
+                <result property="endDate" column="end_date"/>
+                <result property="patientName" column="patient_name"/>
+                <result property="admDate" column="adm_date"/>
+                <result property="phoneNum" column="phone_num"/>
+                <result property="createdAt" column="created_at"/>
+                <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+
+        <!-- 접수번호 조회 기능. -->
+        <resultMap id="findAdmInfoResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="patientName" column="patient_name"/>
+            <result property="regidentNum" column="regident_num" />
+            <result property="phoneNum" column="phone_num"/>
+            <result property="admDate" column="created_at"/>
         </resultMap>
 
 <!-- 접수 추가 삽입 sql -->
@@ -106,13 +130,13 @@
                 where diagnosis_order_id = #{diagnosisOrderId}
         </delete>
 
-        <insert id="insertVitalInAdmId">
+    <insert id="insertVitalInAdmId">
                 insert into patient_vital_tb
                 values (default, #{admId}, #{usercode}, #{height}, #{weight}, #{fever}, now(), now())
         </insert>
 <!-- 의사사번 기준 등록된 진료대기자 명단 sql -->
         <select id="selectWaitingListByUserCode" resultMap="admResultMap">
-            select 
+            select
                 adm.adm_id as adm_id,
 	            adm.patient_id as adm_patient_id,
                 pt.patient_name as pt_patient_name,
@@ -121,19 +145,19 @@
                 adm.start_date as start_date,
                 adm.end_date as end_date
             from adm_tb as adm
-            left outer join patient_tb as pt
-            on pt.patient_id = adm.patient_id
-            where date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d") 
+                left outer join patient_tb as pt
+                on pt.patient_id = adm.patient_id
+            where date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d")
             and adm.usercode = #{usercode} and adm.end_date is null
-            order by adm_time;
+            order by adm_time
         </select>
 
 <!-- 접수 번호 기준 바이탈 정보 sql -->
         <select id="selectVitalInfoByAdmId" resultMap="admVitalResultMap">
-            select 
+            select
                 adm.adm_id,
 	            adm.patient_id,
-                (select patient_name 
+                (select patient_name
 		            from patient_tb pt
 		            where pt.patient_id = adm.patient_id) as patient_name,
                 patient_vital_id,
@@ -142,19 +166,19 @@
                 fever,
                 date_format(pvt.created_at, "%H:%i") as vital_check_time
             from adm_tb as adm
-            left outer join patient_vital_tb as pvt
-            on pvt.adm_id = adm.adm_id
+                left outer join patient_vital_tb as pvt
+                on pvt.adm_id = adm.adm_id
             where adm.adm_id = #{admId}
             order by date_format(pvt.created_at, "%H:%i") desc
-            limit 1
+                limit 1
         </select>
 
 <!-- 접수 번호 기준 세부 내역 sql -->
         <select id="selectDetailOrderByAdmId" resultMap="admDiagnosisResultMap">
-            select 
+            select
 	        distinct adm.adm_id as adm_id,
-                patient_id,
-                (select patient_name from patient_tb where patient_tb.patient_id = adm.patient_id) as patient_name,
+                adm.patient_id as patient_id,
+                patient_name,
                 date_format(adm.created_at, "%Y년 %m월 %d일") as adm_date,
                 dot.order_code as order_code,
                 order_name,
@@ -169,12 +193,14 @@
 	            on dot.adm_id = adm.adm_id
                 left outer join order_tb as ot
                     on dot.order_code = ot.order_code
+                left outer join patient_tb as pt
+                    on pt.patient_id = adm.patient_id
             where adm.adm_id = #{admId}
             order by order_code;
         </select>
-        
+
         <select id="selectPatientInfoByAdmId" resultMap="admResultMap">
-            select 
+            select
                 adm.adm_id as adm_id,
 	        adm.patient_id as adm_patient_id,
                 pt.patient_name as pt_patient_name,
@@ -184,27 +210,64 @@
                 adm.start_date as start_date,
                 adm.end_date as end_date
             from adm_tb as adm
-            left outer join patient_tb as pt
-            on pt.patient_id = adm.patient_id
+                left outer join patient_tb as pt
+                on pt.patient_id = adm.patient_id
             where adm.adm_id = #{admissionId}
         </select>
 
         <select id="selectTotalPayByAdmId" resultType="java.lang.Integer">
-        select 
-        coalesce(sum(total_order_pay), 0) as totalPay
-        from adm_tb as adm
-        left outer join diagnosis_order_tb as dot
+            select
+                coalesce(sum(total_order_pay), 0) as totalPay
+                from adm_tb as adm
+                left outer join diagnosis_order_tb as dot
                 on dot.adm_id = adm.adm_id
-        where adm.adm_id = #{admissionId}
-        group by adm.adm_id;
+            where adm.adm_id = #{admissionId}
+            group by adm.adm_id;
         </select>
 
         <update id="updateAdmissionStartDate">
-        update adm_tb set start_date = now() 
-        where adm_id = #{admissionId}
+            update adm_tb set start_date = now()
+            where adm_id = #{admissionId}
         </update>
         <update id="updateAdmissionEndDate">
-        update adm_tb set end_date = now() 
-        where adm_id = #{admissionId}
+            update adm_tb set end_date = now()
+            where adm_id = #{admissionId}
         </update>
+    <!-- 전체 대기자 명단 sql -->
+        <select id="selectAllWaitingListAdmId" resultMap="patientSearchResultMap">
+            select
+                adm.adm_id as adm_id,
+                adm.patient_id as patient_id,
+                pt.patient_name as patient_name,
+                pt.phone_num as phone_num,
+                adm.usercode as usercode,
+                date_format(adm.created_at, "%H:%i") as adm_date,
+                adm.start_date as start_date,
+                adm.end_date as end_date
+            from adm_tb as adm
+            left join patient_tb pt on pt.patient_id = adm.patient_id
+            where date(adm.created_at) = curdate() and
+                (pt.patient_name like concat('%', #{keyword}, '%') or #{keyword} is null or #{keyword} = '')
+            order by patient_id asc;
+        </select>
+        <delete id="deleteAllWaitingByAdmId">
+            delete from adm_tb
+            where adm_id = #{admId};
+        </delete>
+
+        <!-- 접수번호 찾기 환자이름 기준 -->
+        <select id="selectAdmissionIdByPatientName" resultMap="findAdmInfoResultMap">
+        select 
+                adm_id, 
+                adm.patient_id as patient_id,
+                patient_name, 
+                regident_num, 
+                phone_num, 
+                date_format(adm.created_at, "%Y-%m-%d") as created_at
+        from adm_tb as adm
+        left outer join patient_tb as pt
+        on adm.patient_id = pt.patient_id
+        where patient_name like concat('%', #{patientName}, '%')
+        order by start_date desc
+        </select>
 </mapper>

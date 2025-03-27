@@ -12,7 +12,10 @@ public interface NoticeMapper {
 
     int insertNotice(Notice notice);
 
-    int updateNoticeByNoticeId(Notice notice);
+    int updateNoticeByNoticeId(
+            @Param("usercode") String usercode,
+            @Param("notice") Notice notice,
+            @Param("noticeId") int noticeId);
 
     int deleteNotice(int noticeId);
 
