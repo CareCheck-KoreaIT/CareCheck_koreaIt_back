@@ -176,7 +176,7 @@
 <!-- 접수 번호 기준 세부 내역 sql -->
         <select id="selectDetailOrderByAdmId" resultMap="admDiagnosisResultMap">
             select
-	        distinct adm.adm_id as adm_id,
+	        adm.adm_id as adm_id,
                 adm.patient_id as patient_id,
                 patient_name,
                 date_format(adm.created_at, "%Y년 %m월 %d일") as adm_date,
@@ -196,6 +196,7 @@
                 left outer join patient_tb as pt
                     on pt.patient_id = adm.patient_id
             where adm.adm_id = #{admId}
+            group by diagnosis_order_id
             order by order_code;
         </select>
 
