@@ -1,7 +1,9 @@
 package com.korit.carecheckkoreait.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
 import com.korit.carecheckkoreait.entity.*;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,9 +120,16 @@ public class AdmissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientSearch> getAllWaitingListKeyword(String keyword) throws Exception {
-        return admissionRepository.selectAllWaitingListByAdmId(keyword)
-                .orElseThrow(() -> new NotFoundException("대기자가 없습니다."));
+    public List<RespWaitingListDto> getAllWaitingListKeyword(String keyword, int startIndex, int limitCount) throws Exception {
+        Optional<List<RespWaitingListDto>> waitingList = admissionRepository.selectAllWaitingListByAdmId(keyword, startIndex, limitCount);
+        if (waitingList.isEmpty()) {
+            throw new NotFoundException("대기자가 없습니다.");
+        }
+        return waitingList.get();
+    }
+
+    public int getWaitingListCount(String keyword) {
+        return admissionRepository.selectWaitingListCount(keyword);
     }
 
     @Transactional(rollbackFor = Exception.class)

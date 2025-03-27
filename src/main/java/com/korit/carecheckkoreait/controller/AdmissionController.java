@@ -2,6 +2,7 @@ package com.korit.carecheckkoreait.controller;
 
 import java.util.List;
 
+import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,12 +97,24 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "전체대기자명단", description = "접수된 전체 대기자 명단")
+    @Operation(summary = "전체 대기자 명단", description = "접수된 전체 대기자 명단을 조회합니다.")
     @GetMapping("/allWaitings")
     public ResponseEntity<?> getAllWaitingList(
-            @RequestParam(value = "keyword", required = false) String keyword) throws Exception {
-        return ResponseEntity.ok().body(admissionService.getAllWaitingListKeyword(keyword));
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(defaultValue = "0") int startIndex,
+            @RequestParam(defaultValue = "10") int limitCount) throws Exception {
+        List<RespWaitingListDto> waitingList = admissionService.getAllWaitingListKeyword(keyword, startIndex, limitCount);
+        return ResponseEntity.ok().body(waitingList);
     }
+
+    // 전체 대기자 수 조회
+    @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
+    @GetMapping("/waitingCount")
+    public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword) {
+        int count = admissionService.getWaitingListCount(keyword);
+        return ResponseEntity.ok().body(count);
+    }
+
     @Operation(summary = "접수된 전체 대기자 명단", description = "접수된 대기자 명단 삭제")
     @DeleteMapping("/{admissionId}")
     public String deletePatientByAdmId(@PathVariable int admissionId) {
