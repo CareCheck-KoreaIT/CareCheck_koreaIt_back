@@ -166,11 +166,11 @@
                 fever,
                 date_format(pvt.created_at, "%H:%i") as vital_check_time
             from adm_tb as adm
-            left outer join patient_vital_tb as pvt
-            on pvt.adm_id = adm.adm_id
+                left outer join patient_vital_tb as pvt
+                on pvt.adm_id = adm.adm_id
             where adm.adm_id = #{admId}
             order by date_format(pvt.created_at, "%H:%i") desc
-            limit 1
+                limit 1
         </select>
 
 <!-- 접수 번호 기준 세부 내역 sql -->
@@ -210,28 +210,28 @@
                 adm.start_date as start_date,
                 adm.end_date as end_date
             from adm_tb as adm
-            left outer join patient_tb as pt
-            on pt.patient_id = adm.patient_id
+                left outer join patient_tb as pt
+                on pt.patient_id = adm.patient_id
             where adm.adm_id = #{admissionId}
         </select>
 
         <select id="selectTotalPayByAdmId" resultType="java.lang.Integer">
-        select
-        coalesce(sum(total_order_pay), 0) as totalPay
-        from adm_tb as adm
-        left outer join diagnosis_order_tb as dot
+            select
+                coalesce(sum(total_order_pay), 0) as totalPay
+                from adm_tb as adm
+                left outer join diagnosis_order_tb as dot
                 on dot.adm_id = adm.adm_id
-        where adm.adm_id = #{admissionId}
-        group by adm.adm_id;
+            where adm.adm_id = #{admissionId}
+            group by adm.adm_id;
         </select>
 
         <update id="updateAdmissionStartDate">
-        update adm_tb set start_date = now()
-        where adm_id = #{admissionId}
+            update adm_tb set start_date = now()
+            where adm_id = #{admissionId}
         </update>
         <update id="updateAdmissionEndDate">
-        update adm_tb set end_date = now()
-        where adm_id = #{admissionId}
+            update adm_tb set end_date = now()
+            where adm_id = #{admissionId}
         </update>
     <!-- 전체 대기자 명단 sql -->
         <select id="selectAllWaitingListAdmId" resultMap="patientSearchResultMap">
@@ -245,9 +245,10 @@
                 adm.start_date as start_date,
                 adm.end_date as end_date
             from adm_tb as adm
-                left join patient_tb pt on pt.patient_id = adm.patient_id
-            where '2025-03-24' = date_format(adm.created_at, "%Y-%m-%d")
-                and pt.patient_name like concat('%', #{keyword}, '%') or #{keyword} is null or #{keyword} = '';
+            left join patient_tb pt on pt.patient_id = adm.patient_id
+            where date(adm.created_at) = curdate() and
+                (pt.patient_name like concat('%', #{keyword}, '%') or #{keyword} is null or #{keyword} = '')
+            order by patient_id asc;
         </select>
         <delete id="deleteAllWaitingByAdmId">
             delete from adm_tb
