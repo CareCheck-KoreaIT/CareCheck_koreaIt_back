@@ -127,4 +127,10 @@ public class AdmissionService {
     public void deleteAllWaitingByAdmId(int admId) {
         admissionRepository.deleteAllWaitingByAdmId(admId);
     }
+
+    @Transactional(readOnly = true)
+    public List<Admission> getAllAdmissionListByPatientName(String patientName) throws Exception {
+        return admissionRepository.selectAllAdmissionIdByPatientName(patientName)
+            .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
+    }
 }

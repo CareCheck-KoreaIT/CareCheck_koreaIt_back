@@ -89,6 +89,16 @@
                 <result property="updatedAt" column="updated_at"/>
         </resultMap>
 
+        <!-- 접수번호 조회 기능. -->
+        <resultMap id="findAdmInfoResultMap" type="com.korit.carecheckkoreait.entity.Admission">
+            <id property="admId" column="adm_id"/>
+            <result property="patientId" column="patient_id"/>
+            <result property="patientName" column="patient_name"/>
+            <result property="regidentNum" column="regident_num" />
+            <result property="phoneNum" column="phone_num"/>
+            <result property="admDate" column="created_at"/>
+        </resultMap>
+
 <!-- 접수 추가 삽입 sql -->
         <insert id="insertAdmission">
                 insert into adm_tb
@@ -243,4 +253,20 @@
             delete from adm_tb
             where adm_id = #{admId};
         </delete>
+
+        <!-- 접수번호 찾기 환자이름 기준 -->
+        <select id="selectAdmissionIdByPatientName" resultMap="findAdmInfoResultMap">
+        select 
+                adm_id, 
+                adm.patient_id as patient_id,
+                patient_name, 
+                regident_num, 
+                phone_num, 
+                date_format(adm.created_at, "%Y-%m-%d") as created_at
+        from adm_tb as adm
+        left outer join patient_tb as pt
+        on adm.patient_id = pt.patient_id
+        where patient_name like concat('%', #{patientName}, '%')
+        order by start_date desc
+        </select>
 </mapper>

@@ -23,6 +23,8 @@ public class Admission {
     private LocalDateTime updatedAt;
 
     private String patientName;
+    private String regidentNum;
+    private String phoneNum;
     private String admDate;
     private List<Chart> chart;
     private List<PatientVital> vital;

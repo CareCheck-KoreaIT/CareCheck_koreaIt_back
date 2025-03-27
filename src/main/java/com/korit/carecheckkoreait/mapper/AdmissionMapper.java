@@ -23,4 +23,5 @@ public interface AdmissionMapper {
     int updateAdmissionEndDate(int admissionId);
     List<PatientSearch> selectAllWaitingListAdmId (String keyword);
     int deleteAllWaitingByAdmId(int admId);
+    List<Admission> selectAdmissionIdByPatientName(String patientName);
 }

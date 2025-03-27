@@ -109,4 +109,13 @@ public class AdmissionController {
         admissionService.deleteAllWaitingByAdmId(admissionId);
         return "환자가 삭제되었습니다.";
     }
+
+    @Operation(summary = "환자이름 기준 접수 명단", description = "해당환자의 접수 내역")
+    @GetMapping("/searchAdmissionList")
+    public ResponseEntity<?> getAdmissionListByPatientName(
+        @Parameter(description = "환자명", example = "거북이", required = true)
+        @RequestParam String patientName
+    ) throws Exception {
+        return ResponseEntity.ok().body(admissionService.getAllAdmissionListByPatientName(patientName));
+    }
 }
