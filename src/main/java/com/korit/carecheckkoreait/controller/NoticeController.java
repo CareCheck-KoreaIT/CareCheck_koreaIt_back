@@ -62,30 +62,28 @@ public class NoticeController {
     }
 
     @Operation(summary = "공지사항 usecode 조회", description = "공지사항 usercode로 조회")
-    @GetMapping("/{usercode}")
+    @GetMapping("/mylist")
     public ResponseEntity<?> searchNoticeByUsercode(
-            @PathVariable String usercode,  // URL 경로에서 usercode를 받음
-            @RequestParam(required = false) String searchText,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "15") int limitCount,
-            @RequestParam(required = false) String order) {
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @ModelAttribute ReqNoticeListSearchDto dto
+    ) {
+        String usercode = principalUser.getUsercode();
+        int totalNoticeListCount = noticeService.getNoticeListCountUsercodeBySearchText(usercode, dto.getSearchText());
 
-        int totalNoticeListCount = noticeService.getNoticeListCountUsercodeBySearchText(usercode, searchText);
-
-        int totalPages = totalNoticeListCount % limitCount == 0
-                ? totalNoticeListCount / limitCount
-                : totalNoticeListCount / limitCount + 1;
+        int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
+                ? totalNoticeListCount / dto.getLimitCount()
+                : totalNoticeListCount / dto.getLimitCount() + 1;
 
         RespNoticeListSearchDto respNoticeListSearchDto =
                 RespNoticeListSearchDto.builder()
-                        .page(page)
-                        .limitCount(limitCount)
+                        .page(dto.getPage())
+                        .limitCount(dto.getLimitCount())
                         .totalPages(totalPages)
                         .totalElements(totalNoticeListCount)
-                        .isFirstPage(page == 1)
-                        .isLastPage(page == totalPages)
-                        .nextPage(page != totalPages ? page + 1 : 0)
-                        .noticeList(noticeService.getNoticeListSearchByUsercode(usercode, searchText, page, limitCount, order))
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
+                        .noticeList(noticeService.getNoticeListSearchByUsercode(usercode, dto.getSearchText(), dto.getPage(), dto.getLimitCount(), dto.getOrder()))
                         .build();
 
         return ResponseEntity.ok().body(respNoticeListSearchDto);
