@@ -3,8 +3,10 @@ package com.korit.carecheckkoreait.controller;
 import java.util.List;
 
 import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
+import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
@@ -38,9 +40,8 @@ public class AdmissionController {
     @Operation(summary = "진료대기자명단", description = "직원코드로 등록된 대기자명단")
     @GetMapping("/waitings")
     public ResponseEntity<?> selectWaitingList(
-        @Parameter(description = "직원코드", example = "2025020003", required = true)
-        @RequestParam String usercode) throws Exception {
-        return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(usercode));
+            @AuthenticationPrincipal PrincipalUser principalUser) throws Exception {
+        return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(principalUser.getUsercode()));
     }
 
     @Operation(summary ="환자바이탈입력", description ="해당접수번호에 등록된 바이탈 정보")
