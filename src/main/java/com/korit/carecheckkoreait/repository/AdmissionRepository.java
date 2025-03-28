@@ -90,11 +90,13 @@ public class AdmissionRepository {
     }
 
 //    전체 진료대기자 명단 조회
-    public Optional<List<RespWaitingListDto>> selectAllWaitingListByAdmId (String keyword, int startIndex, int limitCount) {
-        List<RespWaitingListDto> allWaitingList = admissionMapper.selectAllWaitingListAdmId(keyword, startIndex, limitCount);
-        return allWaitingList.isEmpty()
-                ? Optional.empty()
-                : Optional.of(allWaitingList);
+    public List<PatientSearch> selectAllWaitingListByAdmId(
+            int startIndex,
+            int limitCount,
+            String keyword) {
+        List<PatientSearch> foundUser = admissionMapper.selectAllWaitingListAdmId(startIndex, limitCount, keyword);
+//      System.out.println("Repository : " + foundUser);
+        return foundUser;
     }
 
     public int selectWaitingListCount(String keyword) {

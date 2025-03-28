@@ -3,16 +3,14 @@ package com.korit.carecheckkoreait.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.korit.carecheckkoreait.dto.request.*;
+import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
 import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
 import com.korit.carecheckkoreait.entity.*;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddVitalInAdmDto;
 import com.korit.carecheckkoreait.exception.DuplicatedValueException;
 import com.korit.carecheckkoreait.exception.FieldError;
 import com.korit.carecheckkoreait.repository.AdmissionRepository;
@@ -120,13 +118,29 @@ public class AdmissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<RespWaitingListDto> getAllWaitingListKeyword(String keyword, int startIndex, int limitCount) throws Exception {
-        Optional<List<RespWaitingListDto>> waitingList = admissionRepository.selectAllWaitingListByAdmId(keyword, startIndex, limitCount);
-        if (waitingList.isEmpty()) {
-            throw new NotFoundException("대기자가 없습니다.");
-        }
-        return waitingList.get();
+    public List<PatientSearch> getAllWaitingListKeyword(ReqAllWaitingListDto reqAllWaitingListDto) {
+        int startIndex = (reqAllWaitingListDto.getPage() - 1) * reqAllWaitingListDto.getLimitCount();
+        List<PatientSearch> foundUser = admissionRepository.selectAllWaitingListByAdmId(
+                startIndex,
+                reqAllWaitingListDto.getLimitCount(),
+                reqAllWaitingListDto.getKeyword()
+        );
+//        System.out.println("Service : " + foundUser);         // for test
+        return foundUser;
     }
+
+//    public List<PatientSearch> getNoticeListSearchByUsercode(
+//            int admId,
+//            int patientId,
+//            int page,
+//            String patientName,
+//            String phoneNum,
+//            String admDate) {
+//        int startIndex = (page - 1) * limitCount;
+//        int limitSize = limitCount;
+//
+//        return noticeRepository.findNoticeListSearchByUsercode(usercode, startIndex, limitSize,  searchText);
+//    }
 
     public int getWaitingListCount(String keyword) {
         return admissionRepository.selectWaitingListCount(keyword);
