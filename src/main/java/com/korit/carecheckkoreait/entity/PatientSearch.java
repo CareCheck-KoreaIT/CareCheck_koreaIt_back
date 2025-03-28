@@ -15,13 +15,12 @@ import java.time.LocalDateTime;
 public class PatientSearch {
     private int admId;
     private int patientId;
-    private String usercode;
-    private String clinicDeft;
+    private int page;
+    private String patientName;
+    private String phoneNum;
+    private String admDate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String patientName;
-    private String admDate;
-    private String phoneNum;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

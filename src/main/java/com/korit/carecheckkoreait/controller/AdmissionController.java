@@ -2,15 +2,14 @@ package com.korit.carecheckkoreait.controller;
 
 import java.util.List;
 
+import com.korit.carecheckkoreait.dto.request.*;
+import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
+import com.korit.carecheckkoreait.dto.response.RespUserListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddVitalInAdmDto;
 import com.korit.carecheckkoreait.service.AdmissionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,14 +96,27 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "전체 대기자 명단", description = "접수된 전체 대기자 명단을 조회합니다.")
     @GetMapping("/allWaitings")
-    public ResponseEntity<?> getAllWaitingList(
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(defaultValue = "0") int startIndex,
-            @RequestParam(defaultValue = "10") int limitCount) throws Exception {
-        List<RespWaitingListDto> waitingList = admissionService.getAllWaitingListKeyword(keyword, startIndex, limitCount);
-        return ResponseEntity.ok().body(waitingList);
+    public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqAllWaitingListDto dto) {
+        System.out.println("getUsers 호출");
+        System.out.println(dto);
+        int totalAllWaitingListCount = admissionService.getWaitingListCount(dto.getKeyword());
+        int totalPages = totalAllWaitingListCount % dto.getLimitCount() == 0
+                ? totalAllWaitingListCount / dto.getLimitCount()
+                : totalAllWaitingListCount / dto.getLimitCount() + 1;
+
+        RespAllWaitingListDto respAllWaitingListDto =
+                RespAllWaitingListDto.builder()
+                        .page(dto.getPage())
+                        .limitCount(dto.getLimitCount())
+                        .totalPages(totalPages)
+                        .totalElements(totalAllWaitingListCount)
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .patientAllWaitingList(admissionService.getAllWaitingListKeyword(dto))
+                        .build();
+        return ResponseEntity.ok().body(respAllWaitingListDto);
+//        return ResponseEntity.ok().build();
     }
 
     // 전체 대기자 수 조회
