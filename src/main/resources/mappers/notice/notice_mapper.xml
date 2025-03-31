@@ -109,7 +109,8 @@
         update notice_tb
         set
             title = #{notice.title},
-            content = #{notice.content}
+            content = #{notice.content},
+            updated_at = now()
         where
             usercode = #{usercode}
             and notice_id = #{noticeId}
