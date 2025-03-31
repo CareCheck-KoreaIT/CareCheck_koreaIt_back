@@ -245,23 +245,29 @@
             from adm_tb as adm
             left join patient_tb pt on pt.patient_id = adm.patient_id
             <where>
-                date(adm.created_at) = curdate()
+                date(adm.created_at) = curdate() and
                 <if test="keyword != null and keyword != ''">
                     pt.patient_name like concat('%', #{keyword}, '%')
+                </if>
+                <if test="admId != null">
+                    and adm.adm_id = #{admId}
                 </if>
             </where>
             order by adm.patient_id asc
             limit #{startIndex}, #{limitCount}
         </select>
-        <select id="selectAllWaitingListCount" resultType="int">
+        <select id="selectAllWaitingListCount" resultType="Integer">
             select
                 count(*)
             from adm_tb as adm
             left join patient_tb pt on pt.patient_id = adm.patient_id
             <where>
-                date(adm.created_at) = curdate()
+                date(adm.created_at) = curdate() and
                 <if test="keyword != null and keyword != ''">
                     pt.patient_name like concat('%', #{keyword}, '%')
+                </if>
+                <if test="admId != null">
+                    and adm.adm_id = #{admId}
                 </if>
             </where>
         </select>

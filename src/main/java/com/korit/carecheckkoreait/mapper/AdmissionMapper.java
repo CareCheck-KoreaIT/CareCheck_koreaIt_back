@@ -24,10 +24,11 @@ public interface AdmissionMapper {
     int updateAdmissionEndDate (int admissionId);
 
     List<PatientSearch> selectAllWaitingListAdmId(
+            @Param("admId") int admId,
             @Param("startIndex") int startIndex,
             @Param("limitCount") int limitCount,
             @Param("keyword") String keyword);
-    int selectAllWaitingListCount (String keyword);
+    int selectAllWaitingListCount (String keyword, int admId);
 
     int deleteAllWaitingByAdmId (int admId);
     List<Admission> selectAdmissionIdByPatientName (String patientName);
