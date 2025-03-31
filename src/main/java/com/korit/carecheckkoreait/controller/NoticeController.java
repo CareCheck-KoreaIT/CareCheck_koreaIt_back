@@ -103,6 +103,7 @@ public class NoticeController {
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
     @DeleteMapping("/{noticeId}")
     public ResponseEntity<?> deleteNotice(@PathVariable int noticeId) {
+        System.out.println(noticeId);
         int result = noticeService.deleteNoticeById(noticeId);
         if (result == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("공지사항을 찾을 수 없습니다.");
