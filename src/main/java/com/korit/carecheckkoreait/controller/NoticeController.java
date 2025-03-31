@@ -3,7 +3,6 @@ package com.korit.carecheckkoreait.controller;
 import com.korit.carecheckkoreait.dto.request.ReqModifyNoticeDto;
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespNoticeListSearchDto;
-import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.service.NoticeService;
 import jakarta.validation.constraints.Min;
 import org.apache.ibatis.javassist.NotFoundException;
@@ -90,14 +89,14 @@ public class NoticeController {
     }
 
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
-    @PutMapping("/{usercode}/{noticeId}")
+    @PutMapping("/mylist/{noticeId}")
     public ResponseEntity<?> modifyNotice(
             @Min(value = 1, message = "noticeId는 1이상의 정수입니다.")
             @PathVariable int noticeId,
-            @PathVariable String usercode,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody ReqModifyNoticeDto reqModifyNoticeDto
     ) throws NotFoundException {
-        return ResponseEntity.ok().body(noticeService.modiftyNotice(usercode, noticeId, reqModifyNoticeDto));
+        return ResponseEntity.ok().body(noticeService.modiftyNotice(principalUser.getUsercode(), noticeId, reqModifyNoticeDto));
     }
     
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
