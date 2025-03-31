@@ -9,13 +9,14 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 
 public class PatientSearch {
     private int admId;
     private int patientId;
     private int page;
+    private int limitCount;
     private String patientName;
     private String phoneNum;
     private String admDate;

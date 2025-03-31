@@ -1,11 +1,8 @@
 package com.korit.carecheckkoreait.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.korit.carecheckkoreait.dto.request.*;
-import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
-import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
 import com.korit.carecheckkoreait.entity.*;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,33 +114,16 @@ public class AdmissionService {
         admissionRepository.updateAdmissionEndDate(admissionId);
     }
 
-    @Transactional(readOnly = true)
-    public List<PatientSearch> getAllWaitingListKeyword(ReqAllWaitingListDto reqAllWaitingListDto) {
-        int startIndex = (reqAllWaitingListDto.getPage() - 1) * reqAllWaitingListDto.getLimitCount();
-        List<PatientSearch> foundUser = admissionRepository.selectAllWaitingListByAdmId(
-                startIndex,
-                reqAllWaitingListDto.getLimitCount(),
-                reqAllWaitingListDto.getKeyword()
+    public List<PatientSearch> getAllWaitingListKeyword(int admId, String keyword, int page, int limitCount) {
+        int startIndex = (page - 1) * limitCount;
+        int limitSize = limitCount;
+        return admissionRepository.selectAllWaitingListByAdmId(
+                admId, startIndex, limitSize, keyword
         );
-//        System.out.println("Service : " + foundUser);         // for test
-        return foundUser;
     }
 
-//    public List<PatientSearch> getNoticeListSearchByUsercode(
-//            int admId,
-//            int patientId,
-//            int page,
-//            String patientName,
-//            String phoneNum,
-//            String admDate) {
-//        int startIndex = (page - 1) * limitCount;
-//        int limitSize = limitCount;
-//
-//        return noticeRepository.findNoticeListSearchByUsercode(usercode, startIndex, limitSize,  searchText);
-//    }
-
-    public int getWaitingListCount(String keyword) {
-        return admissionRepository.selectWaitingListCount(keyword);
+    public int getWaitingListCount(String keyword, int admId) {
+        return admissionRepository.selectWaitingListCount(keyword, admId);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -156,4 +136,5 @@ public class AdmissionService {
         return admissionRepository.selectAllAdmissionIdByPatientName(patientName)
             .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
     }
+
 }

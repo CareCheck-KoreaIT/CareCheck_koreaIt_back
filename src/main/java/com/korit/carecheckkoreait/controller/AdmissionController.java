@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.korit.carecheckkoreait.dto.request.*;
 import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
-import com.korit.carecheckkoreait.dto.response.RespUserListSearchDto;
-import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -96,34 +94,99 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
+//    @GetMapping("/allWaitings")
+//    public ResponseEntity<?> getAllWaitingList(
+//            @ModelAttribute ReqAllWaitingListDto dto) {
+//        System.out.println("getUsers 호출");
+//        System.out.println(dto);
+//        int totalAllWaitingListCount = admissionService.getWaitingListCount(dto.getKeyword());
+//        int totalPages = totalAllWaitingListCount % dto.getLimitCount() == 0
+//                ? totalAllWaitingListCount / dto.getLimitCount()
+//                : totalAllWaitingListCount / dto.getLimitCount() + 1;
+//
+//        RespAllWaitingListDto respAllWaitingListDto =
+//                RespAllWaitingListDto.builder()
+//                        .page(dto.getPage())
+//                        .limitCount(dto.getLimitCount())
+//                        .totalPages(totalPages)
+//                        .totalElements(totalAllWaitingListCount)
+//                        .isFirstPage(dto.getPage() == 1)
+//                        .isLastPage(dto.getPage() == totalPages)
+//                        .patientAllWaitingList(admissionService.getAllWaitingListKeyword(dto))
+//                        .build();
+//        return ResponseEntity.ok().body(respAllWaitingListDto);
+//        return ResponseEntity.ok().build();
+//    }
+
     @GetMapping("/allWaitings")
-    public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqAllWaitingListDto dto) {
-        System.out.println("getUsers 호출");
-        System.out.println(dto);
-        int totalAllWaitingListCount = admissionService.getWaitingListCount(dto.getKeyword());
-        int totalPages = totalAllWaitingListCount % dto.getLimitCount() == 0
-                ? totalAllWaitingListCount / dto.getLimitCount()
-                : totalAllWaitingListCount / dto.getLimitCount() + 1;
+    public ResponseEntity<?> getAllWaitingList(
+            @PathVariable Integer admId,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limitCount) {
+            System.out.println("Page: " + page);
+            System.out.println("admId: " + admId);
+            System.out.println("Limit Count: " + limitCount);
+            System.out.println("Keyword: " + keyword);
+
+        if (page < 1 || limitCount < 1) {
+            return ResponseEntity.badRequest().body(null); // 400 Bad Request
+        }
+        int totalAllWaitingListCount = admissionService.getWaitingListCount(keyword, admId);
+
+        int totalPages = totalAllWaitingListCount % limitCount == 0
+                ? totalAllWaitingListCount / limitCount
+                : totalAllWaitingListCount / limitCount + 1;
 
         RespAllWaitingListDto respAllWaitingListDto =
                 RespAllWaitingListDto.builder()
-                        .page(dto.getPage())
-                        .limitCount(dto.getLimitCount())
+                        .page(page)
+                        .limitCount(limitCount)
                         .totalPages(totalPages)
                         .totalElements(totalAllWaitingListCount)
-                        .isFirstPage(dto.getPage() == 1)
-                        .isLastPage(dto.getPage() == totalPages)
-                        .patientAllWaitingList(admissionService.getAllWaitingListKeyword(dto))
+                        .isFirstPage(page == 1)
+                        .isLastPage(page == totalPages)
+                        .patientAllWaitingList(admissionService.getAllWaitingListKeyword(admId, keyword, page, limitCount))
                         .build();
         return ResponseEntity.ok().body(respAllWaitingListDto);
 //        return ResponseEntity.ok().build();
     }
 
-    // 전체 대기자 수 조회
+//    @GetMapping("/{keyword}")
+//    public ResponseEntity<?> searchNoticeByUsercode(
+//            @RequestParam(required = false) String keyword,
+//            @RequestParam(required = false) Integer patientId,
+//            @RequestParam(defaultValue = "1") int page,
+//            @RequestParam(defaultValue = "10") int limitCount) {
+//
+//        int totalwaitListCount = admissionService.getWaitingListCount(keyword, patientId);
+//
+//        int totalPages = totalwaitListCount % limitCount == 0
+//                ? totalwaitListCount / limitCount
+//                : totalwaitListCount / limitCount + 1;
+//
+//        List<PatientSearch> patientList = admissionService.getAllWaitingListSearchByKeyword(keyword);
+//
+//        RespAllWaitingListDto respAllWaitingListDto =
+//                RespAllWaitingListDto.builder()
+//                        .page(page)
+//                        .limitCount(limitCount)
+//                        .totalPages(totalPages)
+//                        .totalElements(totalwaitListCount)
+//                        .isFirstPage(page == 1)
+//                        .isLastPage(page == totalPages)
+//                        .nextPage(page != totalPages ? page + 1 : 0)
+//                        .patientAllWaitingList(patientList)
+//                        .build();
+//
+//        return ResponseEntity.ok().body(respAllWaitingListDto);
+//    }
+
+//  전체 대기자 수 조회
     @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
     @GetMapping("/waitingCount")
-    public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword) {
-        int count = admissionService.getWaitingListCount(keyword);
+    public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword, Integer patientId) {
+        int count = admissionService.getWaitingListCount(keyword, patientId);
         return ResponseEntity.ok().body(count);
     }
 

@@ -41,6 +41,7 @@ public class NoticeController {
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 조회")
     @GetMapping("")
     public ResponseEntity<?> searchNoticeList(@ModelAttribute ReqNoticeListSearchDto dto) {
+
         int totalNoticeListCount = noticeService.getNoticeListCountBySearchText(dto.getSearchText());
         int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
                 ? totalNoticeListCount / dto.getLimitCount()
