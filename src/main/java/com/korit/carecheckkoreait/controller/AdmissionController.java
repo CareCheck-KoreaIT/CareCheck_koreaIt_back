@@ -97,7 +97,7 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/waitings")
+    @GetMapping("/all-waitings")
     public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqAllWaitingListDto dto) {
         System.out.println("getUsers 호출");
         System.out.println(dto);
