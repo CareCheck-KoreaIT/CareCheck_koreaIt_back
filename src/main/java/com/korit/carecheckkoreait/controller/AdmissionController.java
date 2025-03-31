@@ -97,7 +97,7 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/allWaitings")
+    @GetMapping("/waitings")
     public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqAllWaitingListDto dto) {
         System.out.println("getUsers 호출");
         System.out.println(dto);
@@ -122,7 +122,7 @@ public class AdmissionController {
 
     // 전체 대기자 수 조회
     @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
-    @GetMapping("/waitingCount")
+    @GetMapping("/waiting-count")
     public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword) {
         int count = admissionService.getWaitingListCount(keyword);
         return ResponseEntity.ok().body(count);
@@ -137,7 +137,7 @@ public class AdmissionController {
     }
 
     @Operation(summary = "환자이름 기준 접수 명단", description = "해당환자의 접수 내역")
-    @GetMapping("/searchAdmissionList")
+    @GetMapping("/admission-list")
     public ResponseEntity<?> getAdmissionListByPatientName(
         @Parameter(description = "환자명", example = "거북이", required = true)
         @RequestParam String patientName
