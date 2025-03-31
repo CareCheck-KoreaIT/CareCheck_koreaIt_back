@@ -3,6 +3,7 @@ package com.korit.carecheckkoreait.repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.korit.carecheckkoreait.dto.response.RespWaitingListDto;
 import com.korit.carecheckkoreait.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,6 @@ public class AdmissionRepository {
         admissionMapper.insertAdmission(admission);
         return admission;
     }
-
 
     //환자 접수 조회
     public int findAdmissionByPatientIdAndUsercode(int patientId, String usercode) {
@@ -42,6 +42,7 @@ public class AdmissionRepository {
             ? Optional.empty()   
             : Optional.of(waitingList);
     }
+
     //환자의 바이탈 정보 조회(admId)
     public Optional<List<Admission>> selectVitalInfoByAdmId(int admId) {
         List<Admission> vitalInfo = admissionMapper.selectVitalInfoByAdmId(admId);
@@ -49,6 +50,7 @@ public class AdmissionRepository {
             ? Optional.empty()
             : Optional.of(vitalInfo);
     }
+
     //처방에 대한 세부내역
     public Optional<Admission> selectDetailOrderByAdmId(int admissionId){
         Admission detailBillList = admissionMapper.selectDetailOrderByAdmId(admissionId);
@@ -73,6 +75,7 @@ public class AdmissionRepository {
     public void insertDiagnosisInAdm(Diagnosis diagnosis) {
         admissionMapper.insertDiagnosisInAdmission(diagnosis);
     }
+
     public Integer selectTotalPayInAdm(int admissionId) {
         return admissionMapper.selectTotalPayByAdmId(admissionId);
     }
@@ -84,12 +87,18 @@ public class AdmissionRepository {
     public void updateAdmissionEndDate(int admissionId) {
         admissionMapper.updateAdmissionEndDate(admissionId);
     }
+
 //    전체 진료대기자 명단 조회
-    public Optional<List<PatientSearch>> selectAllWaitingListByAdmId (String keyword) {
-        List<PatientSearch> allWaitingList = admissionMapper.selectAllWaitingListAdmId(keyword);
-        return allWaitingList.isEmpty()
-                ? Optional.empty()
-                : Optional.of(allWaitingList);
+    public List<PatientSearch> selectAllWaitingListByAdmId(
+            int admId,
+            int startIndex,
+            int limitSize,
+            String keyword) {
+        return admissionMapper.selectAllWaitingListAdmId(admId, startIndex, limitSize, keyword);
+    }
+
+    public int selectWaitingListCount(String keyword, int admId) {
+        return admissionMapper.selectAllWaitingListCount(keyword, admId);
     }
 
     public void deleteAllWaitingByAdmId(int admId) {

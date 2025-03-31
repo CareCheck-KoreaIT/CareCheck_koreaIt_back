@@ -2,15 +2,12 @@ package com.korit.carecheckkoreait.service;
 
 import java.util.List;
 
+import com.korit.carecheckkoreait.dto.request.*;
 import com.korit.carecheckkoreait.entity.*;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddVitalInAdmDto;
 import com.korit.carecheckkoreait.exception.DuplicatedValueException;
 import com.korit.carecheckkoreait.exception.FieldError;
 import com.korit.carecheckkoreait.repository.AdmissionRepository;
@@ -21,22 +18,13 @@ public class AdmissionService {
     @Autowired
     private AdmissionRepository admissionRepository;
 
-    public int duplicatedAdmission(int patientId, String usercode) {
-        return admissionRepository.findAdmissionByPatientIdAndUsercode(patientId, usercode);
-    }
 
     @Transactional(rollbackFor = Exception.class)
     public Admission insertAdmission(ReqAddAdmissionDto dto) {
-        if (duplicatedAdmission(Integer.parseInt(dto.getPatientId()), dto.getUserCode())==1) {
-            throw new DuplicatedValueException(List.of(FieldError.builder()
-            .field("admId")
-            .message("당일 접수가 된 사람입니다..")
-            .build()));
-        }
         Admission admission = Admission.builder()
                                 .patientId(Integer.parseInt(dto.getPatientId()))
                                 .clinicDeft(dto.getClinicDeft())
-                                .usercode(dto.getUserCode())
+                                .usercode(dto.getUsercode())
                                 .build();
         admissionRepository.insert(admission);
         return admission;
@@ -117,10 +105,16 @@ public class AdmissionService {
         admissionRepository.updateAdmissionEndDate(admissionId);
     }
 
-    @Transactional(readOnly = true)
-    public List<PatientSearch> getAllWaitingListKeyword(String keyword) throws Exception {
-        return admissionRepository.selectAllWaitingListByAdmId(keyword)
-                .orElseThrow(() -> new NotFoundException("대기자가 없습니다."));
+    public List<PatientSearch> getAllWaitingListKeyword(int admId, String keyword, int page, int limitCount) {
+        int startIndex = (page - 1) * limitCount;
+        int limitSize = limitCount;
+        return admissionRepository.selectAllWaitingListByAdmId(
+                admId, startIndex, limitSize, keyword
+        );
+    }
+
+    public int getWaitingListCount(String keyword, int admId) {
+        return admissionRepository.selectWaitingListCount(keyword, admId);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -133,4 +127,5 @@ public class AdmissionService {
         return admissionRepository.selectAllAdmissionIdByPatientName(patientName)
             .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
     }
+
 }

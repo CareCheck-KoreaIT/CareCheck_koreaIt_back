@@ -69,6 +69,7 @@ public class SecurityConfig {
                     "/chart",
                     "/diseases/**",
                     "/allWaitings",
+                    "/waitingCount",
                     "/summary/**",
                     "/roles/**"
             ).permitAll();

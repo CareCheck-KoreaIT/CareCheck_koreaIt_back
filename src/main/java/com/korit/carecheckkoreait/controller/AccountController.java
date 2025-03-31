@@ -38,7 +38,7 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/phoneNumber")
+    @PutMapping("/phone-number")
     public ResponseEntity<?> changePhoneNumber(
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody

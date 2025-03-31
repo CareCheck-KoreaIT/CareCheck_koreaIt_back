@@ -2,14 +2,13 @@ package com.korit.carecheckkoreait.controller;
 
 import java.util.List;
 
+import com.korit.carecheckkoreait.dto.request.*;
+import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import com.korit.carecheckkoreait.dto.request.ReqAddAdmissionDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddDiagnosisInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddOrderInAdmDto;
-import com.korit.carecheckkoreait.dto.request.ReqAddVitalInAdmDto;
 import com.korit.carecheckkoreait.service.AdmissionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,9 +36,8 @@ public class AdmissionController {
     @Operation(summary = "진료대기자명단", description = "직원코드로 등록된 대기자명단")
     @GetMapping("/waitings")
     public ResponseEntity<?> selectWaitingList(
-        @Parameter(description = "직원코드", example = "2025020003", required = true)
-        @RequestParam String usercode) throws Exception {
-        return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(usercode));
+            @AuthenticationPrincipal PrincipalUser principalUser) throws Exception {
+        return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(principalUser.getUsercode()));
     }
 
     @Operation(summary ="환자바이탈입력", description ="해당접수번호에 등록된 바이탈 정보")
@@ -96,12 +94,46 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "전체대기자명단", description = "접수된 전체 대기자 명단")
-    @GetMapping("/allWaitings")
+    @GetMapping("/all-waitings")
     public ResponseEntity<?> getAllWaitingList(
-            @RequestParam(value = "keyword", required = false) String keyword) throws Exception {
-        return ResponseEntity.ok().body(admissionService.getAllWaitingListKeyword(keyword));
+            @PathVariable Integer admId,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int limitCount) {
+            System.out.println("Page: " + page);
+            System.out.println("admId: " + admId);
+            System.out.println("Limit Count: " + limitCount);
+            System.out.println("Keyword: " + keyword);
+
+        if (page < 1 || limitCount < 1) {
+            return ResponseEntity.badRequest().body(null); // 400 Bad Request
+        }
+        int totalAllWaitingListCount = admissionService.getWaitingListCount(keyword, admId);
+
+        int totalPages = totalAllWaitingListCount % limitCount == 0
+                ? totalAllWaitingListCount / limitCount
+                : totalAllWaitingListCount / limitCount + 1;
+
+        RespAllWaitingListDto respAllWaitingListDto =
+                RespAllWaitingListDto.builder()
+                        .page(page)
+                        .limitCount(limitCount)
+                        .totalPages(totalPages)
+                        .totalElements(totalAllWaitingListCount)
+                        .isFirstPage(page == 1)
+                        .isLastPage(page == totalPages)
+                        .patientAllWaitingList(admissionService.getAllWaitingListKeyword(admId, keyword, page, limitCount))
+                        .build();
+        return ResponseEntity.ok().body(respAllWaitingListDto);
+
+  //  전체 대기자 수 조회
+    @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
+    @GetMapping("/waiting-count")
+    public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword) {
+        int count = admissionService.getWaitingListCount(keyword);
+        return ResponseEntity.ok().body(count);
     }
+
     @Operation(summary = "접수된 전체 대기자 명단", description = "접수된 대기자 명단 삭제")
     @DeleteMapping("/{admissionId}")
     public String deletePatientByAdmId(@PathVariable int admissionId) {
@@ -111,7 +143,7 @@ public class AdmissionController {
     }
 
     @Operation(summary = "환자이름 기준 접수 명단", description = "해당환자의 접수 내역")
-    @GetMapping("/searchAdmissionList")
+    @GetMapping("/admission-list")
     public ResponseEntity<?> getAdmissionListByPatientName(
         @Parameter(description = "환자명", example = "거북이", required = true)
         @RequestParam String patientName

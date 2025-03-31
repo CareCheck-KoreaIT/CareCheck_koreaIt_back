@@ -3,7 +3,6 @@ package com.korit.carecheckkoreait.controller;
 import com.korit.carecheckkoreait.dto.request.ReqModifyNoticeDto;
 import com.korit.carecheckkoreait.dto.request.ReqNoticeListSearchDto;
 import com.korit.carecheckkoreait.dto.response.RespNoticeListSearchDto;
-import com.korit.carecheckkoreait.entity.NoticeSearch;
 import com.korit.carecheckkoreait.service.NoticeService;
 import jakarta.validation.constraints.Min;
 import org.apache.ibatis.javassist.NotFoundException;
@@ -41,6 +40,7 @@ public class NoticeController {
     @Operation(summary = "공지사항 전체 조회", description = "공지사항 전체 조회")
     @GetMapping("")
     public ResponseEntity<?> searchNoticeList(@ModelAttribute ReqNoticeListSearchDto dto) {
+
         int totalNoticeListCount = noticeService.getNoticeListCountBySearchText(dto.getSearchText());
         int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
                 ? totalNoticeListCount / dto.getLimitCount()
@@ -62,49 +62,48 @@ public class NoticeController {
     }
 
     @Operation(summary = "공지사항 usecode 조회", description = "공지사항 usercode로 조회")
-    @GetMapping("/{usercode}")
+    @GetMapping("/mylist")
     public ResponseEntity<?> searchNoticeByUsercode(
-            @PathVariable String usercode,  // URL 경로에서 usercode를 받음
-            @RequestParam(required = false) String searchText,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "15") int limitCount,
-            @RequestParam(required = false) String order) {
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @ModelAttribute ReqNoticeListSearchDto dto
+    ) {
+        String usercode = principalUser.getUsercode();
+        int totalNoticeListCount = noticeService.getNoticeListCountUsercodeBySearchText(usercode, dto.getSearchText());
 
-        int totalNoticeListCount = noticeService.getNoticeListCountUsercodeBySearchText(usercode, searchText);
-
-        int totalPages = totalNoticeListCount % limitCount == 0
-                ? totalNoticeListCount / limitCount
-                : totalNoticeListCount / limitCount + 1;
+        int totalPages = totalNoticeListCount % dto.getLimitCount() == 0
+                ? totalNoticeListCount / dto.getLimitCount()
+                : totalNoticeListCount / dto.getLimitCount() + 1;
 
         RespNoticeListSearchDto respNoticeListSearchDto =
                 RespNoticeListSearchDto.builder()
-                        .page(page)
-                        .limitCount(limitCount)
+                        .page(dto.getPage())
+                        .limitCount(dto.getLimitCount())
                         .totalPages(totalPages)
                         .totalElements(totalNoticeListCount)
-                        .isFirstPage(page == 1)
-                        .isLastPage(page == totalPages)
-                        .nextPage(page != totalPages ? page + 1 : 0)
-                        .noticeList(noticeService.getNoticeListSearchByUsercode(usercode, searchText, page, limitCount, order))
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
+                        .noticeList(noticeService.getNoticeListSearchByUsercode(usercode, dto.getSearchText(), dto.getPage(), dto.getLimitCount(), dto.getOrder()))
                         .build();
 
         return ResponseEntity.ok().body(respNoticeListSearchDto);
     }
 
     @Operation(summary = "공지사항 수정", description = "공지사항 수정")
-    @PutMapping("/{usercode}/{noticeId}")
+    @PutMapping("/mylist/{noticeId}")
     public ResponseEntity<?> modifyNotice(
             @Min(value = 1, message = "noticeId는 1이상의 정수입니다.")
             @PathVariable int noticeId,
-            @PathVariable String usercode,
+            @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody ReqModifyNoticeDto reqModifyNoticeDto
     ) throws NotFoundException {
-        return ResponseEntity.ok().body(noticeService.modiftyNotice(usercode, noticeId, reqModifyNoticeDto));
+        return ResponseEntity.ok().body(noticeService.modiftyNotice(principalUser.getUsercode(), noticeId, reqModifyNoticeDto));
     }
     
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
     @DeleteMapping("/{noticeId}")
     public ResponseEntity<?> deleteNotice(@PathVariable int noticeId) {
+        System.out.println(noticeId);
         int result = noticeService.deleteNoticeById(noticeId);
         if (result == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("공지사항을 찾을 수 없습니다.");
