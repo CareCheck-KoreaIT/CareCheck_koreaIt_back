@@ -6,6 +6,7 @@ import com.korit.carecheckkoreait.dto.request.*;
 import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.korit.carecheckkoreait.service.AdmissionService;
@@ -35,9 +36,8 @@ public class AdmissionController {
     @Operation(summary = "진료대기자명단", description = "직원코드로 등록된 대기자명단")
     @GetMapping("/waitings")
     public ResponseEntity<?> selectWaitingList(
-        @Parameter(description = "직원코드", example = "2025020003", required = true)
-        @RequestParam String usercode) throws Exception {
-        return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(usercode));
+            @AuthenticationPrincipal PrincipalUser principalUser) throws Exception {
+        return ResponseEntity.ok().body(admissionService.selectWaitingListUserCode(principalUser.getUsercode()));
     }
 
     @Operation(summary ="환자바이탈입력", description ="해당접수번호에 등록된 바이탈 정보")
@@ -94,31 +94,7 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/allWaitings")
-//    public ResponseEntity<?> getAllWaitingList(
-//            @ModelAttribute ReqAllWaitingListDto dto) {
-//        System.out.println("getUsers 호출");
-//        System.out.println(dto);
-//        int totalAllWaitingListCount = admissionService.getWaitingListCount(dto.getKeyword());
-//        int totalPages = totalAllWaitingListCount % dto.getLimitCount() == 0
-//                ? totalAllWaitingListCount / dto.getLimitCount()
-//                : totalAllWaitingListCount / dto.getLimitCount() + 1;
-//
-//        RespAllWaitingListDto respAllWaitingListDto =
-//                RespAllWaitingListDto.builder()
-//                        .page(dto.getPage())
-//                        .limitCount(dto.getLimitCount())
-//                        .totalPages(totalPages)
-//                        .totalElements(totalAllWaitingListCount)
-//                        .isFirstPage(dto.getPage() == 1)
-//                        .isLastPage(dto.getPage() == totalPages)
-//                        .patientAllWaitingList(admissionService.getAllWaitingListKeyword(dto))
-//                        .build();
-//        return ResponseEntity.ok().body(respAllWaitingListDto);
-//        return ResponseEntity.ok().build();
-//    }
-
-    @GetMapping("/allWaitings")
+    @GetMapping("/all-waitings")
     public ResponseEntity<?> getAllWaitingList(
             @PathVariable Integer admId,
             @RequestParam(required = false) String keyword,
@@ -149,44 +125,12 @@ public class AdmissionController {
                         .patientAllWaitingList(admissionService.getAllWaitingListKeyword(admId, keyword, page, limitCount))
                         .build();
         return ResponseEntity.ok().body(respAllWaitingListDto);
-//        return ResponseEntity.ok().build();
-    }
 
-//    @GetMapping("/{keyword}")
-//    public ResponseEntity<?> searchNoticeByUsercode(
-//            @RequestParam(required = false) String keyword,
-//            @RequestParam(required = false) Integer patientId,
-//            @RequestParam(defaultValue = "1") int page,
-//            @RequestParam(defaultValue = "10") int limitCount) {
-//
-//        int totalwaitListCount = admissionService.getWaitingListCount(keyword, patientId);
-//
-//        int totalPages = totalwaitListCount % limitCount == 0
-//                ? totalwaitListCount / limitCount
-//                : totalwaitListCount / limitCount + 1;
-//
-//        List<PatientSearch> patientList = admissionService.getAllWaitingListSearchByKeyword(keyword);
-//
-//        RespAllWaitingListDto respAllWaitingListDto =
-//                RespAllWaitingListDto.builder()
-//                        .page(page)
-//                        .limitCount(limitCount)
-//                        .totalPages(totalPages)
-//                        .totalElements(totalwaitListCount)
-//                        .isFirstPage(page == 1)
-//                        .isLastPage(page == totalPages)
-//                        .nextPage(page != totalPages ? page + 1 : 0)
-//                        .patientAllWaitingList(patientList)
-//                        .build();
-//
-//        return ResponseEntity.ok().body(respAllWaitingListDto);
-//    }
-
-//  전체 대기자 수 조회
+  //  전체 대기자 수 조회
     @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
-    @GetMapping("/waitingCount")
-    public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword, Integer patientId) {
-        int count = admissionService.getWaitingListCount(keyword, patientId);
+    @GetMapping("/waiting-count")
+    public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword) {
+        int count = admissionService.getWaitingListCount(keyword);
         return ResponseEntity.ok().body(count);
     }
 
@@ -199,7 +143,7 @@ public class AdmissionController {
     }
 
     @Operation(summary = "환자이름 기준 접수 명단", description = "해당환자의 접수 내역")
-    @GetMapping("/searchAdmissionList")
+    @GetMapping("/admission-list")
     public ResponseEntity<?> getAdmissionListByPatientName(
         @Parameter(description = "환자명", example = "거북이", required = true)
         @RequestParam String patientName

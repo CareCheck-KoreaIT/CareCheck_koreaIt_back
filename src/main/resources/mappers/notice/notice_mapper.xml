@@ -80,8 +80,14 @@
                 AND nt.title like concat("%", #{searchText}, "%")
             </if>
         </where>
-        order by
-            nt.created_at desc
+        <choose>
+            <when test="order == 'asc'">
+                order by nt.created_at asc
+            </when>
+            <otherwise>
+                order by nt.created_at desc
+            </otherwise>
+        </choose>
         limit #{startIndex}, #{limitCount}
     </select>
 
@@ -103,7 +109,8 @@
         update notice_tb
         set
             title = #{notice.title},
-            content = #{notice.content}
+            content = #{notice.content},
+            updated_at = now()
         where
             usercode = #{usercode}
             and notice_id = #{noticeId}

@@ -18,22 +18,13 @@ public class AdmissionService {
     @Autowired
     private AdmissionRepository admissionRepository;
 
-    public int duplicatedAdmission(int patientId, String usercode) {
-        return admissionRepository.findAdmissionByPatientIdAndUsercode(patientId, usercode);
-    }
 
     @Transactional(rollbackFor = Exception.class)
     public Admission insertAdmission(ReqAddAdmissionDto dto) {
-        if (duplicatedAdmission(Integer.parseInt(dto.getPatientId()), dto.getUserCode())==1) {
-            throw new DuplicatedValueException(List.of(FieldError.builder()
-            .field("admId")
-            .message("당일 접수가 된 사람입니다..")
-            .build()));
-        }
         Admission admission = Admission.builder()
                                 .patientId(Integer.parseInt(dto.getPatientId()))
                                 .clinicDeft(dto.getClinicDeft())
-                                .usercode(dto.getUserCode())
+                                .usercode(dto.getUsercode())
                                 .build();
         admissionRepository.insert(admission);
         return admission;
