@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.korit.carecheckkoreait.dto.request.*;
 import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
+import com.korit.carecheckkoreait.security.principal.PrincipalUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -125,14 +127,16 @@ public class AdmissionController {
                         .patientAllWaitingList(admissionService.getAllWaitingListKeyword(admId, keyword, page, limitCount))
                         .build();
         return ResponseEntity.ok().body(respAllWaitingListDto);
+    }
 
   //  전체 대기자 수 조회
-    @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
-    @GetMapping("/waiting-count")
-    public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword) {
-        int count = admissionService.getWaitingListCount(keyword);
-        return ResponseEntity.ok().body(count);
-    }
+    // @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
+    // @GetMapping("/waiting-count")
+    // public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword
+    // ) {
+    //     int count = admissionService.getWaitingListCount(keyword);
+    //     return ResponseEntity.ok().body(count);
+    // }
 
     @Operation(summary = "접수된 전체 대기자 명단", description = "접수된 대기자 명단 삭제")
     @DeleteMapping("/{admissionId}")

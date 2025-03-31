@@ -27,4 +27,8 @@ public class OrderRepository {
     public void updateScorePay(double scorePay) {
         orderMapper.updateScoreById(scorePay);
     };
+
+    public void insertScorePay(double scorePay) {
+        orderMapper.insertScorePay(scorePay);
+    }
 }
