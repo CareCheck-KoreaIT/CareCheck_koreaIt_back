@@ -252,7 +252,7 @@
             order by adm_date asc
             limit #{startIndex}, #{limitCount}
         </select>
-        <select id="selectAllWaitingListCount" resultType="Integer">
+        <select id="selectAllWaitingListCount" resultType="java.lang.Integer">
             select
                 count(*)
             from
@@ -273,17 +273,17 @@
 
         <!-- 접수번호 찾기 환자이름 기준 -->
         <select id="selectAdmissionIdByPatientName" resultMap="findAdmInfoResultMap">
-        select
+            select
                 adm_id,
                 adm.patient_id as patient_id,
                 patient_name,
                 regident_num,
                 phone_num,
                 date_format(adm.created_at, "%Y-%m-%d") as created_at
-        from adm_tb as adm
-        left outer join patient_tb as pt
-        on adm.patient_id = pt.patient_id
-        where patient_name like concat('%', #{patientName}, '%')
-        order by adm.created_at desc
+            from adm_tb as adm
+            left outer join patient_tb as pt
+            on adm.patient_id = pt.patient_id
+            where patient_name like concat('%', #{patientName}, '%')
+            order by adm.created_at desc
         </select>
 </mapper>
