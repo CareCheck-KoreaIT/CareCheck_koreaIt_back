@@ -68,7 +68,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{usercode}/account")
-    public ResponseEntity<?> updateUserAccount(@PathVariable String usercode) {
+    public ResponseEntity<?> resignationUser(@PathVariable String usercode) {
         System.out.println(usercode);
         userService.updateUserAccount(usercode);
         return ResponseEntity.ok().build();
