@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.korit.carecheckkoreait.dto.request.*;
 import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
+import com.korit.carecheckkoreait.dto.response.RespSearchPatientsDto;
 import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 
+import com.korit.carecheckkoreait.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +24,8 @@ public class AdmissionController {
     
     @Autowired
     private AdmissionService admissionService;
+    @Autowired
+    private PatientService patientService;
 
     @Operation(summary = "진료접수", description = "접수등록")
     @PostMapping
@@ -96,9 +100,10 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "오늘 환자 접수 명단", description = "ReceiptPage - 오늘 접수된 환자 명단")
     @GetMapping("/todaywaitings")
     public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqSearchTodayReciptPatientsDto dto) {
-        System.out.println(dto);
+//        System.out.println(dto);
         int totalPatientlistCount = admissionService.getWaitingListCount(dto.getSearchText());
         int totalPages = totalPatientlistCount % dto.getLimitCount() == 0
                 ? totalPatientlistCount / dto.getLimitCount()
@@ -133,5 +138,27 @@ public class AdmissionController {
         @RequestParam String patientName
     ) throws Exception {
         return ResponseEntity.ok().body(admissionService.getAllAdmissionListByPatientName(patientName));
+    }
+
+    @Operation(summary = "전체 환자 명단", description = "환자 정보 찾기")
+    @GetMapping("/patients")
+    public ResponseEntity<?> getAllPatientsByName(@ModelAttribute ReqSearchPatientsDto dto) throws Exception {
+        int totalPatientlistCount = patientService.selectPatientsCount(dto.getSearchText());
+        int totalPages = totalPatientlistCount % dto.getLimitCount() == 0
+                ? totalPatientlistCount / dto.getLimitCount()
+                : totalPatientlistCount / dto.getLimitCount() + 1;
+
+        RespSearchPatientsDto respSearchPatientsDto =
+                RespSearchPatientsDto.builder()
+                        .page(dto.getPage())
+                        .limitCount(dto.getLimitCount())
+                        .totalPages(totalPages)
+                        .totalElements(totalPatientlistCount)
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .patientList(patientService.selectPatientsList(dto))
+                        .build();
+        System.out.println(respSearchPatientsDto);
+        return ResponseEntity.ok().body(respSearchPatientsDto);
     }
 }
