@@ -283,6 +283,6 @@
         left outer join patient_tb as pt
         on adm.patient_id = pt.patient_id
         where patient_name like concat('%', #{patientName}, '%')
-        order by start_date desc
+        order by adm.created_at desc
         </select>
 </mapper>
