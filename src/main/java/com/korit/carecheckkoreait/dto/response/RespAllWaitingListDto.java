@@ -15,7 +15,6 @@ public class RespAllWaitingListDto {
     private int totalElements;
     private boolean isFirstPage;
     private boolean isLastPage;
-    private int nextPage;
 
     private List<PatientSearch> patientAllWaitingList;
 }
