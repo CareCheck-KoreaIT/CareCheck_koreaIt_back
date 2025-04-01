@@ -83,8 +83,6 @@
                 <result property="admDate" column="adm_date"/>
                 <result property="startDate" column="start_date"/>
                 <result property="endDate" column="end_date"/>
-                <result property="createdAt" column="created_at"/>
-                <result property="updatedAt" column="updated_at"/>
         </resultMap>
 
         <!-- 접수번호 조회 기능. -->
@@ -128,7 +126,7 @@
                 where diagnosis_order_id = #{diagnosisOrderId}
         </delete>
 
-    <insert id="insertVitalInAdmId">
+        <insert id="insertVitalInAdmId">
                 insert into patient_vital_tb
                 values (default, #{admId}, #{usercode}, #{height}, #{weight}, #{fever}, now(), now())
         </insert>
@@ -201,7 +199,7 @@
         <select id="selectPatientInfoByAdmId" resultMap="admResultMap">
             select
                 adm.adm_id as adm_id,
-	        adm.patient_id as adm_patient_id,
+	            adm.patient_id as adm_patient_id,
                 pt.patient_name as pt_patient_name,
                 adm.usercode as adm_usercode,
                 adm.clinic_deft as clinic_deft,
@@ -235,41 +233,38 @@
     <!-- 전체 대기자 명단 sql -->
         <select id="selectAllWaitingListAdmId" resultMap ="patientSearchResultMap">
             select
-                adm.adm_id as admId,
-                adm.patient_id as patientId,
-                pt.patient_name as patientName,
-                pt.phone_num as phoneNum,
+                adm_id,
+                adm.patient_id as patient_id,
+                pt.patient_name as patient_name,
+                pt.phone_num as phone_num,
                 date_format(adm.created_at, "%H:%i") as adm_date,
                 adm.start_date as start_date,
                 adm.end_date as end_date
-            from adm_tb as adm
-            left join patient_tb pt on pt.patient_id = adm.patient_id
+            from
+                adm_tb as adm
+                inner join patient_tb pt on(pt.patient_id = adm.patient_id)
             <where>
-                date(adm.created_at) = curdate() and
-                <if test="keyword != null and keyword != ''">
-                    pt.patient_name like concat('%', #{keyword}, '%')
-                </if>
-                <if test="admId != null">
-                    and adm.adm_id = #{admId}
+                date(adm.created_at) = curdate()
+                <if test="patientName != null and patientName != ''">
+                    and pt.patient_name like concat("%", #{patientName}, "%")
                 </if>
             </where>
-            order by adm.patient_id asc
+            order by adm_date asc
             limit #{startIndex}, #{limitCount}
         </select>
-        <select id="selectAllWaitingListCount" resultType="Integer">
+        <select id="selectAllWaitingListCount" resultType="java.lang.Integer">
             select
                 count(*)
-            from adm_tb as adm
-            left join patient_tb pt on pt.patient_id = adm.patient_id
+            from
+                adm_tb as adm
+                inner join patient_tb pt on(pt.patient_id = adm.patient_id)
             <where>
-                date(adm.created_at) = curdate() and
-                <if test="keyword != null and keyword != ''">
-                    pt.patient_name like concat('%', #{keyword}, '%')
-                </if>
-                <if test="admId != null">
-                    and adm.adm_id = #{admId}
+                date(adm.created_at) = curdate()
+                <if test="patientName != null and patientName != ''">
+                    and patient_name like concat("%", #{patientName}, "%")
                 </if>
             </where>
+
         </select>
         <delete id="deleteAllWaitingByAdmId">
             delete from adm_tb
@@ -278,17 +273,17 @@
 
         <!-- 접수번호 찾기 환자이름 기준 -->
         <select id="selectAdmissionIdByPatientName" resultMap="findAdmInfoResultMap">
-        select
+            select
                 adm_id,
                 adm.patient_id as patient_id,
                 patient_name,
                 regident_num,
                 phone_num,
                 date_format(adm.created_at, "%Y-%m-%d") as created_at
-        from adm_tb as adm
-        left outer join patient_tb as pt
-        on adm.patient_id = pt.patient_id
-        where patient_name like concat('%', #{patientName}, '%')
-        order by start_date desc
+            from adm_tb as adm
+            left outer join patient_tb as pt
+            on adm.patient_id = pt.patient_id
+            where patient_name like concat('%', #{patientName}, '%')
+            order by adm.created_at desc
         </select>
 </mapper>

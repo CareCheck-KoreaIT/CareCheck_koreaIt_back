@@ -105,16 +105,19 @@ public class AdmissionService {
         admissionRepository.updateAdmissionEndDate(admissionId);
     }
 
-    public List<PatientSearch> getAllWaitingListKeyword(int admId, String keyword, int page, int limitCount) {
-        int startIndex = (page - 1) * limitCount;
-        int limitSize = limitCount;
-        return admissionRepository.selectAllWaitingListByAdmId(
-                admId, startIndex, limitSize, keyword
+    public List<PatientSearch> getTodayWaitingListByPatientName(ReqSearchTodayReciptPatientsDto reqSearchTodayReciptPatientsDto) {
+        int startIndex = (reqSearchTodayReciptPatientsDto.getPage() - 1) * reqSearchTodayReciptPatientsDto.getLimitCount();
+        List<PatientSearch> foundPatients = admissionRepository.selectAllWaitingListByPatientName(
+                startIndex,
+                reqSearchTodayReciptPatientsDto.getLimitCount(),
+                reqSearchTodayReciptPatientsDto.getSearchText()
         );
+
+        return foundPatients;
     }
 
-    public int getWaitingListCount(String keyword, int admId) {
-        return admissionRepository.selectWaitingListCount(keyword, admId);
+    public int getWaitingListCount(String patientName) {
+        return admissionRepository.selectWaitingListCount(patientName);
     }
 
     @Transactional(rollbackFor = Exception.class)

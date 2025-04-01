@@ -42,6 +42,6 @@ public interface UserMapper {
             @Param("usercode") String usercode,
             @Param("password") String password
     );
-    int deleteUserByCode(@Param("usercode") String usercode);
+    int updateUserAccountByCode(@Param("usercode") String usercode);
 
 }

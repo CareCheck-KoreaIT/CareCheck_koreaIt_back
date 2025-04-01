@@ -15,13 +15,9 @@ import java.time.LocalDateTime;
 public class PatientSearch {
     private int admId;
     private int patientId;
-    private int page;
-    private int limitCount;
     private String patientName;
     private String phoneNum;
     private String admDate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }
