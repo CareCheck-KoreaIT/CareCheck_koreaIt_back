@@ -67,10 +67,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/users/{usercode}")
-    public ResponseEntity<?> deleteUser(@PathVariable String usercode) {
+    @PutMapping("/users/{usercode}/account")
+    public ResponseEntity<?> updateUserAccount(@PathVariable String usercode) {
         System.out.println(usercode);
-        userService.deleteUser(usercode);
+        userService.updateUserAccount(usercode);
         return ResponseEntity.ok().build();
     }
 

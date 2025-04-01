@@ -60,8 +60,8 @@ public class UserRepository {
     public void updateUserPasswordByCode(String usercode, String password) {
         userMapper.updateUserPasswordByCode(usercode, password);
     }
-    public void deleteUserByCode(String usercode) {
-        userMapper.deleteUserByCode(usercode);
+    public void updateUserAccountByCode(String usercode) {
+        userMapper.updateUserAccountByCode(usercode);
     }
 
 }
