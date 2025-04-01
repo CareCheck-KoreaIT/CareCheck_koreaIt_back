@@ -14,11 +14,10 @@ public class SystemSettingController {
     @Autowired
     private OrderService orderService;
 
-    @Operation(summary = "점수단가 변경", description = "점수단가 변경")
+    @Operation(summary = "점수단가 추가", description = "매년 단가 추가가")
     @PostMapping("/orders/score")
-    public ResponseEntity<?> updateScorePay(@RequestParam double scorePay) {
-        System.out.println("controller" + scorePay);
-        orderService.updateScorePay(scorePay);
+    public ResponseEntity<?> insertScorePay(@RequestParam double scorePay) {
+        orderService.insertScorePay(scorePay);
         return ResponseEntity.ok().build();
     }
 }
