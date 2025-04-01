@@ -71,7 +71,8 @@ public class SecurityConfig {
                     "/allWaitings",
                     "/waitingCount",
                     "/summary/**",
-                    "/roles/**"
+                    "/roles/**",
+                    "/patients/**"
             ).permitAll();
 
             authorizeRequests.requestMatchers(

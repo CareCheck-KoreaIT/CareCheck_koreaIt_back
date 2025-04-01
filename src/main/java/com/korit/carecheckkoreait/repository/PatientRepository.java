@@ -5,6 +5,8 @@ import com.korit.carecheckkoreait.mapper.PatientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class PatientRepository {
     @Autowired
@@ -13,5 +15,9 @@ public class PatientRepository {
     public Patient save(Patient patient) {
         patientMapper.insertPatient(patient);
         return patient;
+    }
+
+    public Optional<Patient> getPatientId(int patientId) {
+        return Optional.ofNullable(patientMapper.selectPatientById(patientId));
     }
 }

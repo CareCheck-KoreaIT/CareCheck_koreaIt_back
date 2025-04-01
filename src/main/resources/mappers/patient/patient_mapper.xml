@@ -9,4 +9,13 @@
         insert into patient_tb
         values(default, #{patientName}, #{regidentNum}, #{phoneNum}, now(), now())
     </insert>
+    <select id="selectPatientById" resultType="com.korit.carecheckkoreait.entity.Patient">
+        select
+            *
+        from
+            patient_tb
+        where
+            patient_id = #{patientId}
+    </select>
+
 </mapper>
