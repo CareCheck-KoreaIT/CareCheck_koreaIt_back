@@ -36,6 +36,11 @@ public class AdmissionService {
     }
 
     @Transactional(readOnly = true)
+    public boolean selectPatientId(int patientId) {
+        return admissionRepository.findPatientId(patientId).orElse(0) > 0;
+    }
+
+    @Transactional(readOnly = true)
     public List<Admission> selectWaitingListUserCode(String usercode) throws Exception {
         return admissionRepository.selectWaitingListByUserCode(usercode)
         .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
