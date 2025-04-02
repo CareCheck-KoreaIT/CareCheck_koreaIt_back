@@ -136,8 +136,8 @@ public class UserService {
         userRepository.updateUserPasswordByCode(usercode, passwordEncoder.encode(initialPassword));
     }
     @Transactional(rollbackFor = Exception.class)
-    public void deleteUser(String usercode) {
-        userRepository.deleteUserByCode(usercode);
+    public void updateUserAccount(String usercode) {
+        userRepository.updateUserAccountByCode(usercode);
     }
 
 }

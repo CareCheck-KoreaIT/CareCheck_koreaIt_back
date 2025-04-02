@@ -9,28 +9,28 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface AdmissionMapper {
-    int insertAdmission (Admission admission);
-    int selectAdmissionByPatientIdAndUserCode (int patientId, String usercode);
+    int insertAdmission(Admission admission);
+    int selectAdmissionByPatientIdAndUserCode(int patientId, String usercode);
     int selectPatientId(int patientId);
-    Admission selectPatientInfoByAdmId (int admissionId);
-    int insertOrderInAdmission (DiagnosisOrder diagnosisOrder);
-    int deleteOrderInAdmission (int diagnosisOrderId);
-    int insertDiagnosisInAdmission (Diagnosis diagnosis);
-    int insertVitalInAdmId (PatientVital patientVital);
-    Integer selectTotalPayByAdmId (int admissionId);
-    List<Admission> selectWaitingListByUserCode (String usercode);
-    List<Admission> selectVitalInfoByAdmId (int admissionId);
-    Admission selectDetailOrderByAdmId (int admissionId);
-    int updateAdmissionStartDate (int admissionId);
-    int updateAdmissionEndDate (int admissionId);
+    Admission selectPatientInfoByAdmId(int admissionId);
+    int insertOrderInAdmission(DiagnosisOrder diagnosisOrder);
+    int deleteOrderInAdmission(int diagnosisOrderId);
+    int insertDiagnosisInAdmission(Diagnosis diagnosis);
+    int insertVitalInAdmId(PatientVital patientVital);
+    Integer selectTotalPayByAdmId(int admissionId);
+    List<Admission> selectWaitingListByUserCode(String usercode);
+    List<Admission> selectVitalInfoByAdmId(int admissionId);
+    Admission selectDetailOrderByAdmId(int admissionId);
+    int updateAdmissionStartDate(int admissionId);
+    int updateAdmissionEndDate(int admissionId);
+
 
     List<PatientSearch> selectAllWaitingListAdmId(
-            @Param("admId") int admId,
             @Param("startIndex") int startIndex,
             @Param("limitCount") int limitCount,
-            @Param("keyword") String keyword);
-    int selectAllWaitingListCount (String keyword, int admId);
+            @Param("patientName") String patientName);
+    int selectAllWaitingListCount (String patientName);
 
-    int deleteAllWaitingByAdmId (int admId);
-    List<Admission> selectAdmissionIdByPatientName (String patientName);
+    int deleteAllWaitingByAdmId(int admId);
+    List<Admission> selectAdmissionIdByPatientName(String patientName);
 }

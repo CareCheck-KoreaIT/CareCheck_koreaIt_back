@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.korit.carecheckkoreait.dto.request.*;
 import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
+import com.korit.carecheckkoreait.dto.response.RespSearchPatientsDto;
 import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 
 import org.apache.ibatis.javassist.NotFoundException;
+import com.korit.carecheckkoreait.service.PatientService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +26,8 @@ public class AdmissionController {
     
     @Autowired
     private AdmissionService admissionService;
+    @Autowired
+    private PatientService patientService;
 
     @Operation(summary = "진료접수", description = "접수등록")
     @PostMapping()
@@ -100,54 +105,35 @@ public class AdmissionController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/all-waitings")
-    public ResponseEntity<?> getAllWaitingList(
-            @PathVariable Integer admId,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int limitCount) {
-            System.out.println("Page: " + page);
-            System.out.println("admId: " + admId);
-            System.out.println("Limit Count: " + limitCount);
-            System.out.println("Keyword: " + keyword);
-
-        if (page < 1 || limitCount < 1) {
-            return ResponseEntity.badRequest().body(null); // 400 Bad Request
-        }
-        int totalAllWaitingListCount = admissionService.getWaitingListCount(keyword, admId);
-
-        int totalPages = totalAllWaitingListCount % limitCount == 0
-                ? totalAllWaitingListCount / limitCount
-                : totalAllWaitingListCount / limitCount + 1;
+    @Operation(summary = "오늘 환자 접수 명단", description = "ReceiptPage - 오늘 접수된 환자 명단")
+    @GetMapping("/todaywaitings")
+    public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqSearchTodayReciptPatientsDto dto) {
+//        System.out.println(dto);
+        int totalPatientlistCount = admissionService.getWaitingListCount(dto.getSearchText());
+        int totalPages = totalPatientlistCount % dto.getLimitCount() == 0
+                ? totalPatientlistCount / dto.getLimitCount()
+                : totalPatientlistCount / dto.getLimitCount() + 1;
 
         RespAllWaitingListDto respAllWaitingListDto =
                 RespAllWaitingListDto.builder()
-                        .page(page)
-                        .limitCount(limitCount)
+                        .page(dto.getPage())
+                        .limitCount(dto.getLimitCount())
                         .totalPages(totalPages)
-                        .totalElements(totalAllWaitingListCount)
-                        .isFirstPage(page == 1)
-                        .isLastPage(page == totalPages)
-                        .patientAllWaitingList(admissionService.getAllWaitingListKeyword(admId, keyword, page, limitCount))
+                        .totalElements(totalPatientlistCount)
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .patientAllWaitingList(admissionService.getTodayWaitingListByPatientName(dto))
                         .build();
+//        System.out.println(respAllWaitingListDto);
+
         return ResponseEntity.ok().body(respAllWaitingListDto);
     }
 
-  //  전체 대기자 수 조회
-    // @Operation(summary = "전체대기자수", description = "접수된 전체 대기자 수")
-    // @GetMapping("/waiting-count")
-    // public ResponseEntity<?> getWaitingListCount(@RequestParam(value = "keyword", required = false) String keyword
-    // ) {
-    //     int count = admissionService.getWaitingListCount(keyword);
-    //     return ResponseEntity.ok().body(count);
-    // }
-
     @Operation(summary = "접수된 전체 대기자 명단", description = "접수된 대기자 명단 삭제")
     @DeleteMapping("/{admissionId}")
-    public String deletePatientByAdmId(@PathVariable int admissionId) {
+    public void deletePatientByAdmId(@PathVariable int admissionId) {
         System.out.println("삭제 시행함: " + admissionId);
         admissionService.deleteAllWaitingByAdmId(admissionId);
-        return "환자가 삭제되었습니다.";
     }
 
     @Operation(summary = "환자이름 기준 접수 명단", description = "해당환자의 접수 내역")
@@ -157,5 +143,27 @@ public class AdmissionController {
         @RequestParam String patientName
     ) throws Exception {
         return ResponseEntity.ok().body(admissionService.getAllAdmissionListByPatientName(patientName));
+    }
+
+    @Operation(summary = "전체 환자 명단", description = "환자 정보 찾기")
+    @GetMapping("/patients")
+    public ResponseEntity<?> getAllPatientsByName(@ModelAttribute ReqSearchPatientsDto dto) throws Exception {
+        int totalPatientlistCount = patientService.selectPatientsCount(dto.getSearchText());
+        int totalPages = totalPatientlistCount % dto.getLimitCount() == 0
+                ? totalPatientlistCount / dto.getLimitCount()
+                : totalPatientlistCount / dto.getLimitCount() + 1;
+
+        RespSearchPatientsDto respSearchPatientsDto =
+                RespSearchPatientsDto.builder()
+                        .page(dto.getPage())
+                        .limitCount(dto.getLimitCount())
+                        .totalPages(totalPages)
+                        .totalElements(totalPatientlistCount)
+                        .isFirstPage(dto.getPage() == 1)
+                        .isLastPage(dto.getPage() == totalPages)
+                        .patientList(patientService.selectPatientsList(dto))
+                        .build();
+        System.out.println(respSearchPatientsDto);
+        return ResponseEntity.ok().body(respSearchPatientsDto);
     }
 }
