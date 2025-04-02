@@ -130,8 +130,8 @@ public class AdmissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Admission> getAllAdmissionListByPatientName(String patientName) throws Exception {
-        return admissionRepository.selectAllAdmissionIdByPatientName(patientName)
+    public List<Admission> getAllAdmissionListBySearchValue(ReqAdmissionListDto reqAdmissionListDto) throws Exception {
+        return admissionRepository.selectAllAdmissionIdBySearchValue(reqAdmissionListDto.getPatientName(), reqAdmissionListDto.getRegidentNum())
             .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
     }
 
