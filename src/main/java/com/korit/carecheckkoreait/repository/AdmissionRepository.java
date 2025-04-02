@@ -105,8 +105,8 @@ public class AdmissionRepository {
         admissionMapper.deleteAllWaitingByAdmId(admId);
     }
 
-    public Optional<List<Admission>> selectAllAdmissionIdByPatientName (String patientName) {
-        List<Admission> allAdmissionsList = admissionMapper.selectAdmissionIdByPatientName(patientName);
+    public Optional<List<Admission>> selectAllAdmissionIdBySearchValue (String patientName, String regidentNum) {
+        List<Admission> allAdmissionsList = admissionMapper.selectAdmissionIdBySearchValue(patientName, regidentNum);
         if(allAdmissionsList == null) {
             return Optional.empty();
         }

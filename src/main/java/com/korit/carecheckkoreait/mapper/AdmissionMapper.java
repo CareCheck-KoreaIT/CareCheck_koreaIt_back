@@ -30,5 +30,8 @@ public interface AdmissionMapper {
     int selectAllWaitingListCount (String patientName);
 
     int deleteAllWaitingByAdmId(int admId);
-    List<Admission> selectAdmissionIdByPatientName(String patientName);
+    List<Admission> selectAdmissionIdBySearchValue(
+            @Param("patientName") String patientName,
+            @Param("regidentNum") String regidentNum
+    );
 }

@@ -131,13 +131,12 @@ public class AdmissionController {
         admissionService.deleteAllWaitingByAdmId(admissionId);
     }
 
-    @Operation(summary = "환자이름 기준 접수 명단", description = "해당환자의 접수 내역")
+    @Operation(summary = "수납 명단 조회", description = "해당환자의 접수 내역")
     @GetMapping("/admission-list")
-    public ResponseEntity<?> getAdmissionListByPatientName(
-        @Parameter(description = "환자명", example = "거북이", required = true)
-        @RequestParam String patientName
+    public ResponseEntity<?> getAdmissionListBySearchValue(
+        @ModelAttribute ReqAdmissionListDto dto
     ) throws Exception {
-        return ResponseEntity.ok().body(admissionService.getAllAdmissionListByPatientName(patientName));
+        return ResponseEntity.ok().body(admissionService.getAllAdmissionListBySearchValue(dto));
     }
 
     @Operation(summary = "전체 환자 명단", description = "환자 정보 찾기")

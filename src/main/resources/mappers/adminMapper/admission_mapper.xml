@@ -272,7 +272,7 @@
         </delete>
 
         <!-- 접수번호 찾기 환자이름 기준 -->
-        <select id="selectAdmissionIdByPatientName" resultMap="findAdmInfoResultMap">
+        <select id="selectAdmissionIdBySearchValue" resultMap="findAdmInfoResultMap">
             select
                 adm_id,
                 adm.patient_id as patient_id,
@@ -283,7 +283,12 @@
             from adm_tb as adm
             left outer join patient_tb as pt
             on adm.patient_id = pt.patient_id
-            where patient_name like concat('%', #{patientName}, '%')
+            <where>
+                patient_name like concat('%', #{patientName}, '%')
+                <if test="regidentNum != null and regidentNum != ''">
+                    and regident_num like concat('%', #{regidentNum}, '%')
+                </if>
+            </where>
             order by adm.created_at desc
         </select>
 </mapper>
