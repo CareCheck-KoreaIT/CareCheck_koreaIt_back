@@ -112,6 +112,15 @@
                 and adm.usercode = #{usercode}
                 and date_format(now(), "%Y-%m-%d") = date_format(adm.created_at, "%Y-%m-%d")
         </select>
+<!-- 접수 환자id 중복 조회 목적-->
+        <select id="selectPatientId" resultType="int">
+            select
+                count(*)
+            from
+                patient_tb as pt
+            where
+                pt.patient_id = #{patientId}
+        </select>
 <!-- 접수 - 오더등록 -->
         <insert id="insertOrderInAdmission">
                 insert into diagnosis_order_tb
@@ -291,4 +300,5 @@
         where patient_name like concat('%', #{patientName}, '%')
         order by start_date desc
         </select>
+
 </mapper>

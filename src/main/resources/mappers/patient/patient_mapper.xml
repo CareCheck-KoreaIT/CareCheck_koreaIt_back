@@ -4,9 +4,31 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.korit.carecheckkoreait.mapper.PatientMapper">
-
+    <resultMap id="patientResultMap" type="com.korit.carecheckkoreait.entity.Patient">
+        <id property="patientId" column="patient_id" />
+        <result property="patientName" column="patient_name" />
+        <result property="regidentNum" column="regident_num" />
+        <result property="phoneNum" column="phone_num" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+    </resultMap>
+    
     <insert id="insertPatient" keyProperty="patientId" useGeneratedKeys="true">
         insert into patient_tb
         values(default, #{patientName}, #{regidentNum}, #{phoneNum}, now(), now())
     </insert>
+
+    <select id="selectPatientById" resultType="com.korit.carecheckkoreait.entity.Patient">
+        select
+            patient_id,
+            patient_name,
+            regident_num,
+            phone_num,
+            created_at,
+            updated_at
+        from
+            patient_tb
+        where
+            patient_id = #{patientId}
+    </select>
 </mapper>

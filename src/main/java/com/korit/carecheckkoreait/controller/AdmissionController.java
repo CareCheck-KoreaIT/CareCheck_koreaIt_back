@@ -6,6 +6,7 @@ import com.korit.carecheckkoreait.dto.request.*;
 import com.korit.carecheckkoreait.dto.response.RespAllWaitingListDto;
 import com.korit.carecheckkoreait.security.principal.PrincipalUser;
 
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,8 +25,11 @@ public class AdmissionController {
     private AdmissionService admissionService;
 
     @Operation(summary = "진료접수", description = "접수등록")
-    @PostMapping
-    public ResponseEntity<?> insertAdm(@RequestBody ReqAddAdmissionDto dto) {
+    @PostMapping()
+    public ResponseEntity<?> insertAdm(@RequestBody ReqAddAdmissionDto dto) throws NotFoundException {
+        if(!admissionService.selectPatientId(Integer.parseInt(dto.getPatientId()))) {
+            throw new NotFoundException("해당하는 환자번호에 맞는 환자정보가 없습니다.");
+        }
         return ResponseEntity.ok().body(admissionService.insertAdmission(dto));
     }
 
