@@ -112,7 +112,6 @@ public class AdmissionService {
                 reqSearchTodayReciptPatientsDto.getLimitCount(),
                 reqSearchTodayReciptPatientsDto.getSearchText()
         );
-
         return foundPatients;
     }
 
