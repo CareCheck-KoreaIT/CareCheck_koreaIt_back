@@ -2,6 +2,7 @@ package com.korit.carecheckkoreait.controller.advice;
 
 import com.korit.carecheckkoreait.exception.DuplicatedValueException;
 import org.apache.coyote.BadRequestException;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,6 +36,11 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> badRequestException(BadRequestException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> notFoundException(NotFoundException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
