@@ -20,12 +20,19 @@ public class AdmissionService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public Admission insertAdmission(ReqAddAdmissionDto dto) {
+    public Admission insertAdmission(ReqAddAdmissionDto dto) throws NotFoundException {
+        int patientId = Integer.parseInt(dto.getPatientId());
+
+        if (!selectPatientId(patientId)) {
+            throw new NotFoundException("환자번호를 확인하세요.");
+        }
+
         Admission admission = Admission.builder()
-                                .patientId(Integer.parseInt(dto.getPatientId()))
-                                .clinicDeft(dto.getClinicDeft())
-                                .usercode(dto.getUsercode())
-                                .build();
+                .patientId(patientId)
+                .clinicDeft(dto.getClinicDeft())
+                .usercode(dto.getUsercode())
+                .build();
+
         admissionRepository.insert(admission);
         return admission;
     }
