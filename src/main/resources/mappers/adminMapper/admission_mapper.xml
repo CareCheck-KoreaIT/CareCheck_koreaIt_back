@@ -81,6 +81,7 @@
                 <result property="patientName" column="patient_name"/>
                 <result property="phoneNum" column="phone_num"/>
                 <result property="admDate" column="adm_date"/>
+                <result property="doctorName" column="doctor_name" />
                 <result property="startDate" column="start_date"/>
                 <result property="endDate" column="end_date"/>
         </resultMap>
@@ -238,11 +239,13 @@
                 pt.patient_name as patient_name,
                 pt.phone_num as phone_num,
                 date_format(adm.created_at, "%H:%i") as adm_date,
+                ut.username as doctor_name,
                 adm.start_date as start_date,
                 adm.end_date as end_date
             from
                 adm_tb as adm
                 inner join patient_tb pt on(pt.patient_id = adm.patient_id)
+                left outer join user_tb ut on(ut.usercode = adm.usercode)
             <where>
                 date(adm.created_at) = curdate()
                 <if test="patientName != null and patientName != ''">
@@ -271,7 +274,7 @@
             where adm_id = #{admId};
         </delete>
 
-        <!-- 접수번호 찾기 환자이름 기준 -->
+        <!-- 접수번호 찾기 환자이름(+주민등록번호) 기준 -->
         <select id="selectAdmissionIdBySearchValue" resultMap="findAdmInfoResultMap">
             select
                 adm_id,
