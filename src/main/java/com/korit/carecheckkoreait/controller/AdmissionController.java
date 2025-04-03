@@ -31,9 +31,6 @@ public class AdmissionController {
     @Operation(summary = "진료접수", description = "접수등록")
     @PostMapping
     public ResponseEntity<?> insertAdm(@RequestBody ReqAddAdmissionDto dto) throws NotFoundException {
-        if(!admissionService.selectPatientId(Integer.parseInt(dto.getPatientId()))) {
-            throw new NotFoundException("해당하는 환자번호에 맞는 환자정보가 없습니다.");
-        }
         return ResponseEntity.ok().body(admissionService.insertAdmission(dto));
     }
 
