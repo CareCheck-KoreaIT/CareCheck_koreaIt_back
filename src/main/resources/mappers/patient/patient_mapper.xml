@@ -11,6 +11,9 @@
         <result property="regidentNum" column="regident_num" />
         <result property="createdAt" column="created_at" />
         <result property="updatedAt" column="updated_at" />
+
+        <result property="createdAtDateFormat" column="pt_created_at" />
+        <result property="updatedAtDateFormat" column="pt_updated_at" />
     </resultMap>
 
     <insert id="insertPatient" keyProperty="patientId" useGeneratedKeys="true">
@@ -47,8 +50,8 @@
             patient_name,
             phone_num,
             regident_num,
-            created_at,
-            updated_at
+            date_format(created_at, "%Y-%m-%d %H:%i:%S") as pt_created_at,
+            date_format(updated_at, "%Y-%m-%d %H:%i:%S") as pt_updated_at
         from
             patient_tb
         <where>

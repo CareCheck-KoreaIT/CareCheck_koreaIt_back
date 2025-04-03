@@ -29,6 +29,8 @@
         <result property="accountEnabled" column="account_enabled" />
         <result property="createdAt" column="created_at" />
         <result property="updatedAt" column="updated_at" />
+        <result property="createdAtDateFormat" column="ut_created_at" />
+        <result property="updatedAtDateFormat" column="ut_updated_at" />
         <collection property="userRole" resultMap="userRoleResultMap" />
     </resultMap>
 
@@ -184,6 +186,8 @@
             ut.account_enabled,
             ut.created_at,
             ut.updated_at,
+            date_format(ut.created_at, "%Y-%m-%d %H:%i:%S") as ut_created_at,
+            date_format(ut.updated_at, "%Y-%m-%d %H:%i:%S") as ut_updated_at,
 
             urt.user_role_id,
             urt.usercode as urt_usercode,
