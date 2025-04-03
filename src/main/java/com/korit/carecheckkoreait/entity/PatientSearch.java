@@ -18,6 +18,7 @@ public class PatientSearch {
     private String patientName;
     private String phoneNum;
     private String admDate;
+    private String doctorName;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 }
