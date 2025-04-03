@@ -21,7 +21,6 @@ public class Admission {
     private LocalDateTime endDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     private String patientName;
     private String regidentNum;
     private String phoneNum;
