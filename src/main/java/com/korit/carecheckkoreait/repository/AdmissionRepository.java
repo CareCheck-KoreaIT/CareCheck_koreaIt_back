@@ -26,6 +26,11 @@ public class AdmissionRepository {
         return admissionMapper.selectAdmissionByPatientIdAndUserCode(patientId, usercode);
     }
 
+    // 환자 patientId 접수 조회
+    public Optional<Integer> findPatientId(int patientId) {
+        return Optional.ofNullable(admissionMapper.selectPatientId(patientId));
+    }
+
     //접수 번호로 환자정보 가져오기
     public Optional<Admission> selectPatientInfoByUserCode(int admissionId) {
         Admission admPatientInfo = admissionMapper.selectPatientInfoByAdmId(admissionId);
