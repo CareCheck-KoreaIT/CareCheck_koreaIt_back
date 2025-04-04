@@ -179,9 +179,9 @@
             where adm_id = #{admissionId}
         </update>
     <!-- 전체 대기자 명단 sql -->
-        <select id="selectAllWaitingListAdmId" resultMap ="admissionResultMap">
+        <select id="selectAllWaitingListAdmId" resultMap ="patientSearchResultMap">
             select
-                adm_id,
+                adm.adm_id,
                 adm.patient_id as patient_id,
                 pt.patient_name as patient_name,
                 pt.phone_num as phone_num,
@@ -191,7 +191,7 @@
                 adm.end_date as end_date
             from
                 adm_tb as adm
-                inner join patient_tb pt on(pt.patient_id = adm.patient_id)
+                left outer join patient_tb pt on(pt.patient_id = adm.patient_id)
                 left outer join user_tb ut on(ut.usercode = adm.usercode)
             <where>
                 date(adm.created_at) = curdate()
@@ -251,7 +251,7 @@
                 regident_num,
                 phone_num,
                 date_format(adm.end_date, "%Y-%m-%d") as adm_date,
-                coalesce(sum(total_order_pay), 0) as total_pay      
+                coalesce(sum(total_order_pay), 0) as total_pay
             from adm_tb as adm
             left outer join patient_tb as pt
             on adm.patient_id = pt.patient_id
