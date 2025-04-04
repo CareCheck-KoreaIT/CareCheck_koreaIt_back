@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 public interface AdmissionMapper {
     int insertAdmission(Admission admission);
     int selectAdmissionByPatientIdAndUserCode(int patientId, String usercode);
+    int selectPatientId(int patientId);
     Admission selectPatientInfoByAdmId(int admissionId);
     int insertOrderInAdmission(DiagnosisOrder diagnosisOrder);
     int deleteOrderInAdmission(int diagnosisOrderId);
@@ -30,5 +31,8 @@ public interface AdmissionMapper {
     int selectAllWaitingListCount (String patientName);
 
     int deleteAllWaitingByAdmId(int admId);
-    List<Admission> selectAdmissionIdByPatientName(String patientName);
+    List<Admission> selectAdmissionIdBySearchValue(
+            @Param("patientName") String patientName,
+            @Param("regidentNum") String regidentNum
+    );
 }
