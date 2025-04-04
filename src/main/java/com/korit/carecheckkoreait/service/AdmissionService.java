@@ -20,12 +20,19 @@ public class AdmissionService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public Admission insertAdmission(ReqAddAdmissionDto dto) {
+    public Admission insertAdmission(ReqAddAdmissionDto dto) throws NotFoundException {
+        int patientId = Integer.parseInt(dto.getPatientId());
+
+        if (!selectPatientId(patientId)) {
+            throw new NotFoundException("환자번호를 확인하세요.");
+        }
+
         Admission admission = Admission.builder()
-                                .patientId(Integer.parseInt(dto.getPatientId()))
-                                .clinicDeft(dto.getClinicDeft())
-                                .usercode(dto.getUsercode())
-                                .build();
+                .patientId(patientId)
+                .clinicDeft(dto.getClinicDeft())
+                .usercode(dto.getUsercode())
+                .build();
+
         admissionRepository.insert(admission);
         return admission;
     }
@@ -130,8 +137,8 @@ public class AdmissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Admission> getAllAdmissionListByPatientName(String patientName) throws Exception {
-        return admissionRepository.selectAllAdmissionIdByPatientName(patientName)
+    public List<Admission> getAllAdmissionListBySearchValue(ReqAdmissionListDto reqAdmissionListDto) throws Exception {
+        return admissionRepository.selectAllAdmissionIdBySearchValue(reqAdmissionListDto.getPatientName(), reqAdmissionListDto.getRegidentNum())
             .orElseThrow(()-> new NotFoundException("접수된 내역이 없습니다."));
     }
 

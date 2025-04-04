@@ -31,9 +31,6 @@ public class AdmissionController {
     @Operation(summary = "진료접수", description = "접수등록")
     @PostMapping
     public ResponseEntity<?> insertAdm(@RequestBody ReqAddAdmissionDto dto) throws NotFoundException {
-        if(!admissionService.selectPatientId(Integer.parseInt(dto.getPatientId()))) {
-            throw new NotFoundException("해당하는 환자번호에 맞는 환자정보가 없습니다.");
-        }
         return ResponseEntity.ok().body(admissionService.insertAdmission(dto));
     }
 
@@ -135,13 +132,12 @@ public class AdmissionController {
         admissionService.deleteAllWaitingByAdmId(admissionId);
     }
 
-    @Operation(summary = "환자이름 기준 접수 명단", description = "해당환자의 접수 내역")
+    @Operation(summary = "수납 명단 조회", description = "해당환자의 접수 내역")
     @GetMapping("/admission-list")
-    public ResponseEntity<?> getAdmissionListByPatientName(
-        @Parameter(description = "환자명", example = "거북이", required = true)
-        @RequestParam String patientName
+    public ResponseEntity<?> getAdmissionListBySearchValue(
+        @ModelAttribute ReqAdmissionListDto dto
     ) throws Exception {
-        return ResponseEntity.ok().body(admissionService.getAllAdmissionListByPatientName(patientName));
+        return ResponseEntity.ok().body(admissionService.getAllAdmissionListBySearchValue(dto));
     }
 
     @Operation(summary = "전체 환자 명단", description = "환자 정보 찾기")
