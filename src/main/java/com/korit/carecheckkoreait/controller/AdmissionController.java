@@ -104,7 +104,7 @@ public class AdmissionController {
     @Operation(summary = "오늘 환자 접수 명단", description = "ReceiptPage - 오늘 접수된 환자 명단")
     @GetMapping("/todaywaitings")
     public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqSearchTodayReciptPatientsDto dto) {
-//        System.out.println(dto);
+        System.out.println(dto);
         int totalPatientlistCount = admissionService.getWaitingListCount(dto.getSearchText());
         int totalPages = totalPatientlistCount % dto.getLimitCount() == 0
                 ? totalPatientlistCount / dto.getLimitCount()
@@ -120,7 +120,7 @@ public class AdmissionController {
                         .isLastPage(dto.getPage() == totalPages)
                         .patientAllWaitingList(admissionService.getTodayWaitingListByPatientName(dto))
                         .build();
-//        System.out.println(respAllWaitingListDto);
+        System.out.println(respAllWaitingListDto);
 
         return ResponseEntity.ok().body(respAllWaitingListDto);
     }
