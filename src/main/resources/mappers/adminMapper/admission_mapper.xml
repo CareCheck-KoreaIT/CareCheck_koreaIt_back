@@ -186,6 +186,7 @@
                 pt.patient_name as patient_name,
                 pt.phone_num as phone_num,
                 date_format(adm.created_at, "%H:%i") as adm_date,
+                coalesce(sum(total_order_pay), 0) as total_pay,
                 ut.username as doctor_name,
                 adm.start_date as start_date,
                 adm.end_date as end_date
@@ -193,6 +194,7 @@
                 adm_tb as adm
                 left outer join patient_tb pt on(pt.patient_id = adm.patient_id)
                 left outer join user_tb ut on(ut.usercode = adm.usercode)
+                left outer join diagnosis_order_tb dot on(dot.adm_id = adm.adm_id)
             <where>
                 date(adm.created_at) = curdate()
                 <if test="patientName != null and patientName != ''">
