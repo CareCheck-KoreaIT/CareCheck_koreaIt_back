@@ -50,7 +50,6 @@ public class AccountController {
 
     @GetMapping("/me")
     public ResponseEntity<?> getLoginUser(@AuthenticationPrincipal PrincipalUser principalUser) {
-        // System.out.println(principalUser.getUser());      // 테스트
         return ResponseEntity.ok().body(principalUser.getUser());
     }
 

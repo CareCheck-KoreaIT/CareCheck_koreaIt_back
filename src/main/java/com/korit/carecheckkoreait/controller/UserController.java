@@ -27,7 +27,6 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<?> getUsers(@ModelAttribute ReqSearchUserDto dto) {
-//        System.out.println("getUsers 호출");
         int totalUserListCount = userService.getUserListCountBySearchName(dto.getSearchName());
         int totalPages = totalUserListCount % dto.getLimitCount() == 0
                 ? totalUserListCount / dto.getLimitCount()
@@ -50,8 +49,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(
             @PathVariable String usercode,
             @RequestBody Map<String, String> requestBody
-    ) {
-        System.out.println(requestBody);
+    ) throws Exception {
         userService.updateUser(usercode, requestBody);
         return ResponseEntity.ok().build();
     }
@@ -60,16 +58,14 @@ public class UserController {
     public ResponseEntity<?> initialUserPassword(
             @PathVariable String usercode,
             @RequestBody Map<String, String> requestBody
-    ) {
-        System.out.println(usercode + ": " + requestBody.get("password"));
+    ) throws Exception {
         String initialPassword = requestBody.get("password");
         userService.initialPassword(usercode, initialPassword);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/users/{usercode}/account")
-    public ResponseEntity<?> resignationUser(@PathVariable String usercode) {
-        System.out.println(usercode);
+    public ResponseEntity<?> resignationUser(@PathVariable String usercode) throws Exception {
         userService.updateUserAccount(usercode);
         return ResponseEntity.ok().build();
     }
