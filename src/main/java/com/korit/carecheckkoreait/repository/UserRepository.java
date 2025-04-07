@@ -46,7 +46,6 @@ public class UserRepository {
             String order,
             String searchName) {
         List<User> foundUser = userMapper.selectUserListBySearchOptions(startIndex, limitCount, order, searchName);
-//        System.out.println("Repository : " + foundUser);
         return foundUser;
     }
 
