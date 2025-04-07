@@ -104,7 +104,6 @@ public class AdmissionController {
     @Operation(summary = "오늘 환자 접수 명단", description = "ReceiptPage - 오늘 접수된 환자 명단")
     @GetMapping("/todaywaitings")
     public ResponseEntity<?> getAllWaitingList(@ModelAttribute ReqSearchTodayReciptPatientsDto dto) {
-        System.out.println(dto);
         int totalPatientlistCount = admissionService.getWaitingListCount(dto.getSearchText());
         int totalPages = totalPatientlistCount % dto.getLimitCount() == 0
                 ? totalPatientlistCount / dto.getLimitCount()
@@ -120,7 +119,6 @@ public class AdmissionController {
                         .isLastPage(dto.getPage() == totalPages)
                         .patientAllWaitingList(admissionService.getTodayWaitingListByPatientName(dto))
                         .build();
-        System.out.println(respAllWaitingListDto);
 
         return ResponseEntity.ok().body(respAllWaitingListDto);
     }
@@ -128,7 +126,6 @@ public class AdmissionController {
     @Operation(summary = "접수된 전체 대기자 명단", description = "접수된 대기자 명단 삭제")
     @DeleteMapping("/{admissionId}")
     public void deletePatientByAdmId(@PathVariable int admissionId) {
-        System.out.println("삭제 시행함: " + admissionId);
         admissionService.deleteAllWaitingByAdmId(admissionId);
     }
 
@@ -158,7 +155,6 @@ public class AdmissionController {
                         .isLastPage(dto.getPage() == totalPages)
                         .patientList(patientService.selectPatientsList(dto))
                         .build();
-        System.out.println(respSearchPatientsDto);
         return ResponseEntity.ok().body(respSearchPatientsDto);
     }
 }
