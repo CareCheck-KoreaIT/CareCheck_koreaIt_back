@@ -21,8 +21,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        System.out.println("인증 예외 발생");
-
         response.setStatus(401);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
