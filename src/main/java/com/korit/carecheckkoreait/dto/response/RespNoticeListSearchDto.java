@@ -15,7 +15,6 @@ public class RespNoticeListSearchDto {
     private int totalElements;
     private boolean isFirstPage;
     private boolean isLastPage;
-    private int nextPage;
 
     private List<NoticeSearch> noticeList;
 }

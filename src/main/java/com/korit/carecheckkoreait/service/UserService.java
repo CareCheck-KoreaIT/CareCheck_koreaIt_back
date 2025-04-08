@@ -36,9 +36,13 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public String signin(ReqSigninDto reqSigninDto) {
+    public String signin(ReqSigninDto reqSigninDto) throws Exception {
         User user = userRepository.selectByUsercode(reqSigninDto.getUsercode())
                 .orElseThrow(() -> new UsernameNotFoundException("사용자 정보를 다시 확인하세요."));
+
+        if(user.getAccountEnabled() != 1) {
+            throw new BadRequestException("로그인 권한이 없습니다.");
+        }
 
         if(!passwordEncoder.matches(reqSigninDto.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("사용자 정보를 다시 확인하세요.");
@@ -112,7 +116,6 @@ public class UserService {
                 reqSearchUserDto.getOrder(),
                 reqSearchUserDto.getSearchName()
         );
-//        System.out.println("Service : " + foundUser);         // for test
         return foundUser;
     }
 
@@ -122,7 +125,12 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updateUser(String usercode, Map<String, String> requestBody) {
+    public void updateUser(String usercode, Map<String, String> requestBody) throws Exception {
+        User enabledUser = userRepository.selectByUsercode(usercode)
+                .orElseThrow(NullPointerException::new);
+        if(enabledUser.getAccountEnabled() != 1) {
+            throw new BadRequestException("퇴사 처리된 직원입니다.");
+        }
         User user = User.builder()
                 .usercode(usercode)
                 .username(requestBody.get("username"))
@@ -132,11 +140,21 @@ public class UserService {
         userRepository.updateUserByCode(user);
     }
     @Transactional(rollbackFor = Exception.class)
-    public void initialPassword(String usercode, String initialPassword) {
+    public void initialPassword(String usercode, String initialPassword) throws Exception {
+        User enabledUser = userRepository.selectByUsercode(usercode)
+                .orElseThrow(NullPointerException::new);
+        if(enabledUser.getAccountEnabled() != 1) {
+            throw new BadRequestException("퇴사 처리된 직원입니다.");
+        }
         userRepository.updateUserPasswordByCode(usercode, passwordEncoder.encode(initialPassword));
     }
     @Transactional(rollbackFor = Exception.class)
-    public void updateUserAccount(String usercode) {
+    public void updateUserAccount(String usercode) throws Exception {
+        User enabledUser = userRepository.selectByUsercode(usercode)
+                .orElseThrow(NullPointerException::new);
+        if(enabledUser.getAccountEnabled() != 1) {
+            throw new BadRequestException("이미 퇴사 처리된 직원입니다.");
+        }
         userRepository.updateUserAccountByCode(usercode);
     }
 

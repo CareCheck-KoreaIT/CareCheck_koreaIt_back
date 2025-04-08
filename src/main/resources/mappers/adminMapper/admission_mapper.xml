@@ -201,6 +201,7 @@
                     and pt.patient_name like concat("%", #{patientName}, "%")
                 </if>
             </where>
+            group by adm.adm_id, adm.patient_id, pt.patient_name, pt.regident_num, pt.phone_num, adm.created_at
             order by adm_date asc
             limit #{startIndex}, #{limitCount}
         </select>
