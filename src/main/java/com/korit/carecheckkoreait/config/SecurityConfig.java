@@ -58,26 +58,22 @@ public class SecurityConfig {
             ).permitAll();
 
             authorizeRequests.requestMatchers(
-                    "/auth/**",
-                    "/adm/**",
-                    "/account/**",
-                    "/admission/**",
-                    "/user/changeInfo/**",
-                    "/notices/**",
-                    "/orders/**",
-                    "/chart/registration",
-                    "/chart",
-                    "/diseases/**",
-                    "/allWaitings",
-                    "/waitingCount",
-                    "/summary/**",
-                    "/roles/**",
-                    "/patients/**"
+                    "/api/auth/**"
             ).permitAll();
 
             authorizeRequests.requestMatchers(
-                    "/admin/**"
+                    "/api/admin/**",
+                    "/api/orders",
+                    "/api/orders/score"
             ).hasRole("ADMIN");
+
+            authorizeRequests.requestMatchers(
+                    "/api/admission/waitings",
+                    "/api/admission/{admissionId}/start",
+                    "/api/admission/{admissionId}/complete",
+                    "/api/admission/{admissionId}/orders",
+                    "/api/admission/{admissionId}/diagnosis"
+            ).hasRole("DOCTOR");
 
             authorizeRequests.anyRequest().authenticated();
 

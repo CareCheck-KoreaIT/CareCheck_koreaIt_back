@@ -12,7 +12,7 @@ import com.korit.carecheckkoreait.service.UserRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/api/roles")
 public class UserRoleController {
     @Autowired
     private UserRoleService userRoleService;

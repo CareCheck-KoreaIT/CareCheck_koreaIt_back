@@ -14,7 +14,7 @@ import com.korit.carecheckkoreait.service.DiseaseService;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("/diseases")
+@RequestMapping("/api/diseases")
 public class DiseaseController {
     @Autowired
     private DiseaseService diseaseService;
