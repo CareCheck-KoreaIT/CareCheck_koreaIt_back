@@ -71,6 +71,7 @@ public class SecurityConfig {
                     "/api/admission/waitings",
                     "/api/admission/{admissionId}/start",
                     "/api/admission/{admissionId}/complete",
+                    "/api/admission/{admissionId}/vitals",
                     "/api/admission/{admissionId}/orders",
                     "/api/admission/{admissionId}/diagnosis"
             ).hasRole("DOCTOR");
