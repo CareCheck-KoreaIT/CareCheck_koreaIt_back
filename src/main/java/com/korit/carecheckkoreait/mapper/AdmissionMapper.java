@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface AdmissionMapper {
     int insertAdmission(Admission admission);
-    int selectAdmissionByPatientIdAndUserCode(int patientId, String usercode);
     int selectPatientId(int patientId);
     Admission selectPatientInfoByAdmId(int admissionId);
     int insertOrderInAdmission(DiagnosisOrder diagnosisOrder);

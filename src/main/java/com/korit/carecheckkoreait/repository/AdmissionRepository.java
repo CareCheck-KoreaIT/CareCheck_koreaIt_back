@@ -21,11 +21,6 @@ public class AdmissionRepository {
         return admission;
     }
 
-    //환자 접수 조회
-    public int findAdmissionByPatientIdAndUsercode(int patientId, String usercode) {
-        return admissionMapper.selectAdmissionByPatientIdAndUserCode(patientId, usercode);
-    }
-
     // 환자 patientId 접수 조회
     public Optional<Integer> findPatientId(int patientId) {
         return Optional.ofNullable(admissionMapper.selectPatientId(patientId));
