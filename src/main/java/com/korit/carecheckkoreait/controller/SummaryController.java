@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
-@RequestMapping("/summary")
+@RequestMapping("/api/summary")
 public class SummaryController {
     @Autowired
     private SummaryService summaryService;
