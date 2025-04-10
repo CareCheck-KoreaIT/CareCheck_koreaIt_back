@@ -31,7 +31,6 @@ public class OrderService {
     }
 
     public void updateScorePay(double scorePay) {
-        System.out.println("service"+ scorePay);
         orderRepository.updateScorePay(scorePay);
     }
     public void insertScorePay(double scorePay) {

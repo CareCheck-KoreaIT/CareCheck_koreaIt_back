@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class AuthController {
 
     @Operation(summary = "로그인", description = "로그인")
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody ReqSigninDto dto) {
+    public ResponseEntity<?> signin(@RequestBody ReqSigninDto dto) throws Exception {
         RespTokenDto respTokenDto = RespTokenDto.builder()
                 .type("JWT")
                 .name("AccessToken")

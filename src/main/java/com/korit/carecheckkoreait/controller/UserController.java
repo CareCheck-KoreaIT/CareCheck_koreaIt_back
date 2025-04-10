@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class UserController {
 
     @Autowired
@@ -24,10 +24,9 @@ public class UserController {
         return ResponseEntity.ok().body(userService.signup(dto));
     }
 
-
+    @Operation(summary = "직원 정보 조회", description = "관리자 메뉴 - 직원 정보 조회")
     @GetMapping("/users")
     public ResponseEntity<?> getUsers(@ModelAttribute ReqSearchUserDto dto) {
-//        System.out.println("getUsers 호출");
         int totalUserListCount = userService.getUserListCountBySearchName(dto.getSearchName());
         int totalPages = totalUserListCount % dto.getLimitCount() == 0
                 ? totalUserListCount / dto.getLimitCount()
@@ -46,30 +45,30 @@ public class UserController {
         return ResponseEntity.ok().body(respUserListSearchDto);
     }
 
+    @Operation(summary = "직원 정보 수정", description = "관리자 메뉴 - 직원 정보 조회 - 직원 정보 수정")
     @PutMapping("/users/{usercode}")
     public ResponseEntity<?> updateUser(
             @PathVariable String usercode,
             @RequestBody Map<String, String> requestBody
-    ) {
-        System.out.println(requestBody);
+    ) throws Exception {
         userService.updateUser(usercode, requestBody);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "직원 비밀번호 수정", description = "관리자 메뉴 - 직원 정보 조회 - 직원 비밀번호 수정")
     @PutMapping("/users/{usercode}/password")
     public ResponseEntity<?> initialUserPassword(
             @PathVariable String usercode,
             @RequestBody Map<String, String> requestBody
-    ) {
-        System.out.println(usercode + ": " + requestBody.get("password"));
+    ) throws Exception {
         String initialPassword = requestBody.get("password");
         userService.initialPassword(usercode, initialPassword);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "직원 퇴사 처리", description = "관리자 메뉴 - 직원 정보 조회 - 직원 퇴사 처리")
     @PutMapping("/users/{usercode}/account")
-    public ResponseEntity<?> resignationUser(@PathVariable String usercode) {
-        System.out.println(usercode);
+    public ResponseEntity<?> resignationUser(@PathVariable String usercode) throws Exception {
         userService.updateUserAccount(usercode);
         return ResponseEntity.ok().build();
     }

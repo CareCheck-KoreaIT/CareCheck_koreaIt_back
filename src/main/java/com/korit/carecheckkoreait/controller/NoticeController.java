@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/notices")
+@RequestMapping("/api/notices")
 public class NoticeController {
 
     @Autowired
@@ -54,7 +54,6 @@ public class NoticeController {
                         .totalElements(totalNoticeListCount)
                         .isFirstPage(dto.getPage() == 1)
                         .isLastPage(dto.getPage() == totalPages)
-                        .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
                         .noticeList(noticeService.getNoticeListSearchBySearchOption(dto))
                         .build();
 
@@ -82,7 +81,6 @@ public class NoticeController {
                         .totalElements(totalNoticeListCount)
                         .isFirstPage(dto.getPage() == 1)
                         .isLastPage(dto.getPage() == totalPages)
-                        .nextPage(dto.getPage() != totalPages ? dto.getPage() + 1 : 0)
                         .noticeList(noticeService.getNoticeListSearchByUsercode(usercode, dto.getSearchText(), dto.getPage(), dto.getLimitCount(), dto.getOrder()))
                         .build();
 
@@ -103,7 +101,6 @@ public class NoticeController {
     @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
     @DeleteMapping("/{noticeId}")
     public ResponseEntity<?> deleteNotice(@PathVariable int noticeId) {
-        System.out.println(noticeId);
         int result = noticeService.deleteNoticeById(noticeId);
         if (result == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("공지사항을 찾을 수 없습니다.");
